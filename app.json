@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/cart/cart",
+    "pages/order/order"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "微券代理",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "/assets/images/index-black.png",
+        "selectedIconPath": "/assets/images/index.png"
+      },
+      {
+        "pagePath": "pages/cart/cart",
+        "text": "购物车",
+        "iconPath": "/assets/images/cart-black.png",
+        "selectedIconPath": "/assets/images/cart.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "订单",
+        "iconPath": "/assets/images/order-black.png",
+        "selectedIconPath": "/assets/images/order.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于微券优品为你匹配到附近的店铺"
+    }
+  },
+  "debug": true,
+  "sitemapLocation": "sitemap.json"
+}

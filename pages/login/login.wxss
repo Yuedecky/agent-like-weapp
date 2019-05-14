@@ -1,0 +1,76 @@
+@import '/assets/wxss/common.wxss';
+.login-container{
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.logo-image{
+  margin:70rpx 0rpx 0rpx 0rpx;
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  border:1px solid #cec;
+}
+
+.logo-name{
+  width: 200rpx;
+  height: 60rpx;
+  font-size: 40rpx;  
+  color:#333;
+  text-align: center;
+}
+.input-section{
+  margin-top: 100rpx;
+  width: 80%;
+}
+.input-section view input{
+  height: 80rpx;
+  line-height: 80rpx;
+  border-bottom: 1px solid #ccc;
+}
+.code-input input{
+  width: 360rpx;
+  margin-right: 20rpx;
+}
+
+.code-input button{
+  width: 320rpx;
+  height:80rpx;
+  font-size: 40rpx;
+  line-height: 80rpx;
+  border: none;
+}
+.code-input button::after{
+  border: none;
+}
+
+.login-btn{
+    margin-top: 40rpx;
+    width: 80%;
+    padding: 12rpx 12rpx 12rpx 12rpx;
+    font-size: 40rpx;
+    line-height: 80rpx;
+    background-color: #57A948;
+    color: white;
+    font-weight: 600;
+}
+.login-btn::after{
+  border: none;
+}
+
+.protocol{
+  font-size: 28rpx;
+  color:#999;
+  margin-top: 16px;
+}
+.protocol text{
+  color: green;
+}
+
+.apply-agent{
+  font-size: 40rpx;
+  color: #19e;
+}

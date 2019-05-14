@@ -1,0 +1,26 @@
+<view class="login-container flex-column">
+        <view class='bottom-20'><image class="logo-image" src="{{logoUrl}}"></image></view>
+        <view class="logo-name">
+          {{logoName}}
+        </view>
+        <view class='input-section flow-column middle-center'>
+        <view class='phone-input bottom-40'>
+           <input type="tel" value="{{phone}}" maxlength='11' placeholder="请输入手机号" bindinput='getPhoneValue'/>
+        </view>
+        <view class='code-input flex-row'>
+          <input type='number' maxlength='6' value="{{code}}" placeholder='请输入验证码' bindinput='getCodeValue'/>
+          <button type='default' bindtap='getCode' disabled='{{codeDisabled}}'>
+              获取验证码
+            </button>
+        </view>
+        </view>
+        <button type='primary' class="login-btn"  disabled='{{disabled}}'   hover-class='none'
+         bindtap='submitInfo'>登录</button>
+         <view class='protocol bottom-100'>
+         点击登录，基表示已阅读并同意<text>《登陆服务条款》</text>
+         </view>
+
+         <view class='apply-agent middle-center'>
+         代理申请
+         </view>
+</view>
