@@ -1,0 +1,5 @@
+@import "/templates/apply-basic/apply-basic.wxss";
+
+.apply-container{
+  width: 100%;
+}

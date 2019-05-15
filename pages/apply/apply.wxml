@@ -1,0 +1,4 @@
+<import src="/templates/apply-basic/apply-basic.wxml"></import>
+<view class='apply-container'>
+  <template is='basic-info' data="{{text:'获取验证码'}}"></template>
+</view>
