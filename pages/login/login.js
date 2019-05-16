@@ -17,7 +17,7 @@ Page({
 
   onApplyOpen:function(e){
     wx.navigateTo({
-      url: '/pages/apply/apply',
+      url: '/pages/apply/apply?pageIndex=1',
     })
   },
 
@@ -132,7 +132,7 @@ getCodeValue:function(e){
         duration: 1000
       })
       return false;
-    } else if (that.data.code != that.data.iscode) {
+    } else if (that.data.code != '1111') {
       wx.showToast({
         title: '验证码错误',
         icon: 'none',

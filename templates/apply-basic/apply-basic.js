@@ -4,6 +4,10 @@ Page({
    * 页面的初始数据
    */
   data: {
+    realName:'',
+    applyPhone:'',
+    applyCode:'',
+    isCode:false,
     text: '请输入验证码'
   },
 
@@ -13,7 +17,10 @@ Page({
   onLoad: function (options) {
     let that = this;
     that.setData({
-      text: options.text
+      text: options.text,
+      realName:options.realName,
+      applyPhone:options.applyPhone,
+      applyCode:options.applyCode
     })
   },
 

@@ -5,14 +5,14 @@
   </view>
    <view class='input-section flow-column middle-center'>
   <view class='realname-input bottom-40'>
-           <input type="text" value="{{realname}}" maxlength='20' placeholder="请输入真实姓名" bindinput='getRealNameValue'/>
+           <input type="text" value="{{realName}}" maxlength='20' placeholder="请输入真实姓名" bindinput='getRealNameValue'/>
         </view>
         <view class='phone-input bottom-40'>
            <input type="tel" value="{{phone}}" maxlength='11' placeholder="请输入手机号" bindinput='getPhoneNumberValue'/>
         </view>
          <view class='code-input flex-row'>
           <input type='number' maxlength='6' value="{{code}}" placeholder='请输入验证码' bindinput='getCodeValue'/>
-          <button type='default' bindtap='getCode' disabled='{{codeDisabled}}'>
+          <button type='default' bindtap='getApplyCode' disabled='{{codeDisabled}}'>
               {{text}}
             </button>
         </view>

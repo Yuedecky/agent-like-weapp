@@ -1,4 +1,6 @@
-
+.font-grey{
+  color: #998;
+}
 .flex-column{
   display: flex;
   flex-direction: column;

@@ -4,48 +4,206 @@ Page({
    * 页面的初始数据
    */
   data: {
-    realname:'',
-    applyPhone:'',
-    applyCode:'',
+    applicant:{
+      realName: '',
+      applyPhone: '',
+      applyCode: '',
+      isCode:false,
+    },
+    school:{
+      schoolName: '',
+      schoolAddress:'',
+      roomNo:'',
+    },
+    qualification:{
+      images: [],
+      upImgUrl: '',
+    },
+    
+    pageIndex:0,
+
+    warn: ''
   },
 
-  getRealNameValue:function(e){
-    let that = this;
-    that.setData({
-      realname: e.detail.realname
+  uploadimg: function (data) {
+    var that = this;
+    var i = data.i ? data.i : 0,//要上传的图片
+      success = data.success ? data.success : 0,//上传成功的个数
+      fail = data.fail ? data.fail : 0;//上传失败的个数
+    wx.uploadFile({
+      url: data.url, //开发者服务器 url
+      filePath: data.path[i],
+      name: 'file',
+      formData: {
+        'user': 'test'
+      },
+      success: function (res) {
+        success++;
+        //do something
+      },
+      fail: function () {
+        fail++;
+      },
+      compvare: function () {
+        i++;
+        if (i == data.path.length) {
+          console.log("success：" + success + "fail" + fail);
+        } else {
+          data.i = i;
+          data.success = success;
+          data.fail = fail;
+          uploadimg(data);
+        }
+      }
     })
   },
-  getPhoneValue:function(e){
-    let that = this;
+
+nextStepTwo:function(e){
+  var that = this;
+  that.checkInput();
+  var curIndex = that.data.pageIndex+1;
+  if(that.data.warn =='' || that.data.warn == undefined){
+    wx.navigateTo({
+      url: '/pages/apply/apply?pageIndex=' + curIndex,
+    })
+  }
+  
+},
+  getSchoolNameValue:function(e){
+    var that = this;
+    console.log('getSchoolNameValue,e:',e)
     that.setData({
-      applyPhone: e.detail.applyPhone
+      school:{
+         schoolName: e.detail.value
+      }
     })
   },
-  getCodeValue:function(e){
-    let that = this;
+  getPhoneNumberValue:function(e){
+    var that = this;
     that.setData({
-      applyCode: e.detail.applyCode
+      applicant:{
+        applyPhone: e.detail.value
+      }
     })
   },
-  nextStepOne: function (e) {
-    console.log(e)
-    let that = this;
-    let realname=that.data.realname;
-    let applyPhone = that.data.applyPhone;
-    let applyCode = that.data.applyCode;
-    let warn = '';
-    if(realname =='' || realname == undefined){
-      warn = '请填写真实姓名';
-    }else if(applyPhone == '' || applyPhone == undefined){
-      warn = '请填写手机号';
-    }else if(applyCode =='' || applyCode == undefined){
-      warn = '请输入验证码';
+
+  getSchoolAddressValue:function(e){
+    var that = this;
+    that.setData({
+    school:{
+      schoolAddress: e.detail.value
     }
-    if(warn != ''){
+  })
+  },
+  getRoomNoValue:function(e){
+    var that = this;
+    that.setData({
+      qualification:{
+        roomNo: e.detail.value
+      }
+    })
+  },
+
+  getApplyCode:function(e){
+      var that = this;
+      that.checkInput();
+  },
+
+  checkInput:function(){
+    var that = this;
+    var warn = '';
+    if(that.data.pageIndex =="1"){
+      var realName = that.data.applicant.realName;
+      var applyPhone = that.data.applicant.applyPhone;
+      var applyCode = that.data.applicant.applyCode;
+      if (realName == '' || realName == undefined) {
+        warn = '请填写真实姓名';
+      } else if (applyPhone == '' || applyPhone == undefined) {
+        warn = '请填写手机号';
+      } else if (applyCode == '' || applyCode == undefined) {
+        warn = '请输入验证码';
+      }
+    }else if(that.data.pageIndex =="2"){
+      var schoolName = that.data.school.schoolName;
+      var schoolAddress = that.data.school.schoolAddress;
+      var roomNo = that.data.school.roomNo;
+      if (schoolName == '' || schoolName == undefined) {
+        warn = '请填写学校名称';
+      } else if (schoolAddress == '' || schoolAddress == undefined) {
+        warn = '请填写学校地址';
+      } else if (roomNo == '' || roomNo == undefined) {
+        warn = '请填写详细地址';
+      }
+    }else if(that.data.pageIndex == "3"){
+
+    }
+    
+    if (warn != '') {
       wx.showModal({
         title: '提示',
         content: warn,
-        duration:2000
+        duration: 2000
+      })
+      that.setData({
+        warn: warn
+      })
+      return;
+    }else{
+      that.setData({
+        warn:''
+      })
+    }
+  },
+
+  getRealNameValue:function(e){
+    var that = this;
+    that.setData({
+      applicant:{
+        realName: e.detail.value
+      }
+    })
+  },
+  getPhoneValue:function(e){
+    var that = this;
+    that.setData({
+      applicant:{
+        applyPhone: e.detail.value
+      }
+    })
+  },
+  getCodeValue:function(e){
+    var that = this;
+    that.setData({
+      applicant:{
+        applyCode: e.detail.value
+      }
+    })
+  },
+  nextStepOne: function (e) {
+    var that = this;
+    that.checkInput();
+    var curIndex = that.data.pageIndex+1;
+    if(that.data.warn == '' || that.data.warn == undefined){
+        wx.navigateTo({
+          url: '/pages/apply/apply?pageIndex=' + curIndex,
+        })
+      }
+  },
+
+  /**
+   * 
+   */
+  getApplyCode:function(e){
+    var that = this;
+    that.checkInput();
+    if(that.data.applicant.isCode != '1111'){
+      that.setData({
+        warn: '验证码不正确'
+      })
+    }else{
+      var curIndex = that.data.pageIndex+1;
+      wx.navigateTo({
+        url: '/pages/apply/apply?pageIndex='+curIndex,
       })
     }
 
@@ -55,7 +213,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+    var that = this;
+    that.setData({
+      pageIndex: options.pageIndex
+    })
   },
 
   /**
