@@ -5,10 +5,10 @@
         </view>
         <view class='input-section flow-column middle-center'>
         <view class='phone-input bottom-40'>
-           <input type="tel" value="{{phone}}" maxlength='11' placeholder="请输入手机号" bindinput='getPhoneValue'/>
+           <input type="tel" value="{{phone}}" name="phone" maxlength='11' placeholder="请输入手机号" bindinput='getPhoneValue'/>
         </view>
         <view class='code-input flex-row'>
-          <input type='number' maxlength='6' value="{{code}}" placeholder='请输入验证码' bindinput='getCodeValue'/>
+          <input type='number' maxlength='6' name="code" value="{{code}}" placeholder='请输入验证码' bindinput='getCodeValue'/>
           <button type='default' bindtap='getCode' disabled='{{codeDisabled}}'>
               {{text}}
             </button>

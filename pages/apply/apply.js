@@ -20,9 +20,10 @@ Page({
       upImgUrl: '',
     },
     
-    pageIndex:0,
+    pageIndex:1,
 
-    warn: ''
+    warn: '',
+    excludeType: ''
   },
 
   uploadimg: function (data) {
@@ -60,70 +61,65 @@ Page({
 
 nextStepTwo:function(e){
   var that = this;
+  this.setData({
+    excludeType:''
+  })
   that.checkInput();
-  var curIndex = that.data.pageIndex+1;
+  that.setData({
+    pageIndex: this.data.pageIndex+1
+  })
   if(that.data.warn =='' || that.data.warn == undefined){
-    wx.navigateTo({
-      url: '/pages/apply/apply?pageIndex=' + curIndex,
+    wx.switchTab({
+      url: '/pages/apply/apply?pageIndex=' + that.data.pageIndex,
     })
   }
   
 },
   getSchoolNameValue:function(e){
-    var that = this;
-    console.log('getSchoolNameValue,e:',e)
-    that.setData({
-      school:{
-         schoolName: e.detail.value
-      }
+    this.setData({
+      'school.schoolName': e.detail.value
     })
   },
   getPhoneNumberValue:function(e){
-    var that = this;
-    that.setData({
-      applicant:{
-        applyPhone: e.detail.value
-      }
+    this.setData({
+      'applicant.applyPhone': e.detail.value
     })
   },
 
   getSchoolAddressValue:function(e){
-    var that = this;
-    that.setData({
-    school:{
-      schoolAddress: e.detail.value
-    }
+    this.setData({
+    'school.schoolAddress': e.detail.value
   })
   },
   getRoomNoValue:function(e){
-    var that = this;
-    that.setData({
-      qualification:{
-        roomNo: e.detail.value
-      }
+    this.setData({
+      'school.roomNo': e.detail.value
     })
   },
 
   getApplyCode:function(e){
       var that = this;
-      that.checkInput();
+      that.checkInput('code');
   },
 
   checkInput:function(){
     var that = this;
     var warn = '';
-    if(that.data.pageIndex =="1"){
+    let phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
+    if(that.data.pageIndex ==1){
       var realName = that.data.applicant.realName;
       var applyPhone = that.data.applicant.applyPhone;
       var applyCode = that.data.applicant.applyCode;
       if (realName == '' || realName == undefined) {
         warn = '请填写真实姓名';
-      } else if (applyPhone == '' || applyPhone == undefined) {
-        warn = '请填写手机号';
-      } else if (applyCode == '' || applyCode == undefined) {
-        warn = '请输入验证码';
+      } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone)|| applyPhone.trim().length !=11) {
+        warn = '请填写正确的手机号';
+      }else if(that.data.excludeType != 'code'){
+        if (applyCode == '' || applyCode == undefined) {
+          warn = '请输入验证码';
+        }
       }
-    }else if(that.data.pageIndex =="2"){
+    }else if(that.data.pageIndex ==2){
       var schoolName = that.data.school.schoolName;
       var schoolAddress = that.data.school.schoolAddress;
       var roomNo = that.data.school.roomNo;
@@ -134,14 +130,15 @@ nextStepTwo:function(e){
       } else if (roomNo == '' || roomNo == undefined) {
         warn = '请填写详细地址';
       }
-    }else if(that.data.pageIndex == "3"){
-
+    }else if(that.data.pageIndex == 3){
+        
     }
     
     if (warn != '') {
-      wx.showModal({
-        title: '提示',
-        content: warn,
+      wx.showToast({
+        title: warn,
+        icon: '',
+        image:'/assets/images/error.png',
         duration: 2000
       })
       that.setData({
@@ -156,36 +153,32 @@ nextStepTwo:function(e){
   },
 
   getRealNameValue:function(e){
-    var that = this;
-    that.setData({
-      applicant:{
-        realName: e.detail.value
-      }
+    this.setData({
+      'applicant.realName': e.detail.value
     })
   },
   getPhoneValue:function(e){
-    var that = this;
-    that.setData({
-      applicant:{
-        applyPhone: e.detail.value
-      }
+    this.setData({
+      'applicant.applyPhone': e.detail.value.applyPhone
     })
   },
   getCodeValue:function(e){
-    var that = this;
-    that.setData({
-      applicant:{
-        applyCode: e.detail.value
-      }
+    this.setData({
+      'applicant.applyCode': e.detail.value
     })
   },
   nextStepOne: function (e) {
     var that = this;
+    this.setData({
+      excludeType:""
+    })
     that.checkInput();
-    var curIndex = that.data.pageIndex+1;
+    that.setData({
+      pageIndex: this.data.pageIndex+1
+    })
     if(that.data.warn == '' || that.data.warn == undefined){
-        wx.navigateTo({
-          url: '/pages/apply/apply?pageIndex=' + curIndex,
+        wx.switchTab({
+          url: '/pages/apply/apply?pageIndex=' + that.data.pageIndex,
         })
       }
   },
@@ -195,6 +188,9 @@ nextStepTwo:function(e){
    */
   getApplyCode:function(e){
     var that = this;
+    this.setData({
+      excludeType:'code'
+    })
     that.checkInput();
     if(that.data.applicant.isCode != '1111'){
       that.setData({
@@ -215,7 +211,7 @@ nextStepTwo:function(e){
   onLoad: function (options) {
     var that = this;
     that.setData({
-      pageIndex: options.pageIndex
+      pageIndex: Number(options.pageIndex)
     })
   },
 
