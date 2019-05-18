@@ -1,0 +1,23 @@
+@import "/assets/wxss/common.wxss";
+.footer-warn{
+  display: table;
+  width: 100%;
+  line-height: 50rpx;
+  white-space: nowrap;
+  border-spacing: 2rem 0;
+  font-size: 30rpx;
+  color: gray
+}
+.footer-warn::before,.footer-warn::after{
+  display: table-cell;
+  content: "";
+  width: 50%;
+  background: linear-gradient(#ddd, #ddd) repeat-x center;
+  background-size: 0.1rem 0.1rem;
+}
+
+.footer{
+  text-align: center;
+  height: 50rpx;
+  margin-top: 10rpx;
+}

@@ -1,0 +1,61 @@
+<view class='header'>
+  <view class='check-box'>        
+     <image class='check-img' src='/assets/images/check-black.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
+     <image class='check-img' src='/assets/images/check.png' hidden='{{!allsel}}' catchtap='allcheckTap'></image>        
+     <text class='check-text' catchtap='allcheckTap'>全选</text>    
+  </view>    
+  <text class='header-text' catchtap='adminTap'>{{adminShow?'取消管理':'管理'}}</text>
+</view>
+<view class='main'>  
+    <view class='shop' wx:for='{{shopcarData}}' wx:key='this'>    
+        <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>        
+            <image class='check-img' hidden='{{item.check}}' src='/assets/images/check-black.png'></image>        
+            <image class='check-img' hidden='{{!item.check}}' src='/assets/images/check.png'></image>    
+        </view>    
+        <image 
+            class='shop-img' 
+            src='https://img12.360buyimg.com/n7/jfs/t1/31199/14/3993/287777/5c791bb5Ebaa929af/044c52520956ebfb.jpg' 
+            mode='aspectFill' 
+            catchtap='navshopdetailTap'>
+        </image>    
+        <view class='shop-detail' catchtap='navshopdetailTap'>        
+            <text class='shop-name'>{{item.name}}</text>        
+            <text class='shop-type'>{{item.types}}</text>        
+            <view class='shop-detail-bottom'>            
+                <text class='shop-price'>￥{{item.price}}</text>            
+                <view class='num-change'>                
+                    <image 
+                        class='minus-icon' 
+                        hidden='{{item.num<2}}' 
+                        src='/assets/images/decrease.png' 
+                        data-index='{{index}}' 
+                        data-types='minus'  
+                        catchtap='numchangeTap'>
+                    </image>
+                    <image 
+                        class='minus-icon' 
+                        hidden='{{item.num>=2}}' 
+                        src='/assets/images/decrease.png'>
+                     </image>                
+                    <text class='shop-num'>{{item.num}}</text>                
+                    <image 
+                        class='add-icon' 
+                        data-index='{{index}}' 
+                        data-types='add'  
+                        catchtap='numchangeTap' 
+                        src='/assets/images/plus.png'>
+                    </image>            
+                </view>        
+            </view>    
+         </view>  
+        </view>
+</view>
+<view class='footer flex-row'>
+<view class='flex-column total-part'>
+   <view class='footer-total-text' wx:if='{{adminShow}}'>合计支付：<text class='footer-total-price'>￥{{total}}</text></view>
+   <view class='footer-total-text' wx:if='{{adminShow}}'>合计提成：<text class='footer-total-price'>￥{{total}}</text></view>
+   </view>
+   <view class='footer-total' wx:if="{{adminShow}}">立即下单</view>  
+   <view class='deleteshop' catchtap='deleteshopTap' wx:if='{{!adminShow}}'>移除商品</view>    
+   <!-- <text class='deleteshop' catchtap='addcollectTap' hidden='{{!adminShow}}'>加入收藏夹</text> -->
+</view>

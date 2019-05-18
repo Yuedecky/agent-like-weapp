@@ -1,0 +1,26 @@
+@import "/assets/wxss/common.wxss";
+.thanks-info{
+  padding: 40rpx 10rpx 0rpx 0rpx;
+  font-size: 32rpx;
+  text-align: center;
+  color: #333;
+}
+
+.thanks-okay{
+  margin-top: 600rpx;
+  width: 100%;
+}
+
+.exit-btn{
+    margin: 0 auto;
+    width: 100rpx;
+    height: 60rpx;
+    padding: 12rpx 12rpx 12rpx 12rpx;
+    font-size: 40rpx;
+    line-height: 60rpx;
+    color: #fff;
+    border-radius: 10rpx;
+    text-align: center;
+    background: rgb(60, 155, 60);
+    font-weight: 600;
+}

@@ -1,0 +1,10 @@
+
+.image-cancel{
+    width:40rpx;
+    height:40rpx;
+    border-radius:50%;
+    position:relative;
+    top:-162rpx;
+    right:-122rpx;
+    z-index:800;
+}

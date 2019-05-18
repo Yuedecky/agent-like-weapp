@@ -4,24 +4,19 @@ Page({
    * 页面的初始数据
    */
   data: {
-    images: [],//临时图片地址
-    upImgUrl: 'https://........'//上传图片服务器地址
+    
   },
-
-
-   
-  
-  
-
+  // exitApp:function(e){
+  //   console.log(e)
+  //   wx.navigateBack({
+  //     delta:-1
+  //   })
+  // },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let that = this;
-    that.setData({
-      images: options.images,
-      upImgUrl: options.upImgUrl
-    })
+    
   },
 
   /**

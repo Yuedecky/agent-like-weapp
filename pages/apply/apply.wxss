@@ -1,5 +1,5 @@
 @import "/templates/apply-basic/apply-basic.wxss";
-
+@import "/templates/apply-qualification/apply-qualification.wxss";
 .apply-container{
   width: 100%;
 }

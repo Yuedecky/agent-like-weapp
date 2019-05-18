@@ -1,3 +1,6 @@
+import { promisify } from '../../assets/js/promise.util';
+import { $init, $digest } from '../../assets/js/common.util';
+
 Page({
 
   /**
@@ -26,36 +29,22 @@ Page({
     excludeType: ''
   },
 
-  uploadimg: function (data) {
+  submitApply: function (data) {
     var that = this;
-    var i = data.i ? data.i : 0,//要上传的图片
-      success = data.success ? data.success : 0,//上传成功的个数
-      fail = data.fail ? data.fail : 0;//上传失败的个数
-    wx.uploadFile({
-      url: data.url, //开发者服务器 url
-      filePath: data.path[i],
-      name: 'file',
-      formData: {
-        'user': 'test'
-      },
-      success: function (res) {
-        success++;
-        //do something
-      },
-      fail: function () {
-        fail++;
-      },
-      compvare: function () {
-        i++;
-        if (i == data.path.length) {
-          console.log("success：" + success + "fail" + fail);
-        } else {
-          data.i = i;
-          data.success = success;
-          data.fail = fail;
-          uploadimg(data);
-        }
-      }
+    let images = that.data.qualification.images;
+    // wx.uploadFile({
+    //   url: data.url, //开发者服务器 url
+    //   filePath: images,
+    //   name: 'file',
+    //   formData: {
+    //   },
+    //   success: function (res) {
+    //   },
+    //   fail: function () {
+    //   },
+    // })
+    wx.reLaunch({
+      url: '/pages/thanks/thanks',
     })
   },
 
@@ -131,13 +120,16 @@ nextStepTwo:function(e){
         warn = '请填写详细地址';
       }
     }else if(that.data.pageIndex == 3){
-        
+        if(that.data.qualification.images.length <1){
+          warn = '请选择图片'
+        }else if(that.data.qualification.images.length>3){
+          warn = '之多只能上传三张图片'
+        }
     }
     
     if (warn != '') {
       wx.showToast({
         title: warn,
-        icon: '',
         image:'/assets/images/error.png',
         duration: 2000
       })
@@ -205,14 +197,70 @@ nextStepTwo:function(e){
 
   },
 
+  longPress: function (e) {
+    console.log(e)
+    let that = this;
+    let images = that.data.qualification.images;
+    let index = e.currentTarget.dataset.index;
+    wx.showModal({ //使用模态框提示用户进行操作
+      title: '提示',
+      content: '确定删除该图片?',
+      success: function (res) {
+        if (res.confirm) { //判断用户是否点击了确定
+          images.splice(index,1)
+          that.setData({
+            'qualification.images':images
+          })
+        }
+      }
+    })
+  },
+  chooseImage: function () {
+    var that = this;
+    wx.chooseImage({
+      count: 9, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      success: function (res) {
+        var tempFilePaths = res.tempFilePaths
+        that.setData({
+          'qualification.images': that.data.qualification.images.concat(tempFilePaths),
+        })
+      }
+    })
+    console.log(that.data.qualification.images.length)
+  },
+  previewImage: function (e) {
+    let that = this;
+    console.log('preview image,e:',e)
+    wx.previewImage({
+      current: e.currentTarget.id, // 当前显示图片的http链接
+      urls: that.data.qualification.images // 需要预览的图片http链接列表
+    })
+  },
+  
+  /**
+   * 上传图片
+   */
+  uploadImg: function (e) {
+    var that = this;
+    if (that.data.qualification.images.length > 0 && that.data.qualification.images.length <=3) {
+      uploadImg({
+        url: that.data.qualification.upImgUrl,//这里是你图片上传的接口
+        path: that.data.qualification.images//这里是选取的图片的地址数组
+      });
+    } 
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that = this;
-    that.setData({
-      pageIndex: Number(options.pageIndex)
-    })
+      $init(this);
+      let that = this;
+      that.setData({
+        pageIndex: options.pageIndex
+      })
   },
 
   /**

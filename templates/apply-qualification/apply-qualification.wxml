@@ -6,18 +6,18 @@
                    <view class="weui-uploader">
                        <view class="weui-uploader__hd">
                            <view class="weui-uploader__title font-grey">拍照上传学生证基本信息</view>
-                           <view class="weui-uploader__info">{{images.length}}/9</view>
+                           <view class="weui-uploader__info">{{images.length}}/3</view>
                        </view>
                        <view class="weui-uploader__bd">
-                           <view class="weui-uploader__files" id="uploaderFiles">
-                               <block wx:for="{{images}}" wx:key="*this" wx:for-item="{{item}}">
-                                   <view class="weui-uploader__file" bindtap="previewImage" id="{{item}}">
-                                       <image class="weui-uploader__img" src="{{item}}" mode="aspectFill" />
+                           <view class="weui-uploader__files padding-bottom-40 " id="uploaderFiles">
+                               <block wx:for="{{images}}" wx:key="*this">
+                                   <view class="weui-uploader__file" bindtap="previewImage" id="{{item}}" >
+                                       <image class="weui-uploader__img" src="{{item}}" mode="aspectFill"  bindlongpress='longPress' data-index="{{index}}"/>
                                    </view>
                                </block>
                            </view>
-                           <view class="weui-uploader__input-box">
-                               <view class="weui-uploader__input" bindtap="chooseImage"></view>
+                           <view class="weui-uploader__input-box" wx:if='{{images.length<=2}}'>
+                               <view class="weui-uploader__input " bindtap="chooseImage"></view>
                            </view>
                        </view>
                    </view>
@@ -25,6 +25,6 @@
            </view>
        </view>
    </view>
-<button bindtap="uploadImg" type='primary' class='login-btn'>提交申请</button>
+<button bindtap="submitApply" type='primary' class='login-btn top-600'>提交申请</button>
 
 </template>
