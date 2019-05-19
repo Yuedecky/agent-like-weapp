@@ -1,8 +1,8 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/cart/cart",
     "pages/login/login",
+    "pages/cart/cart",
     "pages/order/order",
     "pages/apply/apply",
     "pages/thanks/thanks"

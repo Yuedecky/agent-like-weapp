@@ -32,6 +32,9 @@ Page({
   submitApply: function (data) {
     var that = this;
     let images = that.data.qualification.images;
+    let realName = that.data.applicant.realName;
+    let applyPhone = that.data.applicant.applyPhone;
+    let applyCode = thta.data.applicant.applyCode;
     // wx.uploadFile({
     //   url: data.url, //开发者服务器 url
     //   filePath: images,

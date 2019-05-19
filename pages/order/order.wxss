@@ -1,0 +1,31 @@
+@import "/templates/order-item/order-item.wxss";
+.m-order-header{
+  font-size: 32rpx;
+  color:#999;
+  margin-left: 20rpx;
+}
+
+.order-p-count{
+  color: red;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.order-p-no{
+  width:84%;
+  height: 100%;
+}
+
+.order-p-status{
+  width: 16%;
+  height: 100%;
+  text-align: center;
+}
+
+.to-paid-order{
+  float: right;  
+}
+.o-cancel-btn{
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+}

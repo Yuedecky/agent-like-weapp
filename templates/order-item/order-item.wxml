@@ -1,0 +1,18 @@
+<template name='order-item'>
+<view class=' order-list-container flex-row'>
+        <view class='item-left-block'>
+          <image src="{{image}}" class='order-image-item'></image>
+        </view>
+        <view class='item-right-block flex-row'>
+          <view class="left-section flex-column">
+              <view class='item-name'>{{name}}</view>
+              <view class='item-desc'>{{desc}}</view>
+              <view class='item-price'>销售价：<text class='price-info'>{{salePrice}}</text>
+              提成价：<text class='price-info'>{{commission}}</text></view>
+              </view>
+          <view class='right-section'>
+             <view><text class='goods-num'>×{{num}}</text></view>
+          </view>
+          </view>
+      </view>
+      </template>

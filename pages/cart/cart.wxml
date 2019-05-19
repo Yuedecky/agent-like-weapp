@@ -55,7 +55,6 @@
    <view class='footer-total-text' wx:if='{{adminShow}}'>合计支付：<text class='footer-total-price'>￥{{total}}</text></view>
    <view class='footer-total-text' wx:if='{{adminShow}}'>合计提成：<text class='footer-total-price'>￥{{total}}</text></view>
    </view>
-   <view class='footer-total' wx:if="{{adminShow}}">立即下单</view>  
-   <view class='deleteshop' catchtap='deleteshopTap' wx:if='{{!adminShow}}'>移除商品</view>    
-   <!-- <text class='deleteshop' catchtap='addcollectTap' hidden='{{!adminShow}}'>加入收藏夹</text> -->
+   <view class='footer-total-submit middle-center' wx:if="{{adminShow}}">立即下单</view>  
+   <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{!adminShow}}'>移除商品</view>    
 </view>

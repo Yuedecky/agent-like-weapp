@@ -36,6 +36,7 @@ App({
   appData: {
     logoName: '微券加盟',
     logoUrl: 'http://image.qfstatic.com/897/2019/201904/20190429/8D5C9103C78643A190513340FA3FA294.jpeg',
-    version: 0.1
+    version: 0.1,
+    serverUrl:"http://47.102.44.202/",
   }
 })

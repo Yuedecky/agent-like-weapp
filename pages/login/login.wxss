@@ -30,6 +30,7 @@
   line-height: 80rpx;
   border-bottom: 1px solid #ccc;
 }
+
 .code-input input{
   width: 360rpx;
   margin-right: 20rpx;
