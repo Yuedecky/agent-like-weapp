@@ -42,12 +42,12 @@
 
 .item-left-block{
   width: 32%;
-  height: 260rpx;
+  height: 200rpx;
 }
 
 .item-right-block{
   width: 66%;
-  height: 260rpx;
+  height: 200rpx;
 }
 
 .left-section{
@@ -61,7 +61,7 @@
 
 .right-image-item {
   width: 90%;
-  height: 250rpx;
+  height: 200rpx;
 }
 
 .item-name {
@@ -90,6 +90,6 @@
 .add-cart{
   width: 40rpx;
   height: 40rpx;
-  margin-top: 200rpx;
+  margin-top: 160rpx;
   margin-left: -40rpx;
 }

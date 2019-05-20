@@ -8,7 +8,7 @@ Page({
     activeIndex:1,
     sliderOffset: 0,
     sliderLeft:0, 
-    silderWidth:120,
+    silderWidth:110,
 
 
     // ====

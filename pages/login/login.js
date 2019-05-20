@@ -17,7 +17,7 @@ Page({
 
   onApplyOpen:function(e){
     wx.navigateTo({
-      url: '/pages/apply/apply?pageIndex=1',
+      url: '/pages/apply/apply?pageIndex=2',
     })
   },
 
@@ -146,6 +146,7 @@ getCodeValue:function(e){
       })
     }
   },
+
 
 
   /**

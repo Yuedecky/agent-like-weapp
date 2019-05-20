@@ -6,7 +6,12 @@ Page({
   data: {
     schoolName: '',
     schoolAddress:'',
-    roomNo:''
+    roomNo:'',
+
+    provinces: [],
+    citys: [],
+    countys: [],
+    value: [0, 0, 0],
     
   },
 
@@ -18,7 +23,11 @@ Page({
       that.setData({
         schoolAddress:options.schoolAddress,
         schoolName:options.schoolName,
-        roomNo:options.roomNo
+        roomNo:options.roomNo,
+        provinces:options.provinces,
+        citys:options.citys,
+        countys:options.countys,
+        value:options.value
       })
   },
 

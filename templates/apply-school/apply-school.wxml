@@ -7,8 +7,9 @@
   <view class='schoolname-input bottom-40'>
            <input type="text" value="{{schoolName}}" maxlength='20' placeholder="请输入学校名称" name="schoolName" auto-focus='true' bindinput='getSchoolNameValue'/>
         </view>
-        <view class='school-address-input bottom-40'>
-           <input type="text" value="{{schoolAddress}}" name="schoolAddress" maxlength='50' placeholder="请输入学校地址" bindinput='getSchoolAddressValue'/>
+        <view class='school-address-input bottom-40 flex-row'>
+           <view class='school-address-holder'><input type="text" value="{{schoolAddress}}" name="schoolAddress" maxlength='30' placeholder="请输入学校地址" bindinput='getSchoolAddressValue'/></view>
+           <view  class="right-arrow school-address-selector" bindtap='translate'></view>
         </view>
          <view>
           <input type='text' maxlength='50' value="{{roomNo}}" name="roomNo" placeholder='详细地址（精确到楼号-宿舍号）' bindinput='getRoomNoValue'/>
@@ -17,4 +18,6 @@
         <button type='primary' class="login-btn"  disabled='{{disabled}}'   hover-class='none'
          bindtap='nextStepTwo'>下一步</button>
 </view>
+
+
 </template>

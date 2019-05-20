@@ -12,7 +12,7 @@
   <view class="index-nav-right">
     <view class="nav-right-container" wx:if="{{level[index].ishaveChild}}">
       <block wx:for="{{level[index].children}}" wx:key="*this">
-      <view class='flex-row'>
+      <view class='flex-row bottom-20'>
         <view class='item-left-block'>
           <image src="{{item.image}}" class='right-image-item'></image>
         </view>
