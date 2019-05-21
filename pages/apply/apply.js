@@ -1,5 +1,7 @@
 import { promisify } from '../../assets/js/promise.util';
 import { $init, $digest } from '../../assets/js/common.util';
+
+var app = getApp();
 var area = require('../../assets/lib/area');
 var areaInfo = [];//所有省市区县数据
 var provinces = [];//省
@@ -31,13 +33,17 @@ Page({
     citys: citys,
     countys: countys,
     value: [0, 0, 0],
+
+    //
+    codeDisabled:false,
+    codeText: '发送验证码',
+    currentTime:60,
     
 
     applicant:{
       realName: '',
       applyPhone: '',
       applyCode: '',
-      isCode:false,
     },
     school:{
       schoolName: '',
@@ -50,7 +56,6 @@ Page({
     },
     
     pageIndex:1,
-
     warn: '',
     excludeType: ''
   },
@@ -87,26 +92,89 @@ Page({
 
   submitApply: function (data) {
     var that = this;
-    let images = that.data.qualification.images;
-    let realName = that.data.applicant.realName;
+    var warn  = '';
+    if (that.data.qualification.images.length < 1) {
+      warn = '请选择图片'
+    } else if (that.data.qualification.images.length > 3) {
+      warn = '之多只能上传三张图片'
+    }
+    if(warn !='' || warn != null){
+      wx.showToast({
+        title: warn,
+        duration:2000,
+        icon: 'none'
+      })
+    }
+    //1.先调用上传
+    var arr = [];
+    let studentIdCards = that.data.qualification.images;
+    for(var i=0;i<studentIdCards.length;i++){
+     const uploadTask =  wx.uploadFile({
+        url: app.appData.serverUrl + 'upload', //开发者服务器 url
+        filePath: studentIdCards[i],
+        name: 'file',
+        success: function (res) {
+          console.log(res)
+          let data = JSON.parse(res.data)
+          let url = data.data;
+          arr.push(url);
+          if( i == studentIdCards.length -1){
+            that.setData({
+              'qualification.images': arr
+            })
+          }
+        },
+        fail: function (res) {
+          console.log(res)
+        },
+      })
+      uploadTask.onProgressUpdate((res) =>{
+        console.log(res)
+        console.log('上传进度', res.progress)
+        console.log('已经上传的数据长度', res.totalBytesSent)
+        console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+      })
+    }
+    console.log('images:',studentIdCards)
     let applyPhone = that.data.applicant.applyPhone;
     let applyCode = that.data.applicant.applyCode;
-    console.log(images)
-
-    // wx.uploadFile({
-    //   url: data.url, //开发者服务器 url
-    //   filePath: images,
-    //   name: 'file',
-    //   formData: {
-    //   },
-    //   success: function (res) {
-    //   },
-    //   fail: function () {
-    //   },
-    // })
-    wx.reLaunch({
-      url: '/pages/thanks/thanks',
+    let realName = that.data.applicant.realName;
+    let schoolName = that.data.school.schoolName;
+    let schoolAddress = that.data.school.schoolAddress;
+    let schoolDetailAddress = that.data.school.roomNo;
+    studentIdCards = that.data.qualification.images;
+    //2.提交申请
+    wx.request({
+      url: app.appData.serverUrl + 'user/apply',
+      data:{
+        loginName: applyPhone,
+        verifyCode: applyCode,
+        realName: realName,
+        schoolName: schoolName,
+        schoolAddress: schoolAddress,
+        schoolDetailAddress: schoolDetailAddress,
+        studentIdCards: studentIdCards
+      },
+      success:function(res){
+        console.log(res)
+        let data = res.data;
+        if(data.status != 200){
+          wx.showToast({
+            title: '申请失败',
+            icon:'none',
+            duration:2000
+          })
+        }else{
+          wx.reLaunch({
+            url: '/pages/thanks/thanks',
+          })
+        }
+      },
+      fail:function(res){
+        console.log(res)
+      }
     })
+    
   },
 
 nextStepTwo:function(e){
@@ -114,13 +182,28 @@ nextStepTwo:function(e){
   this.setData({
     excludeType:''
   })
-  that.checkInput();
-  that.setData({
-    pageIndex: this.data.pageIndex+1
-  })
-  if(that.data.warn =='' || that.data.warn == undefined){
-    wx.switchTab({
-      url: '/pages/apply/apply?pageIndex=' + that.data.pageIndex,
+
+  var warn = ''
+  var schoolName = that.data.school.schoolName;
+  var schoolAddress = that.data.school.schoolAddress;
+  var roomNo = that.data.school.roomNo;
+  if (schoolName == '' || schoolName == undefined) {
+    warn = '请填写学校名称';
+  } else if (schoolAddress == '' || schoolAddress == undefined) {
+    warn = '请填写学校地址';
+  } else if (roomNo == '' || roomNo == undefined) {
+    warn = '请填写详细地址';
+  }
+  
+  if(warn =='' || warn == undefined){
+    wx.navigateTo({
+      url: '/pages/apply/apply?pageIndex=3' ,
+    })
+  }else{
+    wx.showToast({
+      title: warn,
+      duration:2000,
+      icon: 'none'
     })
   }
   
@@ -147,47 +230,108 @@ nextStepTwo:function(e){
     })
   },
 
-  getApplyCode:function(e){
-      var that = this;
-      that.checkInput('code');
+  onProvinceSelected:function(e){
+    let that= this;
+    let provinceId = e.currentTarget.dataset.id;
+    that.setData({
+      province: provinceId
+    })
   },
 
-  
+
+  getApplyCode:function(e){
+    var that = this;
+    var realName = that.data.applicant.realName;
+    var applyPhone = that.data.applicant.applyPhone;
+    var applyCode = that.data.applicant.applyCode;
+    let phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
+    let warn = '';
+    if (realName == '' || realName == undefined) {
+      warn = '请填写真实姓名';
+    } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
+      warn = '请填写正确的手机号';
+    } else if (applyCode == '' || applyCode == undefined) {
+        warn = '请输入验证码';
+    }
+    if(warn == null || warn ==''){
+      wx.showToast({
+        title: warn,
+        icon:'none'
+      })
+      return;
+    }
+    let currentTime = that.data.currentTime;
+    let sendUrl = app.appData.serverUrl + 'verify/code/send';
+      wx.request({
+        url: sendUrl,
+        data: {
+          phone: that.data.applicant.applyPhone,
+          type:2
+        },
+        success:function(e){
+          console.log(e)
+          let data = e.data;
+          if(data.status != 200){
+            wx.showToast({
+              title: data.msg,
+              duration:2000,
+              icon: 'none'
+            })
+          }else{
+            wx.showToast({
+              title: '发送成功',
+              duration:2000,
+              icon:'none'
+            });
+            //start
+            //设置一分钟的倒计时
+            var interval = setInterval(function () {
+              currentTime--; //每执行一次让倒计时秒数减一
+              that.setData({
+                codeDisabled: true,
+                text: currentTime + 's', //按钮文字变成倒计时对应秒数
+              })
+              //如果当秒数小于等于0时 停止计时器 且按钮文字变成重新发送 且按钮变成可用状态 倒计时的秒数也要恢复成默认秒数 即让获取验证码的按钮恢复到初始化状态只改变按钮文字
+              if (currentTime <= 0) {
+                clearInterval(interval)
+                that.setData({
+                  text: '重新发送',
+                  currentTime: 61,
+                  codeDisabled: false,
+                  color: '#59b550'
+                })
+              }
+            }, 1000);
+           
+
+           // end
+          }
+        },
+        fail:function(e){
+          console.log(e)
+          wx.showToast({
+            title: '发送失败',
+            icon: 'none'
+          })
+        }
+      })
+  },
+
+  nono:function(e){
+    console.log(e)
+  },
 
   checkInput:function(){
     var that = this;
     var warn = '';
-    let phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
-    if(that.data.pageIndex ==1){
-      var realName = that.data.applicant.realName;
-      var applyPhone = that.data.applicant.applyPhone;
-      var applyCode = that.data.applicant.applyCode;
-      if (realName == '' || realName == undefined) {
-        warn = '请填写真实姓名';
-      } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone)|| applyPhone.trim().length !=11) {
-        warn = '请填写正确的手机号';
-      }else if(that.data.excludeType != 'code'){
-        if (applyCode == '' || applyCode == undefined) {
-          warn = '请输入验证码';
-        }
-      }
-    }else if(that.data.pageIndex ==2){
-      var schoolName = that.data.school.schoolName;
-      var schoolAddress = that.data.school.schoolAddress;
-      var roomNo = that.data.school.roomNo;
-      if (schoolName == '' || schoolName == undefined) {
-        warn = '请填写学校名称';
-      } else if (schoolAddress == '' || schoolAddress == undefined) {
-        warn = '请填写学校地址';
-      } else if (roomNo == '' || roomNo == undefined) {
-        warn = '请填写详细地址';
-      }
-    }else if(that.data.pageIndex == 3){
-        if(that.data.qualification.images.length <1){
-          warn = '请选择图片'
-        }else if(that.data.qualification.images.length>3){
-          warn = '之多只能上传三张图片'
-        }
+    let pageIndex = Number(that.data.pageIndex)
+    if(pageIndex ==1){
+      
+      return;
+    }else if(pageIndex ==2){
+      
+    }else if(pageIndex == 3){
+       
     }
     
     if (warn != '') {
@@ -222,44 +366,37 @@ nextStepTwo:function(e){
       'applicant.applyCode': e.detail.value
     })
   },
+
   nextStepOne: function (e) {
     var that = this;
     this.setData({
       excludeType:""
     })
-    that.checkInput();
-    that.setData({
-      pageIndex: this.data.pageIndex+1
-    })
+    var warn  = '';
+    var schoolName = that.data.school.schoolName;
+    var schoolAddress = that.data.school.schoolAddress;
+    var roomNo = that.data.school.roomNo;
+    if (schoolName == '' || schoolName == undefined) {
+      warn = '请填写学校名称';
+    } else if (schoolAddress == '' || schoolAddress == undefined) {
+      warn = '请填写学校地址';
+    } else if (roomNo == '' || roomNo == undefined) {
+      warn = '请填写详细地址';
+    }
+    if(warn == null || warn == ''){
+      wx.showToast({
+        title: warn,
+        icon: 'none',
+        duration:2000
+      })
+      return
+    }
     if(that.data.warn == '' || that.data.warn == undefined){
-        wx.switchTab({
-          url: '/pages/apply/apply?pageIndex=' + that.data.pageIndex,
+        wx.navigateTo({
+          url: '/pages/apply/apply?pageIndex=2' 
         })
       }
   },
-
-  /**
-   * 
-   */
-  getApplyCode:function(e){
-    var that = this;
-    this.setData({
-      excludeType:'code'
-    })
-    that.checkInput();
-    if(that.data.applicant.isCode != '1111'){
-      that.setData({
-        warn: '验证码不正确'
-      })
-    }else{
-      var curIndex = that.data.pageIndex+1;
-      wx.navigateTo({
-        url: '/pages/apply/apply?pageIndex='+curIndex,
-      })
-    }
-
-  },
-
   longPress: function (e) {
     console.log(e)
     let that = this;
@@ -493,9 +630,6 @@ nextStepTwo:function(e){
     that.setData({
       pageIndex:options.pageIndex
     })
-    var date = new Date()
-    console.log(date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日");
-
     //获取省市区县数据
     area.getAreaInfo(function (arr) {
       areaInfo = arr;
@@ -541,7 +675,6 @@ nextStepTwo:function(e){
     show = true;
     t = 0;
     animationEvents(this, moveY, show);
-
   },
   //页面滑至底部事件
   onReachBottom: function () {

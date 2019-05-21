@@ -12,12 +12,13 @@ Page({
     phone: '',
     code:'',
     text:'获取验证码',
-    currentTime: 60
+    currentTime: 60,
+    validateCode: ''
   },
 
   onApplyOpen:function(e){
     wx.navigateTo({
-      url: '/pages/apply/apply?pageIndex=2',
+      url: '/pages/apply/apply?pageIndex=1',
     })
   },
 
@@ -54,6 +55,17 @@ getCodeValue:function(e){
       warn = "手机号格式不正确";
     } else {
       //当手机号正确的时候提示用户短信验证码已经发送
+      let url = app.appData.serverUrl + 'verify/code/send';
+      wx.request({
+        url: url,
+        data:{
+          phone: phone,
+          type:1
+        },
+        success:function(res){
+          console.log(res);
+        }
+      })
       wx.showToast({
         title: '短信验证码已发送',
         icon: 'none',
@@ -65,9 +77,9 @@ getCodeValue:function(e){
 
       //判断 当提示错误信息文字不为空 即手机号输入有问题时提示用户错误信息 并且提示完之后一定要让按钮为可用状态 因为点击按钮时设置了只要点击了按钮就让按钮禁用的情况
       if (warn != null) {
-        wx.showModal({
-          title: '提示',
-          content: warn
+        wx.showToast({
+          title: warn,
+          icon: 'none'
         })
 
         that.setData({
@@ -132,17 +144,32 @@ getCodeValue:function(e){
         duration: 1000
       })
       return false;
-    } else if (that.data.code != '1111') {
-      wx.showToast({
-        title: '验证码错误',
-        icon: 'none',
-        duration: 1000
-      })
-      return false;
     } else {
-      wx.setStorageSync('phone', this.data.phone);
-      wx.switchTab({
-        url: '/pages/index/index',
+      wx.request({
+        url: app.appData.serverUrl+'user/login',
+        data:{
+          loginName: that.data.phone,
+          password: that.data.code,
+        },
+        success:function(res){
+          console.log(res);
+          let data = res.data;
+          if(data.status != 200){
+            wx.showToast({
+              title: data.msg,
+            })
+            wx.setStorageSync('phone', this.data.phone);
+            wx.switchTab({
+              url: '/pages/index/index',
+            })
+          }
+        },
+        fail:function(e){
+          wx.showToast({
+            title: '登陆失败',
+            icon:"none"
+          })
+        }
       })
     }
   },

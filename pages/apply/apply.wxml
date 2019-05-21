@@ -12,11 +12,11 @@
         <text class="left-bt" catchtap="hiddenFloatView" data-id="555">取消</text>
         <text class="right-bt" catchtap="hiddenFloatView" data-id="666">确定</text>
           <view class="line"></view> 
-        <picker-view indicator-style = "height: 50rpx;" value="{{value}}" bindchange="bindChange" catchtap="nono">
+        <picker-view indicator-style = "height: 50rpx;" value="{{value}}" bindchange="bindChange">
         <!--省-->
         <picker-view-column>
            <view wx:for="{{provinces}}" wx:for-item="sheng" wx:key="">
-             {{sheng.name}}
+             <view catchtap='onProvinceSelected' data-pid='{{sheng.id}}'>{{sheng.name}}</view>
           </view>
         </picker-view-column>
         <!--地级市-->
