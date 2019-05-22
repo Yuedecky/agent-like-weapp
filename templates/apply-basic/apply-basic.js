@@ -8,7 +8,8 @@ Page({
     applyPhone:'',
     applyCode:'',
     isCode:false,
-    text: '请输入验证码'
+    text: '请输入验证码',
+    codeDisabled: false
   },
 
   /**
@@ -20,7 +21,8 @@ Page({
       text: options.text,
       realName:options.realName,
       applyPhone:options.applyPhone,
-      applyCode:options.applyCode
+      applyCode:options.applyCode,
+      codeDisabled: options.codeDisabled
     })
   },
 

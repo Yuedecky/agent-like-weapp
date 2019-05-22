@@ -3,7 +3,7 @@
 <import src="/templates/apply-qualification/apply-qualification.wxml"></import>
 <view class='apply-container'>
 <view wx:if="{{pageIndex == 1}}">
-  <template is='basic-info' data="{{text:'获取验证码'}}"></template>
+  <template is='basic-info' data="{{text:codeText,codeDisabled:codeDisabled}}"></template>
 </view>
 <view wx:elif="{{pageIndex==2}}">
     <template is ='school-info' data="{{...school}}"></template>
@@ -15,19 +15,19 @@
         <picker-view indicator-style = "height: 50rpx;" value="{{value}}" bindchange="bindChange">
         <!--省-->
         <picker-view-column>
-           <view wx:for="{{provinces}}" wx:for-item="sheng" wx:key="">
-             <view catchtap='onProvinceSelected' data-pid='{{sheng.id}}'>{{sheng.name}}</view>
+           <view wx:for="{{provinces}}" wx:for-item="sheng" wx:key="*this">
+             {{sheng.name}}
           </view>
         </picker-view-column>
         <!--地级市-->
         <picker-view-column>
-          <view wx:for="{{citys}}" wx:key="">
+          <view wx:for="{{citys}}" wx:key="*this">
             {{item.name}}
           </view>
         </picker-view-column>
         <!--区县-->
         <picker-view-column>
-          <view wx:for="{{countys}}" wx:key="">
+          <view wx:for="{{countys}}" wx:key="*this">
             {{item.name}}
           </view>
         </picker-view-column>

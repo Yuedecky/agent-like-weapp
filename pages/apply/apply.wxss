@@ -53,17 +53,8 @@ picker-view-column view{
   background-color: rgba(255, 255, 255, 1);
 }
 
-.animation-button {
-  margin-top: 20rpx;
-  top:20rpx;
-  width: 400rpx;
-  height: 100rpx; 
-  line-height: 100rpx; 
-  align-items:center;
-}
 
-
-text{
+.animation-element-wrapper text{
   color: #999999;
   display: inline-flex;  
   position: fixed;

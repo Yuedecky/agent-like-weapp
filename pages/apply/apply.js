@@ -62,6 +62,7 @@ Page({
 
   //滑动事件
   bindChange: function (e) {
+    let that = this;
     var val = e.detail.value
     // console.log(e)
     //判断滑动的是第几个column
@@ -69,19 +70,19 @@ Page({
     if (index[0] != val[0]) {
       val[1] = 0;
       val[2] = 0;
-      getCityArr(val[0], this);//获取地级市数据
-      getCountyInfo(val[0], val[1], this);//获取区县数据
+      getCityArr(val[0], that);//获取地级市数据
+      getCountyInfo(val[0], val[1], that);//获取区县数据
     } else {    //若省份column未做滑动，地级市做了滑动则定位区县第一位
       if (index[1] != val[1]) {
         val[2] = 0;
-        getCountyInfo(val[0], val[1], this);//获取区县数据
+        getCountyInfo(val[0], val[1], that);//获取区县数据
       }
     }
     index = val;
 
 
     //更新数据
-    this.setData({
+    that.setData({
       value: [val[0], val[1], val[2]],
       province: provinces[val[0]].name,
       city: citys[val[1]].name,
@@ -98,7 +99,7 @@ Page({
     } else if (that.data.qualification.images.length > 3) {
       warn = '之多只能上传三张图片'
     }
-    if(warn !='' || warn != null){
+    if(warn !=''){
       wx.showToast({
         title: warn,
         duration:2000,
@@ -107,9 +108,9 @@ Page({
     }
     //1.先调用上传
     var arr = [];
-    let studentIdCards = that.data.qualification.images;
+    let studentIdCards = wx.getStorageSync('qualification.images');
     for(var i=0;i<studentIdCards.length;i++){
-     const uploadTask =  wx.uploadFile({
+       wx.uploadFile({
         url: app.appData.serverUrl + 'upload', //开发者服务器 url
         filePath: studentIdCards[i],
         name: 'file',
@@ -118,31 +119,27 @@ Page({
           let data = JSON.parse(res.data)
           let url = data.data;
           arr.push(url);
-          if( i == studentIdCards.length -1){
-            that.setData({
-              'qualification.images': arr
-            })
-          }
+          
         },
         fail: function (res) {
           console.log(res)
+          wx.showToast({
+            title: res.errMsg,
+            duration:2000,
+            icon:'none'
+          })
         },
       })
-      uploadTask.onProgressUpdate((res) =>{
-        console.log(res)
-        console.log('上传进度', res.progress)
-        console.log('已经上传的数据长度', res.totalBytesSent)
-        console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
-      })
     }
+    wx.setStorageSync('qualification.images', arr);
     console.log('images:',studentIdCards)
-    let applyPhone = that.data.applicant.applyPhone;
-    let applyCode = that.data.applicant.applyCode;
-    let realName = that.data.applicant.realName;
-    let schoolName = that.data.school.schoolName;
-    let schoolAddress = that.data.school.schoolAddress;
-    let schoolDetailAddress = that.data.school.roomNo;
-    studentIdCards = that.data.qualification.images;
+    let realName=wx.getStorageSync('applicant.realName')
+    let applyPhone = wx.getStorageSync('applicant.applyPhone')
+    let applyCode = wx.getStorageSync('applicant.applyCode')
+    let schoolName = wx.getStorageSync('school.schoolName');
+    let schoolAddress =wx.getStorageSync('school.schoolAddress')
+    let schoolDetailAddress = wx.getStorageSync('school.roomNo');
+    studentIdCards = wx.getStorageSync('qualification.images')
     //2.提交申请
     wx.request({
       url: app.appData.serverUrl + 'user/apply',
@@ -153,14 +150,14 @@ Page({
         schoolName: schoolName,
         schoolAddress: schoolAddress,
         schoolDetailAddress: schoolDetailAddress,
-        studentIdCards: studentIdCards
+        studentIdCards: wx.getStorageSync('qualification.images')
       },
       success:function(res){
         console.log(res)
         let data = res.data;
         if(data.status != 200){
           wx.showToast({
-            title: '申请失败',
+            title: data.msg,
             icon:'none',
             duration:2000
           })
@@ -179,11 +176,31 @@ Page({
 
 nextStepTwo:function(e){
   var that = this;
-  this.setData({
-    excludeType:''
+  wx.getStorageSync({
+    key: 'school.schoolName',
+    success: function(res) {
+      that.setData({
+        'school.schoolName':res.data
+      })
+    },
   })
-
-  var warn = ''
+  wx.getStorageSync({
+    key: 'school.schoolAddress',
+    success: function(res) {
+      that.setData({
+        'school.schoolAddress':res.data
+      })
+    },
+  })
+  wx.getStorageSync({
+    key: 'school.roomNo',
+    success: function(res) {
+      that.setData({
+        'school.roomNo':res.data
+      })
+    },
+  })
+  var warn = '';
   var schoolName = that.data.school.schoolName;
   var schoolAddress = that.data.school.schoolAddress;
   var roomNo = that.data.school.roomNo;
@@ -209,51 +226,47 @@ nextStepTwo:function(e){
   
 },
   getSchoolNameValue:function(e){
-    this.setData({
+    let that = this;
+    that.setData({
       'school.schoolName': e.detail.value
     })
+    wx.setStorageSync('school.schoolName', e.detail.value)     
   },
+
   getPhoneNumberValue:function(e){
-    this.setData({
+    let that = this;
+    that.setData({
       'applicant.applyPhone': e.detail.value
     })
+      wx.setStorageSync('applicant.applyPhone', e.detail.value)
   },
 
-  getSchoolAddressValue:function(e){
-    this.setData({
-    'school.schoolAddress': e.detail.value
-  })
-  },
+ 
+
   getRoomNoValue:function(e){
-    this.setData({
+    let that = this;
+    that.setData({
       'school.roomNo': e.detail.value
     })
+    wx.setStorageSync('school.roomNo', e.detail.value)
   },
 
-  onProvinceSelected:function(e){
-    let that= this;
-    let provinceId = e.currentTarget.dataset.id;
-    that.setData({
-      province: provinceId
-    })
-  },
+
 
 
   getApplyCode:function(e){
     var that = this;
-    var realName = that.data.applicant.realName;
-    var applyPhone = that.data.applicant.applyPhone;
-    var applyCode = that.data.applicant.applyCode;
+    var realName = wx.getStorageSync('applicant.realName');
+    var applyPhone = wx.getStorageSync('applicant.applyPhone');
+    var applyCode = wx.getStorageSync('applicant.applyCode');
     let phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
     let warn = '';
     if (realName == '' || realName == undefined) {
       warn = '请填写真实姓名';
     } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
       warn = '请填写正确的手机号';
-    } else if (applyCode == '' || applyCode == undefined) {
-        warn = '请输入验证码';
-    }
-    if(warn == null || warn ==''){
+    } 
+    if(warn !=''){
       wx.showToast({
         title: warn,
         icon:'none'
@@ -269,7 +282,6 @@ nextStepTwo:function(e){
           type:2
         },
         success:function(e){
-          console.log(e)
           let data = e.data;
           if(data.status != 200){
             wx.showToast({
@@ -283,29 +295,27 @@ nextStepTwo:function(e){
               duration:2000,
               icon:'none'
             });
+          }
             //start
             //设置一分钟的倒计时
             var interval = setInterval(function () {
               currentTime--; //每执行一次让倒计时秒数减一
               that.setData({
                 codeDisabled: true,
-                text: currentTime + 's', //按钮文字变成倒计时对应秒数
+                codeText: currentTime + 's', //按钮文字变成倒计时对应秒数
               })
               //如果当秒数小于等于0时 停止计时器 且按钮文字变成重新发送 且按钮变成可用状态 倒计时的秒数也要恢复成默认秒数 即让获取验证码的按钮恢复到初始化状态只改变按钮文字
               if (currentTime <= 0) {
                 clearInterval(interval)
                 that.setData({
-                  text: '重新发送',
+                  codeText: '重新发送',
                   currentTime: 61,
                   codeDisabled: false,
                   color: '#59b550'
                 })
               }
             }, 1000);
-           
-
            // end
-          }
         },
         fail:function(e){
           console.log(e)
@@ -321,69 +331,37 @@ nextStepTwo:function(e){
     console.log(e)
   },
 
-  checkInput:function(){
-    var that = this;
-    var warn = '';
-    let pageIndex = Number(that.data.pageIndex)
-    if(pageIndex ==1){
-      
-      return;
-    }else if(pageIndex ==2){
-      
-    }else if(pageIndex == 3){
-       
-    }
-    
-    if (warn != '') {
-      wx.showToast({
-        title: warn,
-        image:'/assets/images/error.png',
-        duration: 2000
-      })
-      that.setData({
-        warn: warn
-      })
-      return;
-    }else{
-      that.setData({
-        warn:''
-      })
-    }
-  },
-
   getRealNameValue:function(e){
-    this.setData({
+    let that = this;
+    that.setData({
       'applicant.realName': e.detail.value
     })
+    wx.setStorageSync('applicant.realName', e.detail.value)
   },
-  getPhoneValue:function(e){
-    this.setData({
-      'applicant.applyPhone': e.detail.value.applyPhone
-    })
-  },
+ 
   getCodeValue:function(e){
-    this.setData({
-      'applicant.applyCode': e.detail.value
+    let that = this;
+    that.setData({
+      'applicant.applyCode':e.detail.value
     })
+    wx.setStorageSync('applicant.applyCode', e.detail.value)
   },
 
   nextStepOne: function (e) {
     var that = this;
-    this.setData({
-      excludeType:""
-    })
-    var warn  = '';
-    var schoolName = that.data.school.schoolName;
-    var schoolAddress = that.data.school.schoolAddress;
-    var roomNo = that.data.school.roomNo;
-    if (schoolName == '' || schoolName == undefined) {
-      warn = '请填写学校名称';
-    } else if (schoolAddress == '' || schoolAddress == undefined) {
-      warn = '请填写学校地址';
-    } else if (roomNo == '' || roomNo == undefined) {
-      warn = '请填写详细地址';
+    var realName = wx.getStorageSync('applicant.realName');
+    var applyPhone = wx.getStorageSync('applicant.applyPhone');
+    var applyCode = wx.getStorageSync('applicant.applyCode');
+    let phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
+    let warn = '';
+    if (realName == '' || realName == undefined) {
+      warn = '请填写真实姓名';
+    } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
+      warn = '请填写正确的手机号';
+    } else if (applyCode == '' || applyCode == undefined) {
+      warn = '请填写验证码';
     }
-    if(warn == null || warn == ''){
+    if( warn != ''){
       wx.showToast({
         title: warn,
         icon: 'none',
@@ -391,11 +369,9 @@ nextStepTwo:function(e){
       })
       return
     }
-    if(that.data.warn == '' || that.data.warn == undefined){
         wx.navigateTo({
           url: '/pages/apply/apply?pageIndex=2' 
         })
-      }
   },
   longPress: function (e) {
     console.log(e)
@@ -439,106 +415,12 @@ nextStepTwo:function(e){
     })
   },
   
-  /**
-   * 上传图片
-   */
-  uploadImg: function (e) {
-    var that = this;
-    console.log(e)
-    if (that.data.qualification.images.length > 0 && that.data.qualification.images.length <=3) {
-      uploadImg({
-        url: that.data.qualification.upImgUrl,//这里是你图片上传的接口
-        path: that.data.qualification.images//这里是选取的图片的地址数组
-      });
-    } 
-  },
+ 
 
   /**
    * 生命周期函数--监听页面加载
    */
-  // onLoad: function (options) {
-  //   // 初始化动画变量
-  //   var that = this;
-  //   that.setData({
-  //     pageIndex:options.pageIndex
-  //   })
-  //   var animation = wx.createAnimation({
-  //     duration: 500,
-  //     transformOrigin: "50% 50%",
-  //     timingFunction: 'ease',
-  //   })
-  //   this.animation = animation;
-  //   // 默认联动显示北京
-  //   var id = address.provinces[0].id
-  //   this.setData({
-  //     provinces: address.provinces,
-  //     citys: address.citys[id],
-  //     areas: address.areas[address.citys[id][0].id],
-  //   })
-  //   console.log(this.data)
-  // },
-  // 显示
-  showMenuTap: function (e) {
-    console.log('selectState')
-    //获取点击菜单的类型 1点击状态 2点击时间 
-    var menuType = e.currentTarget.dataset.type
-    // 如果当前已经显示，再次点击时隐藏
-    if (this.data.isVisible == true) {
-      this.startAnimation(false, -200)
-      return
-    }
-    this.setData({
-      menuType: menuType
-    })
-    this.startAnimation(true, 0)
-  },
-  hideMenuTap: function (e) {
-    this.startAnimation(false, -200)
-  },
-  // 执行动画
-  startAnimation: function (isShow, offset) {
-    var that = this
-    var offsetTem
-    if (offset == 0) {
-      offsetTem = offset
-    } else {
-      offsetTem = offset + 'rpx'
-    }
-    this.animation.translateY(offset).step()
-    this.setData({
-      animationData: this.animation.export(),
-      isVisible: isShow
-    })
-    console.log(that.data)
-  },
-  // 选择状态按钮
-  selectState: function (e) {
-    console.log('selectState1')
-    this.startAnimation(false, -200)
-    var status = e.currentTarget.dataset.status
-    this.setData({
-      status: status
-    })
-    console.log(this.data)
-
-  },
-  // 日志选择
-  bindDateChange: function (e) {
-    console.log(e)
-    if (e.currentTarget.dataset.type == 1) {
-      this.setData({
-        begin: e.detail.value
-      })
-    } else if (e.currentTarget.dataset.type == 2) {
-      this.setData({
-        end: e.detail.value
-      })
-    }
-  },
-  sureDateTap: function () {
-    this.data.pageNo = 1
-    this.startAnimation(false, -200)
-  },
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -597,6 +479,7 @@ nextStepTwo:function(e){
   //滑动事件
   bindChange: function (e) {
     var val = e.detail.value
+    let that = this;
     // console.log(e)
     //判断滑动的是第几个column
     //若省份column做了滑动则定位到地级市和区县第一位
@@ -612,11 +495,9 @@ nextStepTwo:function(e){
       }
     }
     index = val;
-
     console.log(index + " => " + val);
-
     //更新数据
-    this.setData({
+    that.setData({
       value: [val[0], val[1], val[2]],
       province: provinces[val[0]].name,
       city: citys[val[1]].name,
@@ -630,6 +511,9 @@ nextStepTwo:function(e){
     that.setData({
       pageIndex:options.pageIndex
     })
+    if(options.pageIndex ==1){
+      wx.clearStorageSync()
+    }
     //获取省市区县数据
     area.getAreaInfo(function (arr) {
       areaInfo = arr;
@@ -640,15 +524,16 @@ nextStepTwo:function(e){
   },
   // ------------------- 分割线 --------------------
   onReady: function () {
-    this.animation = wx.createAnimation({
+    let that = this;
+    that.animation = wx.createAnimation({
       transformOrigin: "50% 50%",
       duration: 0,
       timingFunction: "ease",
       delay: 0
     }
     )
-    this.animation.translateY(200 + 'vh').step();
-    this.setData({
+    that.animation.translateY(200 + 'vh').step();
+    that.setData({
       animation: this.animation.export(),
       show: show
     })
@@ -666,7 +551,6 @@ nextStepTwo:function(e){
     }
     // this.animation.translate(arr[0], arr[1]).step();
     animationEvents(this, moveY, show);
-
   },
   //隐藏弹窗浮层
   hiddenFloatView(e) {
@@ -674,17 +558,21 @@ nextStepTwo:function(e){
     moveY = 200;
     show = true;
     t = 0;
+    let that = this;
+    let id = e.currentTarget.dataset.id;
+    if(id == '666'){
+      let addressName = that.data.province + ' ' + that.data.city + ' ' + that.data.city;
+        that.setData({
+          'school.schoolAddress': addressName
+        })
+      wx.setStorageSync('school.schoolAddress', addressName)
+    }
     animationEvents(this, moveY, show);
   },
   //页面滑至底部事件
   onReachBottom: function () {
     // Do something when page reach bottom.
   },
-  tiaozhuan() {
-    wx.navigateTo({
-      url: '../../pages/modelTest/modelTest',
-    })
-  }
 })
 
 //动画事件

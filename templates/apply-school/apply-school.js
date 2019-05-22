@@ -31,6 +31,27 @@ Page({
       })
   },
 
+  getSchoolNameValue:function(e){
+    let that = this;
+    that.setData({
+      schoolName: e.detail.value
+    })
+  },
+
+  getSchoolAddressValue:function(e){
+    let that = this;
+    that.setData({
+      schoolAddress: e.detail.value
+    })
+  },
+
+  getRoomNoValue:function(e){
+    let that = this;
+    that.setData({
+      roomNo:e.detail.value
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
