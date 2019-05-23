@@ -110,7 +110,7 @@ Page({
     var arr = [];
     let studentIdCards = wx.getStorageSync('qualification.images');
     for(var i=0;i<studentIdCards.length;i++){
-       wx.uploadFile({
+       let task = wx.uploadFile({
         url: app.appData.serverUrl + 'upload', //开发者服务器 url
         filePath: studentIdCards[i],
         name: 'file',
@@ -119,7 +119,6 @@ Page({
           let data = JSON.parse(res.data)
           let url = data.data;
           arr.push(url);
-          
         },
         fail: function (res) {
           console.log(res)
@@ -139,7 +138,7 @@ Page({
     let schoolName = wx.getStorageSync('school.schoolName');
     let schoolAddress =wx.getStorageSync('school.schoolAddress')
     let schoolDetailAddress = wx.getStorageSync('school.roomNo');
-    studentIdCards = wx.getStorageSync('qualification.images')
+    studentIdCards = arr
     //2.提交申请
     wx.request({
       url: app.appData.serverUrl + 'user/apply',
@@ -368,10 +367,38 @@ nextStepTwo:function(e){
         duration:2000
       })
       return
+    }else{
+      wx.request({
+        url: app.appData.serverUrl+'verify/code/pre/check',
+        data:{
+          phone: wx.getStorageSync('applicant.applyPhone'),
+          verifyCode: wx.getStorageSync('applicant.applyCode'),
+          type: 2,
+        },
+        success:function(e){
+          let data = e.data;
+          if(data.status != 200){
+            wx.showToast({
+              title: data.msg,
+              duration:2000,
+              icon:'none'
+            })
+          }else{
+            wx.navigateTo({
+              url: '/pages/apply/apply?pageIndex=2'
+            })
+          }
+        },
+        fail:function(e){
+          wx.showToast({
+            title: '无法发送请求',
+            duration:2000,
+            icon:'none'
+          })
+        }
+      })
     }
-        wx.navigateTo({
-          url: '/pages/apply/apply?pageIndex=2' 
-        })
+        
   },
   longPress: function (e) {
     console.log(e)
@@ -393,15 +420,36 @@ nextStepTwo:function(e){
   },
   chooseImage: function () {
     var that = this;
+    var imgArr = []
     wx.chooseImage({
-      count: 9, // 默认9
+      count: 3, // 默认9
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success: function (res) {
         var tempFilePaths = res.tempFilePaths
+        // wx.uploadFile({
+        //   url: app.appData.serverUrl + 'upload', //开发者服务器 url
+        //   filePath: tempFilePaths[0],
+        //   name: 'file',
+        //   success: function (res) {
+        //     console.log(res)
+        //     let data = JSON.parse(res.data)
+        //     let url = data.data;
+        //     imgArr.push(url);
+        //     wx.setStorageSync('qualification.images', data)
+        //   },
+        //   fail: function (res) {
+        //     console.log(res)
+        //     wx.showToast({
+        //       title: res.errMsg,
+        //       duration: 2000,
+        //       icon: 'none'
+        //     })
+        //   },
+        // })
         that.setData({
           'qualification.images': that.data.qualification.images.concat(tempFilePaths),
-        })
+        });
       }
     })
     console.log(that.data.qualification.images.length)

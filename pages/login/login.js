@@ -42,6 +42,7 @@ getCodeValue:function(e){
   this.setData({
     code:e.detail.value
   })
+
 },
   getCode:function(e){
     let that = this;
@@ -55,15 +56,33 @@ getCodeValue:function(e){
       warn = "手机号格式不正确";
     } else {
       //当手机号正确的时候提示用户短信验证码已经发送
-      let url = app.appData.serverUrl + 'verify/code/send';
       wx.request({
-        url: url,
+        url:app.appData.serverUrl + 'verify/code/send',
         data:{
           phone: phone,
           type:1
         },
         success:function(res){
-          console.log(res);
+          let data = res.data;
+          if(res.status !=200){
+            wx.showToast({
+              title: data.msg,
+              duration:2000,
+              icon:'none'
+            })
+          }else{
+            wx.showToast({
+              title: '发送验证码成功',
+              duration:2000
+            })
+          }
+        },
+        fail:function(e){
+          wx.showToast({
+            title: '获取验证码失败',
+            icon:'none',
+            duration:2000
+          })
         }
       })
       wx.showToast({
@@ -73,29 +92,17 @@ getCodeValue:function(e){
       });
     }
 
-    
-
       //判断 当提示错误信息文字不为空 即手机号输入有问题时提示用户错误信息 并且提示完之后一定要让按钮为可用状态 因为点击按钮时设置了只要点击了按钮就让按钮禁用的情况
       if (warn != null) {
         wx.showToast({
           title: warn,
           icon: 'none'
         })
-
         that.setData({
           codeDisabled: false,
           color: '#59b550'
         })
         return;
-      }else{
-        wx.request({
-          url: '',
-          success:function(res){
-            that.setData({
-              isCode: res.data.isCode
-            })
-          }
-        })
       }
 
     //设置一分钟的倒计时
@@ -157,8 +164,11 @@ getCodeValue:function(e){
           if(data.status != 200){
             wx.showToast({
               title: data.msg,
+              icon:'none',
+              duration:2000
             })
-            wx.setStorageSync('phone', this.data.phone);
+            wx.setStorageSync('phone', that.data.phone);
+          }else{
             wx.switchTab({
               url: '/pages/index/index',
             })
