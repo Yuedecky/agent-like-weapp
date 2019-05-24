@@ -90,7 +90,15 @@ Page({
     })
 
   },
-
+uploadImageFile:function(idx){
+  let that = this;
+  var imgList = that.data.qualification.images;
+  let storeImages = wx.getStorageSync('qualification.images')
+  if (!storeImages) {
+    storeImages = []
+  }
+ 
+},
   submitApply: function (data) {
     var that = this;
     var warn  = '';
@@ -107,30 +115,7 @@ Page({
       })
     }
     //1.先调用上传
-    var arr = [];
     let studentIdCards = wx.getStorageSync('qualification.images');
-    for(var i=0;i<studentIdCards.length;i++){
-       let task = wx.uploadFile({
-        url: app.appData.serverUrl + 'upload', //开发者服务器 url
-        filePath: studentIdCards[i],
-        name: 'file',
-        success: function (res) {
-          console.log(res)
-          let data = JSON.parse(res.data)
-          let url = data.data;
-          arr.push(url);
-        },
-        fail: function (res) {
-          console.log(res)
-          wx.showToast({
-            title: res.errMsg,
-            duration:2000,
-            icon:'none'
-          })
-        },
-      })
-    }
-    wx.setStorageSync('qualification.images', arr);
     console.log('images:',studentIdCards)
     let realName=wx.getStorageSync('applicant.realName')
     let applyPhone = wx.getStorageSync('applicant.applyPhone')
@@ -138,7 +123,6 @@ Page({
     let schoolName = wx.getStorageSync('school.schoolName');
     let schoolAddress =wx.getStorageSync('school.schoolAddress')
     let schoolDetailAddress = wx.getStorageSync('school.roomNo');
-    studentIdCards = arr
     //2.提交申请
     wx.request({
       url: app.appData.serverUrl + 'user/apply',
@@ -149,7 +133,7 @@ Page({
         schoolName: schoolName,
         schoolAddress: schoolAddress,
         schoolDetailAddress: schoolDetailAddress,
-        studentIdCards: wx.getStorageSync('qualification.images')
+        studentIdCards: that.data.qualification.images
       },
       success:function(res){
         console.log(res)
@@ -420,36 +404,38 @@ nextStepTwo:function(e){
   },
   chooseImage: function () {
     var that = this;
-    var imgArr = []
+    var imgArr = that.data.qualification.images;
     wx.chooseImage({
       count: 3, // 默认9
       sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
       success: function (res) {
         var tempFilePaths = res.tempFilePaths
-        // wx.uploadFile({
-        //   url: app.appData.serverUrl + 'upload', //开发者服务器 url
-        //   filePath: tempFilePaths[0],
-        //   name: 'file',
-        //   success: function (res) {
-        //     console.log(res)
-        //     let data = JSON.parse(res.data)
-        //     let url = data.data;
-        //     imgArr.push(url);
-        //     wx.setStorageSync('qualification.images', data)
-        //   },
-        //   fail: function (res) {
-        //     console.log(res)
-        //     wx.showToast({
-        //       title: res.errMsg,
-        //       duration: 2000,
-        //       icon: 'none'
-        //     })
-        //   },
-        // })
-        that.setData({
-          'qualification.images': that.data.qualification.images.concat(tempFilePaths),
-        });
+        wx.uploadFile({
+          url: app.appData.serverUrl + 'upload', //开发者服务器 url
+          filePath: tempFilePaths[0],
+          name: 'file',
+          success: function (res) {
+            console.log(res)
+            let data = JSON.parse(res.data)
+            let url = data.data;
+            imgArr.push(url);
+            that.setData({
+              'qualification.images': imgArr
+            })
+          },
+          fail: function (res) {
+            console.log(res)
+            wx.showToast({
+              title: res.errMsg,
+              duration: 2000,
+              icon: 'none'
+            })
+          },
+        })
+        // that.setData({
+        //   'qualification.images': that.data.qualification.images.concat(tempFilePaths),
+        // });
       }
     })
     console.log(that.data.qualification.images.length)
@@ -609,7 +595,7 @@ nextStepTwo:function(e){
     let that = this;
     let id = e.currentTarget.dataset.id;
     if(id == '666'){
-      let addressName = that.data.province + ' ' + that.data.city + ' ' + that.data.city;
+      let addressName = that.data.province + ' ' + that.data.city + ' ' + that.data.county;
         that.setData({
           'school.schoolAddress': addressName
         })

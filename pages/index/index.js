@@ -14,8 +14,14 @@ Page({
       },
     ],
       products:[{
-        cate_id: 2,
-        cate_name: "OPPO",
+        id: 2,
+        name: "",
+        color: '',
+        memory:'',
+        remark:'',
+        coverImg:'',
+        platformPrice:'',
+        rebatePrice:''
       }],
     current: 1, //当前选中的cate_id
     index: 0 // 当前选中的index

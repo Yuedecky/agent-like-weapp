@@ -1,16 +1,16 @@
 {
   "pages": [
     "pages/login/login",
+    "pages/order/order",
     "pages/index/index",
     "pages/cart/cart",
-    "pages/order/order",
     "pages/apply/apply",
     "pages/thanks/thanks"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "微券代理",
+    "navigationBarTitleText": "微券加盟",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {

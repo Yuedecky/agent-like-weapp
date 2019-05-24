@@ -9,14 +9,14 @@ Page({
     hintText: '',//提示的内容      
     hintShow: false,//是否显示提示,
     //----
-    cartList: [{//购物车   
-      id: '1',
-      name: 'oppo reno',
-      price: '3440',
-      num: 1,
-      types: '白色/39码',
-      check: true
-    }, {
+    cartList: [
+      {
+        id: '12',
+        name: '啊哈额和福特好热惊讶所以就如同撒打发士大夫',
+        price: '332',
+        num: 1,
+        types: '粉色/38码'
+      },{
       id: '2',
       name: '啊哈额和福特好热惊讶所以就如同撒打发士大夫',
       price: '332',
