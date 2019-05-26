@@ -2,36 +2,35 @@
 <view class="index-container">
   <view class="index-nav-left">
     <scroll-view scroll-y scroll-with-animation class='scroll-y'>
-      <block wx:for="{{level}}" wx:key="{{cate_id}}">
-          <view class="nav-left-item flex-row {{current == item.cate_id ? 'active' : ''}}" 
-                data-index='{{index}}' data-id='{{item.cate_id}}' bindtap='onClick'>{{item.cate_name}}</view>
+      <block wx:for="{{brands}}" wx:key="{{id}}">
+          <view class="nav-left-item flex-row {{current == item.id ? 'active' : ''}}" 
+                data-index='{{index}}' data-code='{{item.code}}'  data-bid='{{item.id}}' bindtap='onClick'>{{item.name}}</view>
         </block>
     </scroll-view>
   </view>
 
   <view class="index-nav-right">
-    <view class="nav-right-container" wx:if="{{level[index].ishaveChild}}">
-      <block wx:for="{{level[index].children}}" wx:key="*this">
+    <view class="nav-right-container" wx:if="{{products.length>0}}">
+      <block wx:for="{{products}}" wx:key="id">
       <view class='flex-row bottom-20'>
         <view class='item-left-block'>
-          <image src="{{item.image}}" class='right-image-item'></image>
+          <image src="{{item.coverImg}}" class='right-image-item'></image>
         </view>
         <view class='item-right-block flex-row'>
           <view class="left-section flex-column">
               <view class='item-name'>{{item.name}}</view>
-              <view class='item-desc'>{{item.desc}}</view>
-              <view class='item-price'>销售价：<text class='price-info'>{{item.salePrice}}</text></view>
-              <view class='item-commission'>提成价：<text class='price-info'>{{item.commission}},{{item.child_id}}</text></view>
+              <view class='item-desc'>{{item.remark}}</view>
+              <view class='item-price'>销售价：<text class='price-info'>{{item.platformPrice}}</text></view>
+              <view class='item-commission'>提成价：<text class='price-info'>{{item.rebatePrice}}</text></view>
           </view>
           <view class='right-section'>
-            <image src='/assets/images/add.png' class='add-cart' bindtap='onAddCart' id="the-cart-{{item.child_id}}" data-pid='{{item.child_id}}'></image>
+            <image src='/assets/images/add.png' class='add-cart' bindtap='onAddCart' id="the-cart-{{item.id}}" data-pid='{{item.id}}'></image>
           </view>
           </view>
       </view>
       </block>
       <template is='footer' data="{{text: '没有更多了'}}"/>
     </view>
-    <view wx:else>该类暂无数据</view> 
+    <view wx:else class='none-products'>该类暂无数据</view> 
   </view>
-
 </view>

@@ -64,7 +64,7 @@ getCodeValue:function(e){
         },
         success:function(res){
           let data = res.data;
-          if(res.status !=200){
+          if(data.status !=200){
             wx.showToast({
               title: data.msg,
               duration:2000,
@@ -167,8 +167,9 @@ getCodeValue:function(e){
               icon:'none',
               duration:2000
             })
-            wx.setStorageSync('phone', that.data.phone);
           }else{
+            wx.setStorageSync('phone', that.data.phone);
+            wx.setStorageSync('token',res.data.data)
             wx.switchTab({
               url: '/pages/index/index',
             })

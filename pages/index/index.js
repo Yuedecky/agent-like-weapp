@@ -7,7 +7,8 @@ Page({
   data: {
     brands: [
       {
-        code: 1,
+        id:'',
+        code: 0,
         name: "",
         ishaveChild: true,
         logo:''
@@ -32,10 +33,15 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
+    let auth = wx.getStorageSync('token')
       wx.request({
         url: app.appData.serverUrl+'brand/query',
         method:'get',
+        header:{
+          'Authorization': auth
+        },
         success:function(res){
+          console.log('brand:',res)
             let data= res.data;
             if(data.status !=200){
                 wx.showToast({
@@ -44,9 +50,35 @@ Page({
                   duration:2000
                 })
             }else{
-              let list = data.list;
+              let list = data.data;
               that.setData({
                 'brands': list,
+              });
+              wx.request({
+                url: app.appData.serverUrl+'goods/query',
+                data:{
+                      brandCode: list[0].code,
+                      pageNum: 1,
+                      pageSize:10
+                },
+                header:{
+                  'Authorization': auth
+                },
+                success:function(res){
+                  let data = res.data;
+                  if(data.status!=200){
+                    wx.showToast({
+                      title: data.msg,
+                      icon:'none',
+                      duration:2000
+                    })
+                  }else{
+                    that.setData({
+                      products: data.data.list,
+                      current:1
+                    })
+                  }
+                }
               })
             }
         }
@@ -54,24 +86,81 @@ Page({
   },
 
   onAddCart:function(e){
+    console.log('添加购物车,e',e)
     let that = this;
     let pid = e.currentTarget.dataset.pid;
-    wx.showToast({
-      title: '加入成功',
-      duration:2000,
-      icon:'success'
-    })
-    const query= wx.createSelectorQuery();
-    query.select("#the-cart" + pid).boundingClientRect(function(rect){
-      console.log('rect:',rect)
+    let auth = wx.getStorageSync('token')
+    
+    wx.request({
+      url: app.appData.serverUrl+'choose/add',
+      data:{
+        goodsId: pid,
+        count:1
+      },
+      header:{
+        'Authorization': auth
+      },
+      success:function(res){
+        let data = res.data;
+        if(data.status!=200){
+          wx.showToast({
+            title: data.msg,
+            icon:'none',
+            duration:2000
+          })
+        }else{
+          console.log(data)
+          wx.showToast({
+            title: '加入成功',
+            duration: 2000,
+            icon: 'success'
+          })
+        }
+      }
     })
   },
 
   onClick: function (e) {
+    let that = this;
+    let bid = e.currentTarget.dataset.bid;
+    let brandCode = e.currentTarget.dataset.code;
+    console.log('click-code:', brandCode)
     this.setData({
-      current: e.target.dataset.id,
+      current: brandCode,
       index: e.target.dataset.index
     })
+    let auth = wx.getStorageSync('token')
+    let list = []
+    wx.request({
+      url: app.appData.serverUrl+'goods/query',
+      data:{
+        brandCode:brandCode,
+        pageNum:1,
+        pageSize:10
+      },
+      header:{
+        'Authorization': auth
+      },
+      success:function(res){
+        let data = res.data;
+        console.log('res.data',data)
+        if(data.status != 200){
+          wx.showToast({
+            title: data.msg,
+            icon:'none',
+            duration:2000
+          })
+        }else{
+          console.log('goods', data)
+          that.setData({
+            'products': data.data.list,
+            current: 1
+          })
+        }
+        
+      }
+    })
+
   },
 
   /**

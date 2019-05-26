@@ -4,8 +4,19 @@ Page({
    * 页面的初始数据
    */
   data: {
-    orderListProcessing:[],
-    orderListFinished:[]
+    ordersD:[
+      {
+        goodsId: 0,
+        name: '',
+        coverImage: "",
+        types: '',
+        remark: '',
+        platformPrice: 0.00,
+        rebatePrice: 0,
+        count: 0
+      }
+    ],
+
   },
 
   /**
@@ -14,8 +25,7 @@ Page({
   onLoad: function (options) {
     let that = this;
     that.setData({
-      orderListFinished:options.orderListFinished,
-      orderListProcessing:options.orderListProcessing
+      ordersD: options.ordersD
     })
   },
 

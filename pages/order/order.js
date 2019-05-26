@@ -1,77 +1,41 @@
+var app = getApp();
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     tabs:['未完成','已完成'],
-    activeIndex:1,
+    activeIndex:0,
     sliderOffset: 0,
     sliderLeft:0, 
     silderWidth:110,
 
 
     // ====
-    orderNoF:'201901012323454545',
-    orderNoP:'20190404342322434',
-    orderFStatus: '一完成',
-    orderPStatus:'待配送',
-    orderPTotal:3456,
-    orderPReturn: 234,
-    orderListProcessing:[{
-        pid: 1,
-        name: '联想Z5',
-        image: "https://img10.360buyimg.com/mobilecms/s500x500_jfs/t1/7514/35/14480/132195/5c650f61E7fab2029/39353c4818bbb3eb.jpg",
-        desc: '这是简介',
-        salePrice: 2344.34,
-        commission: 129,
-        num:4
+    orderPTotal:0,
+    orderPReturn: 0,
+    ordersP:[],
+    orderListProcessing:[
+      {
+        order:{
+        id: 0,
+        orderNo: '',
+        status :0,
+        totalPaymentPrice:'',
+        totalRebatePrice:'',
       },
-      {
-        pid: 2,
-        name: '华为P8',
-        image: "https://img11.360buyimg.com/mobilecms/s500x500_jfs/t10357/244/2831662005/146980/ba7823ad/5cdb5f8aN4a876602.png",
-        desc: '这是简介',
-        salePrice: 2344.34,
-        commission: 129,
-        num:2
-      },
-      {
-        pid: 3,
-        name: '畅想9S',
-        image: "https://img12.360buyimg.com/n1/s450x450_jfs/t1/24205/2/14862/179077/5cb6d175E92733807/46e7ace99f41dd41.jpg",
-        desc: '这是简介',
-        salePrice: 2344.34,
-        commission: 129,
-        num:1
-    }],
-    orderListFinished: [{
-      pid: 1,
-      name: '联想Z5',
-      image: "https://img10.360buyimg.com/mobilecms/s500x500_jfs/t1/7514/35/14480/132195/5c650f61E7fab2029/39353c4818bbb3eb.jpg",
-      desc: '这是简介',
-      salePrice: 2344.34,
-      commission: 129,
-      num:2
-    },
-      {
-        pid: 2,
-        name: '华为P8',
-        image: "https://img11.360buyimg.com/mobilecms/s500x500_jfs/t10357/244/2831662005/146980/ba7823ad/5cdb5f8aN4a876602.png",
-        desc: '这是简介',
-        salePrice: 2344.34,
-        commission: 129,
-        num:3
-      },
-      {
-        pid: 3,
-        name: '畅想9S',
-        image: "https://img12.360buyimg.com/n1/s450x450_jfs/t1/24205/2/14862/179077/5cb6d175E92733807/46e7ace99f41dd41.jpg",
-        desc: '这是简介',
-        salePrice: 2344.34,
-        commission: 129,
-        num:4
-      }]
+        orderDetails: [{
+          goodsId: 0,
+          name: '',
+          coverImage: "",
+          types: '',
+          remark: '',
+          platformPrice: 0.00,
+          rebatePrice: 0,
+          count: 0
+        }]
+      }],
+    orderListFinished: []
   },
 
   /**
@@ -79,7 +43,9 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
-    console.log("order's onload:",options)
+    that.setData({
+      activeIndex:options.activeIndex || 0
+    })
     let sliderWidth = that.data.silderWidth;
     wx.getSystemInfo({
       success: function (res) {
@@ -89,6 +55,40 @@ Page({
         });
       }
     });
+    let auth = wx.getStorageSync('token')
+    let status = JSON.stringify([1,2])
+    wx.request({
+      url: app.appData.serverUrl+'order/list',
+      data:{
+        status: status.replace('[','').replace(']','')
+      },
+      header:{
+        'Authorization': auth
+      },
+      success:function(res){
+        let data = res.data;
+        if(data.status != 200){
+          wx.showToast({
+            title: data.msg,
+            duration:2000,
+            icon:'none'
+          })
+        }else{
+          console.log(res)
+          let ordersD =[]
+          let ordersP = []
+          for(var i=0;i<data.data.length;i++){
+              ordersP.push(data.data[i].order)
+              ordersP.d=[]
+              ordersP.d.push(data.data[i].orderDetails)
+          }
+          that.setData({
+            ordersP: ordersP,
+            ordersD: ordersP.d
+          })
+        }
+      }
+    })
   },
 
   /**

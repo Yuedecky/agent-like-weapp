@@ -7,6 +7,12 @@
   flex-direction: row;
   align-items: flex-start;
 }
+.none-products{
+  color: #666;
+  font-size: 34rpx;
+  text-align: center;
+  line-height: 40rpx;
+}
 .scroll-y{
     width: 25%;
     position: fixed;
