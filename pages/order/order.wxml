@@ -33,7 +33,7 @@
             合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
             <view class='contact-or-cancel flex-row'>
               <view classs='o-concat'>
-                <button type='primary'>联系客服</button>
+                <button type='primary' id="{{item.order.orderNo}}" bindtap='onContactUs'>联系客服</button>
               </view>
               <view classs='o-cancel'>
                 <button type='default' class='o-cancel-btn' bindtap='cancelOrder' data-orderid = '{{item.order.id}}'>取消</button>
@@ -68,8 +68,8 @@
               <view class='to-paid-order-money'>
               合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
               <view class='contact-only flex-row'>
-                <view classs='o-concat' bindtap='onContactUs'>
-                  <button type='primary' bindtap='onContactUs'>
+                <view  classs='o-concat' bindtap='onContactUs'>
+                  <button type='primary' id='{{index}}' bindtap='onContactUs'>
                   联系客服
                   </button>
                 </view>

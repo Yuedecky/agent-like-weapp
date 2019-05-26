@@ -130,7 +130,7 @@ Page({
       content: '确定取消该订单？',
       success:function(res){
         if(res.cancel){
-
+          //
         }else{
           wx.request({
             url: app.appData.serverUrl + 'order/cancel',
@@ -160,26 +160,29 @@ Page({
     })
     
   },
+  
   /**
    * 确认
    */
   onContactUs: function (e) {
     var that = this;
     //显示“呼叫”、“添加联系人”弹窗
+    let phoneNumber = that.data.phoneNumber[0].phone;
+    let phoneNumberName = that.data.phoneNumber[0].name;
     wx.showActionSheet({
-      itemList: ['呼叫', '添加联系人'],
+      itemList: [phoneNumber,'呼叫', '添加联系人'],
       success: function (res) {
         console.log("点击电话 res：", res)
-        if (res.tapIndex == 0) {//直接呼叫
+        if (res.tapIndex == 1) {//直接呼叫
           wx.makePhoneCall({
-            phoneNumber: that.data.phoneNumber[0],
+            phoneNumber: phoneNumber,
             success: function (res_makephone) {
               console.log("呼叫电话返回：", res_makephone)
             }
           })
-        } else if (res.tapIndex == 1) {//添加联系人
+        } else if (res.tapIndex == 2) {//添加联系人
           wx.addPhoneContact({
-            firstName: that.data.phoneNumber[0].name,
+            firstName: phoneNumberName,
             mobilePhoneNumber: that.data.phoneNumber[0].phone,
             success: function (res_addphone) {
               console.log("电话添加联系人返回：", res_addphone)
