@@ -1,4 +1,5 @@
 <import src="/templates/order-item/order-item.wxml"></import>
+<import src='/templates/footer/footer.wxml'></import>
 <view class="page">
   <view class="page__bd">
     <view class="weui-tab">
@@ -12,47 +13,77 @@
       </view>
       <view class="weui-tab__panel">
         <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-        <view class='m-order-header flex-row'><view class='order-p-no'>订单编号：{{orderNoP}}</view><view class='order-p-status'>{{orderPStatus}}</view></view>
-        <block wx:for="{{orderListProcessing}}" wx:key="*this" wx:for-item="item">
-          <template is="order-item" data="{{...item}}"/>
+        <view wx:if="{{orderListProcessing.length >0}}">
+        <block wx:for="{{orderListProcessing}}" wx:key="order.id"
+           wx:for-index="index">
+        <view class='order-part bottom-20'>
+          <view class='m-order-header flex-row'>
+            <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
+            <view class='order-p-status'>{{item.order.statusDesc}}</view>
+          </view>
+          <block wx:for="{{orderListProcessing[index].orderDetails}}" 
+              wx:key="id" wx:for-item="ditem">
+            <template is="order-item" data="{{...ditem}}"/>
           </block>
-          <view class='to-paid-order right-20'>
+          <view class='to-paid-order'>
             <view class='to-paid-order-money'>
-            须支付：<text class='order-p-count'>￥{{orderPTotal}}</text>
+            须支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
             </view>
             <view class='to-paid-order-money'>
-            合计提成：<text class='order-p-count'>￥{{orderPReturn}}</text>
+            合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
             <view class='contact-or-cancel flex-row'>
               <view classs='o-concat'>
                 <button type='primary'>联系客服</button>
               </view>
               <view classs='o-cancel'>
-                <button type='default' class='o-cancel-btn'>取消</button>
+                <button type='default' class='o-cancel-btn' bindtap='cancelOrder' data-orderid = '{{item.order.id}}'>取消</button>
               </view>
             </view>
             </view>
           </view>
         </view>
-        <view class="weui-tab__content" hidden="{{activeIndex != 1}}"> 
-        <view class='m-order-header flex-row'><view class='order-p-no'>订单编号：{{orderNoF}}</view><view class='order-p-status'>{{orderFStatus}}</view></view>
-        <block wx:for="{{orderListFinished}}" wx:key="*this" wx:for-item="item">
-        <template is="order-item" data="{{...item}}"/>
         </block>
-        <view class='to-paid-order right-20'>
-            <view class='to-paid-order-money '>
-            支付：<text class='order-p-count'>￥{{orderPTotal}}</text>
+        </view>
+        <view class='none-data' wx:else>
+        暂无数据
+        </view>
+        </view>
+        <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+        <view wx:if="{{orderListFinished.length>0}}">
+          <block wx:for="{{orderListFinished}}" wx:key="order.id"
+            wx:for-index="index">
+          <view class='order-part bottom-20'>
+            <view class='m-order-header flex-row'>
+              <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
+              <view class='order-p-status'>{{item.order.statusDesc}}</view>
             </view>
-            <view class='to-paid-order-money'>
-            合计提成：<text class='order-p-count'>￥{{orderPReturn}}</text>
-            <view class='contact-or-cancel flex-row'>
-              <view classs='o-concat'>
-                <button type='primary'>联系客服</button>
+            <block wx:for="{{orderListFinished[index].orderDetails}}" 
+                wx:key="id" wx:for-item="ditem">
+              <template is="order-item" data="{{...ditem}}"/>
+            </block>
+            <view class='to-paid-order'>
+              <view class='to-paid-order-money'>
+              须支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
+              </view>
+              <view class='to-paid-order-money'>
+              合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
+              <view class='contact-only flex-row'>
+                <view classs='o-concat' bindtap='onContactUs'>
+                  <button type='primary' bindtap='onContactUs'>
+                  联系客服
+                  </button>
+                </view>
+              </view>
               </view>
             </view>
-            </view>
           </view>
+          </block>
+        </view>
+        <view class='none-data' wx:else>
+        暂无数据
         </view>
       </view>
     </view>
   </view>
+</view>
 </view>

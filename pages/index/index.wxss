@@ -66,8 +66,8 @@
 }
 
 .right-image-item {
-  width: 90%;
-  height: 200rpx;
+  width: 100%;
+  height: 100%;
 }
 
 .item-name {
@@ -82,7 +82,9 @@
 }
 
 .item-desc{
-  font-size: 34rpx;
+  font-size: 30rpx;
+  overflow: hidden;
+  white-space: nowrap;
   color: #333;
 }
 .price-info{

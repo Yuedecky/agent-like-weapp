@@ -14,6 +14,10 @@ page{
   word-break: normal;
 }
 
+.delivery-info{
+  font-weight: bold;
+}
+
 .header-wrapper{
   color: #fff;
   padding: 0 20rpx;  
@@ -26,7 +30,6 @@ page{
   width: 100%;
   line-height: 50rpx;
   font-size: 40rpx;
-  font-weight: 500;
   text-align: left;
   padding-top: 10rpx;
   background: #efefef;
@@ -153,8 +156,8 @@ card{
 }
 .shop-type{
   display: block;  
-  font-size: 26rpx;  
-  color: #ccc;  
+  font-size: 32rpx;  
+  color: #333;  
   line-height: 50rpx;
 }
 .shop-detail-bottom{
@@ -170,7 +173,7 @@ card{
 .cart-price text{
   font-size: 34rpx;
   font-weight: 500;
-  letter-spacing: 4rpx;
+  color: #666;
 }
 .num-change{
   width: 40%;

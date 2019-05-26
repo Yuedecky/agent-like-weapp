@@ -1,8 +1,15 @@
 @import "/templates/order-item/order-item.wxss";
+@import "/templates/footer/footer.wxss";
 .m-order-header{
   font-size: 32rpx;
   color:#999;
-  margin-left: 20rpx;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+}
+
+.order-part{
+  padding-bottom: 20rpx;
+  border-bottom: 1px solid #ccc;
 }
 
 .order-p-count{
@@ -23,9 +30,20 @@
 }
 
 .to-paid-order{
-  float: right;  
+  margin-left: 360rpx;
 }
+
 .o-cancel-btn{
   margin-left: 20rpx;
   margin-right: 20rpx;
+}
+
+.none-data{
+  text-align: center;
+  font-size: 34rpx;
+  color: #ccc;
+}
+
+.contact-only{
+  margin-left: 130rpx;
 }

@@ -14,17 +14,8 @@ Page({
         logo:''
       },
     ],
-      products:[{
-        id: 2,
-        name: "",
-        color: '',
-        memory:'',
-        remark:'',
-        coverImg:'',
-        platformPrice:'',
-        rebatePrice:''
-      }],
-    current: 1, //当前选中的cate_id
+    products:[],
+    current: 0, //当前选中的cate_id
     index: 0 // 当前选中的index
   },
 
@@ -41,7 +32,6 @@ Page({
           'Authorization': auth
         },
         success:function(res){
-          console.log('brand:',res)
             let data= res.data;
             if(data.status !=200){
                 wx.showToast({
@@ -53,6 +43,7 @@ Page({
               let list = data.data;
               that.setData({
                 'brands': list,
+                current: list[0].id
               });
               wx.request({
                 url: app.appData.serverUrl+'goods/query',
@@ -75,7 +66,6 @@ Page({
                   }else{
                     that.setData({
                       products: data.data.list,
-                      current:1
                     })
                   }
                 }
@@ -86,7 +76,6 @@ Page({
   },
 
   onAddCart:function(e){
-    console.log('添加购物车,e',e)
     let that = this;
     let pid = e.currentTarget.dataset.pid;
     let auth = wx.getStorageSync('token')
@@ -109,7 +98,6 @@ Page({
             duration:2000
           })
         }else{
-          console.log(data)
           wx.showToast({
             title: '加入成功',
             duration: 2000,
@@ -124,11 +112,7 @@ Page({
     let that = this;
     let bid = e.currentTarget.dataset.bid;
     let brandCode = e.currentTarget.dataset.code;
-    console.log('click-code:', brandCode)
-    this.setData({
-      current: brandCode,
-      index: e.target.dataset.index
-    })
+   
     let auth = wx.getStorageSync('token')
     let list = []
     wx.request({
@@ -143,7 +127,6 @@ Page({
       },
       success:function(res){
         let data = res.data;
-        console.log('res.data',data)
         if(data.status != 200){
           wx.showToast({
             title: data.msg,
@@ -151,13 +134,12 @@ Page({
             duration:2000
           })
         }else{
-          console.log('goods', data)
+          let products=data.data;
           that.setData({
-            'products': data.data.list,
-            current: 1
+            'products': products.list,
+            current: bid
           })
         }
-        
       }
     })
 

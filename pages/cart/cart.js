@@ -14,7 +14,7 @@ Page({
     deliveryName:'',
     deliveryPhone:'',
     deliveryAddress:'',
-
+    totalRebate:0,
     //--
     //----
     shopcar: []
@@ -26,10 +26,12 @@ Page({
       let that = this;
       let allsel = !that.data.allsel;//点击全选后allsel变化
       let total = 0;
+      let totalRebate = 0;
     for (let i = 0, len = shopcar.length; i < len; i++) {
       shopcar[i].check = allsel;//所有商品的选中状态和allsel值一样
       if (allsel) {//如果为选中状态则计算商品的价格
         total += shopcar[i].platformPrice * shopcar[i].count;
+        totalRebate += shopcar[i].rebatePrice * shopcar[i].count;
       }
     }
     that.data.selarr = allsel ? shopcar : [];//如果选中状态为true那么所有商品为选中状态，将物品加入选中变量，否则为空    
@@ -37,9 +39,9 @@ Page({
       allsel: allsel,
       shopcarData: shopcar,
       total: total,
+      totalRebate: totalRebate,
       selarr: that.data.selarr
     });
-    console.log(that.data.selarr)
   },
   //点击移除商品  
   deleteshopTap: function () {
@@ -89,7 +91,8 @@ Page({
         }else{
           that.setData({
             shopcarData: shopcar,
-            total: 0
+            total: 0,
+            totalRebate:0
           });
         }
       }
@@ -113,13 +116,16 @@ Page({
     let index = e.currentTarget.dataset.index;
     let shopcar =  that.data.shopcarData;
     let total = that.data.total;
+    let totalRebate = that.data.totalRebate;
     let selarr = that.data.selarr;
     shopcar[index].check = !shopcar[index].check || false;
     if (shopcar[index].check) {
       total += shopcar[index].count * shopcar[index].platformPrice;
+      totalRebate +=shopcar[index].count * shopcar[index].rebatePrice;
       selarr.push(shopcar[index]);
     } else {
       total -= shopcar[index].count * shopcar[index].platformPrice;
+      totalRebate -= shopcar[index].count * shopcar[index].rebatePrice;
       for (let i = 0, len = selarr.length; i < len; i++) {
         if (shopcar[index].id == selarr[i].id) {
           selarr.splice(i, 1);
@@ -130,6 +136,7 @@ Page({
     this.setData({
       shopcarData: shopcar,
       total: total,
+      totalRebate: totalRebate,
       selarr: selarr
     });
     this.judgmentAll();//每次按钮点击后都判断是否满足全选的条件  
@@ -140,12 +147,13 @@ Page({
     let index = e.currentTarget.dataset.index;//点击的商品下标值        
      let  shopcar = that.data.shopcarData;
       let types = e.currentTarget.dataset.types;//是加号还是减号        
-     let  total = that.data.total;//总计  
+     let  total = that.data.total;//总计
+     let totalRebate = that.data.totalRebate; 
       let auth = wx.getStorageSync('token') 
     switch (types) {
       case 'add':
         shopcar[index].num++;//对应商品的数量+1      
-        shopcar[index].check && (total += parseInt(shopcar[index].platformPrice));//如果商品为选中的，则合计价格+商品单价      
+        shopcar[index].check && (total += parseInt(shopcar[index].platformPrice)) && (totalRebate += parseInt(shopcar[index].rebatePrice));//如果商品为选中的，则合计价格+商品单价      
         wx.request({
           url: app.appData.serverUrl + 'choose/modify/count',
           data: {
@@ -175,7 +183,9 @@ Page({
         break;
       case 'minus':
         shopcar[index].num--;//对应商品的数量-1      
-        shopcar[index].check && (total -= parseInt(shopcar[index].platformPrice));//如果商品为选中的，则合计价格-商品单价    
+        shopcar[index].check 
+        && (total -= parseInt(shopcar[index].platformPrice))
+        && (totalRebate += parseInt(shopcar[index].rebatePrice));//如果商品为选中的，则合计价格-商品单价    
         wx.request({
           url: app.appData.serverUrl + 'choose/modify/count',
           data: {
@@ -213,10 +223,9 @@ Page({
     }
     this.setData({
       shopcarData: shopcar,
-      total: total
+      total: total,
+      totalRebate: totalRebate
     });
-
-   
   },
 
 
@@ -234,73 +243,51 @@ Page({
     });
   },
   onLoad: function (options) {
+    
+  },
+
+  
+  onReady: function () {
     let that = this;
     let auth = wx.getStorageSync('token')
     wx.request({
-      url: app.appData.serverUrl+'address/query',
-      header:{
-        'Authorization':auth
+      url: app.appData.serverUrl + 'address/query',
+      header: {
+        'Authorization': auth
       },
-      method:'get',
-      success:function(res){
+      method: 'get',
+      success: function (res) {
         console.log(res)
         let data = res.data;
         let address = data.data.address;
         let phone = data.data.phone;
         let addressee = data.data.addressee;
-        if(data.status !=200){
+        if (data.status != 200) {
           wx.showToast({
             title: data.msg,
-            duration:2000,
-            icon:'none'
+            duration: 2000,
+            icon: 'none'
           })
-        }else{
+        } else {
           that.setData({
-            deliveryName:addressee,
+            deliveryName: addressee,
             deliveryPhone: phone,
-            deliveryAddress:address
+            deliveryAddress: address
           })
         }
+      },
+      fail: function (res) {
+        console.log(res)
+        wx.showToast({
+          title: '获取收货地址失败',
+          icon: 'none',
+          duration: 2000
+        })
       }
     });
-    wx.request({
-      url: app.appData.serverUrl +'choose/list',
-      method:'get',
-      header:{
-        'Authorization': auth
-      },
-      success:function(res){
-        console.log(res)
-        let data = res.data;
-        if(data.status !=200){
-          wx.showToast({
-            title: data.msg,
-            icon:'none',
-            duration:2000
-          })
-        }else{
-          let list = data.data;
-          for(var i=0;i<list.length;i++){
-            var product = list[i]
-            product.check = false;
-            product.platformPrice = Number(product.platformPrice)
-          }
-          that.setData({
-            shopcarData:list,
-            allsel:false
-          })
-        }
-      }
-    })
-  },
-
-  
-  onReady: function () {
-
   },
 
   submitOrder:function(e){
-    console.log(e)
     let that = this;
     let orderIds=[];
     let shopcar = that.data.selarr;
@@ -334,7 +321,7 @@ Page({
             icon:'none'
           })
         }else{
-          wx.switchTab({
+          wx.reLaunch({
             url: '/pages/order/order?activeIndex=0'
           })
         }
@@ -344,18 +331,53 @@ Page({
   /**   * 生命周期函数--监听页面显示   */
   onShow: function () {
     let that = this;
-    var shopcarData = that.data.shopcar,//这里我是把购物车的数据放到app.js里的，这里取出来，开发的时候视情况加载自己的数据
-      total = 0,
-      selarr = that.data.selarr;
+    let auth = wx.getStorageSync('token')
+    wx.request({
+      url: app.appData.serverUrl + 'choose/list',
+      method: 'get',
+      header: {
+        'Authorization': auth
+      },
+      success: function (res) {
+        console.log(res)
+        let data = res.data;
+        if (data.status != 200) {
+          wx.showToast({
+            title: data.msg,
+            icon: 'none',
+            duration: 2000
+          })
+        } else {
+          let list = data.data;
+          if (list) {
+            for (var i = 0; i < list.length; i++) {
+              var product = list[i]
+              product.check = false;
+              product.platformPrice = Number(product.platformPrice)
+              product.rebatePrice = Number(product.rebatePrice)
+            }
+            that.setData({
+              shopcarData: list,
+              allsel: false
+            })
+          }
+        }
+      }
+    })
+    var shopcarData = that.data.shopcarData;//这里我是把购物车的数据放到app.js里的，这里取出来，开发的时候视情况加载自己的数据
+     let  total = 0;
+     let totalRebate = 0;
+      let selarr = that.data.selarr;
     for (let i = 0, len = shopcarData.length; i < len; i++) {//这里是对选中的商品的价格进行总结    
       if (shopcarData[i].check) {
-        total += shopcarData[i].num * shopcarData[i].price;
+        total += shopcarData[i].num * shopcarData[i].platformPrice;
+        totalRebate += shopcarData[i].count * shopcarData[i].rebatePrice;
         selarr.push(shopcarData[i]);
       }
     }
     this.setData({
-      shopcarData: shopcarData,
       total: total,
+      totalRebate:totalRebate,
       selarr: selarr
     });
     this.judgmentAll();//判断是否全选  

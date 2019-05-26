@@ -2,9 +2,9 @@
 <view class="index-container">
   <view class="index-nav-left">
     <scroll-view scroll-y scroll-with-animation class='scroll-y'>
-      <block wx:for="{{brands}}" wx:key="{{id}}">
+      <block wx:for="{{brands}}" wx:key="{{id}}" wx:for-item='item'>
           <view class="nav-left-item flex-row {{current == item.id ? 'active' : ''}}" 
-                data-index='{{index}}' data-code='{{item.code}}'  data-bid='{{item.id}}' bindtap='onClick'>{{item.name}}</view>
+                 data-code='{{item.code}}'  data-bid='{{item.id}}' bindtap='onClick'>{{item.name}}</view>
         </block>
     </scroll-view>
   </view>
@@ -14,12 +14,12 @@
       <block wx:for="{{products}}" wx:key="id">
       <view class='flex-row bottom-20'>
         <view class='item-left-block'>
-          <image src="{{item.coverImg}}" class='right-image-item'></image>
+          <image src="{{item.coverImg}}"  mode="aspectFit" class='right-image-item'></image>
         </view>
         <view class='item-right-block flex-row'>
           <view class="left-section flex-column">
               <view class='item-name'>{{item.name}}</view>
-              <view class='item-desc'>{{item.remark}}</view>
+              <view class='item-desc'>{{item.color}}/{{item.memory}}</view>
               <view class='item-price'>销售价：<text class='price-info'>{{item.platformPrice}}</text></view>
               <view class='item-commission'>提成价：<text class='price-info'>{{item.rebatePrice}}</text></view>
           </view>
@@ -31,6 +31,6 @@
       </block>
       <template is='footer' data="{{text: '没有更多了'}}"/>
     </view>
-    <view wx:else class='none-products'>该类暂无数据</view> 
+    <view wx:else class='none-products'>暂无数据</view> 
   </view>
 </view>

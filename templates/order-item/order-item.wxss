@@ -38,13 +38,14 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin-bottom: 20rpx;
+  color: black;
 }
 
 .item-desc{
-  font-size: 34rpx;
+  font-size: 30rpx;
   color: #333;
-  margin-bottom: 30rpx;
+  line-height: 50rpx;
+  height: 50rpx;
 }
 .price-info{
   color: red;
