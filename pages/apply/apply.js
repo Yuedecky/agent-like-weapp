@@ -116,13 +116,13 @@ uploadImageFile:function(idx){
     }
     //1.先调用上传
     let studentIdCards = wx.getStorageSync('qualification.images');
-    console.log('images:',studentIdCards)
     let realName=wx.getStorageSync('applicant.realName')
     let applyPhone = wx.getStorageSync('applicant.applyPhone')
     let applyCode = wx.getStorageSync('applicant.applyCode')
     let schoolName = wx.getStorageSync('school.schoolName');
     let schoolAddress =wx.getStorageSync('school.schoolAddress')
     let schoolDetailAddress = wx.getStorageSync('school.roomNo');
+    studentIdCards = JSON.stringify(that.data.qualification.images);
     //2.提交申请
     wx.request({
       url: app.appData.serverUrl + 'user/apply',
@@ -133,10 +133,9 @@ uploadImageFile:function(idx){
         schoolName: schoolName,
         schoolAddress: schoolAddress,
         schoolDetailAddress: schoolDetailAddress,
-        studentIdCards: that.data.qualification.images
+        studentIdCards: studentIdCards.replace('[', '').replace(']', '')
       },
       success:function(res){
-        console.log(res)
         let data = res.data;
         if(data.status != 200){
           wx.showToast({
@@ -151,7 +150,11 @@ uploadImageFile:function(idx){
         }
       },
       fail:function(res){
-        console.log(res)
+        wx.showToast({
+          title: '申请失败，请联系客服',
+          duration:2000,
+          icon:'none'
+        })
       }
     })
     
@@ -188,9 +191,9 @@ nextStepTwo:function(e){
   var schoolAddress = that.data.school.schoolAddress;
   var roomNo = that.data.school.roomNo;
   if (schoolName == '' || schoolName == undefined) {
-    warn = '请填写学校名称';
+    warn = '请填写学校/小区名称';
   } else if (schoolAddress == '' || schoolAddress == undefined) {
-    warn = '请填写学校地址';
+    warn = '请输入学校/小区地址';
   } else if (roomNo == '' || roomNo == undefined) {
     warn = '请填写详细地址';
   }
@@ -206,7 +209,6 @@ nextStepTwo:function(e){
       icon: 'none'
     })
   }
-  
 },
   getSchoolNameValue:function(e){
     let that = this;
@@ -416,7 +418,6 @@ nextStepTwo:function(e){
           filePath: tempFilePaths[0],
           name: 'file',
           success: function (res) {
-            console.log(res)
             let data = JSON.parse(res.data)
             let url = data.data;
             imgArr.push(url);
@@ -433,16 +434,11 @@ nextStepTwo:function(e){
             })
           },
         })
-        // that.setData({
-        //   'qualification.images': that.data.qualification.images.concat(tempFilePaths),
-        // });
       }
     })
-    console.log(that.data.qualification.images.length)
   },
   previewImage: function (e) {
     let that = this;
-    console.log('preview image,e:',e)
     wx.previewImage({
       current: e.currentTarget.id, // 当前显示图片的http链接
       urls: that.data.qualification.images // 需要预览的图片http链接列表

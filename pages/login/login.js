@@ -163,7 +163,6 @@ getCodeValue:function(e){
               duration:2000
             })
           }else{
-            wx.setStorageSync('phone', that.data.phone);
             wx.setStorageSync('token',res.data.data)
             wx.switchTab({
               url: '/pages/index/index',
@@ -180,7 +179,11 @@ getCodeValue:function(e){
     }
   },
 
-
+  onShowProtocol:function(e){
+    wx.navigateTo({
+      url: '/pages/protocol/protocol',
+    })
+  },
 
   /**
    * 生命周期函数--监听页面加载

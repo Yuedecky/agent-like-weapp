@@ -1,0 +1,6 @@
+<import src="/templates/address/address.wxml"></import>
+<view class='address-container'>
+<view wx:for="myAddresses" wx:key="id" wx:for-item="item">
+  <template is='address-template' data="{{...item}}"></template>
+</view>
+</view>

@@ -31,6 +31,17 @@
   content: "\ea44";
 }
 
+.right-arrow{
+width: 9px;
+height: 9px;
+border-top: 2px solid #999;
+border-right: 2px solid #999;
+position: absolute;
+right: 26rpx;
+transform: rotate(45deg);
+margin-top:10rpx;
+}
+
 .font-grey{
   color: #998;
 }

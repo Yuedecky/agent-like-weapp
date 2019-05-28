@@ -1,20 +1,17 @@
 <view class='cart-wraper'>
   <view class='header-wrapper'>
   <view class='delivery-scope flex-column'>
-    <view class='delivery-info'>
-配送信息（以申请信息为准）
+    <view class='delivery-info flex-row'>
+      <view class='delivery-name'>{{deliveryName}}</view>
+      <view class='delivery-phone'>{{deliveryPhone}}</view>
     </view>
-    <view class='delivery-name'>
-    收货人：{{deliveryName}}
-    </view>
-    <view class='delivery-phone'>
-    联系电话：{{deliveryPhone}}
-    </view>
-    <view class='delivery-address'>
-    收货地址：{{deliveryAddress}}
+    <view class='delivery-address flex-row'>
+    <view><image class='address-img' src='/assets/images/address.png'></image></view>
+    <view class='accept-address'>收货地址：{{deliveryAddress}}</view>
+    <view class='right-arrow' catchtap='onSwithAddress'></view>
     </view>
   </view>
-  <view class='flex-row'>
+  <view class='flex-row manage-header'>
   <view class='check-box'> 
      <image class='check-img' src='/assets/images/check-black.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
      <image class='check-img' src='/assets/images/check.png' hidden='{{!allsel}}' catchtap='allcheckTap'></image>        
@@ -42,8 +39,8 @@
             <text class='shop-type'>{{item.color}}/{{item.memory}}</text> 
             <view class='shop-detail-bottom flex-row'> 
                 <view class='flex-column cart-price'>       
-                  <text >售价：<text class='shop-price'>{{item.fullPlatformPrice}}</text></text>
-                  <text >提成：<text class='shop-price'>{{item.fullRebatePrice}}</text></text>
+                  <view>售价：<text class='shop-price'>{{item.fullPlatformPrice}}</text></view>
+                  <view>提成：<text class='shop-price'>{{item.fullRebatePrice}}</text></view>
                 </view>
                 <view class='num-change flex-row'>                
                     <view><image 
@@ -81,7 +78,7 @@
    <view class='footer-total-text' wx:if='{{adminShow}}'>合计支付：<text class='footer-total-price'>￥{{total}}</text></view>
    <view class='footer-total-text' wx:if='{{adminShow}}'>合计提成：<text class='footer-total-price'>￥{{totalRebate}}</text></view>
    </view>
-   <view class='footer-total-submit middle-center' wx:if="{{adminShow}}" catchtap='submitOrder'>立即下单</view>  
+   <view class='footer-total-submit middle-center' wx:if="{{adminShow}}" catchtap='submitOrder'>申请配送</view>  
    <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{!adminShow}}'>移除商品</view>  
   </view>
 </view>

@@ -1,6 +1,6 @@
 @import "/templates/apply-basic/apply-basic.wxss";
 @import "/templates/apply-qualification/apply-qualification.wxss";
-@import "/templates/apply-school/apply-school.wxss";
+@import "/templates/apply-address/apply-address.wxss";
 .apply-container{
   width: 100%;
 }

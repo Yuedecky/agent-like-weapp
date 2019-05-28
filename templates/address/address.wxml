@@ -1,0 +1,16 @@
+<template name='address-template'>
+<view class='address-template-container flex-row bottom-20'>
+  <view class='address-detail'>
+  <view class='address-template-header flex-row'>
+    <view class='right-20'>{{name}}</view>
+    <view>{{phone}}</view>
+  </view>
+  <view class='address-template-body'>
+    {{address}}
+  </view>
+</view>
+<view class='action-sheet'>
+  编辑
+</view>
+</view>
+</template>

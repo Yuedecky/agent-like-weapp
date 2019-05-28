@@ -1,0 +1,5 @@
+@import '/templates/address/address.wxss';
+.address-container{
+  width: 100%;
+  height: 100%;
+}
