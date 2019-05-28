@@ -257,11 +257,7 @@ Page({
       },
       method: 'get',
       success: function (res) {
-        console.log(res)
         let data = res.data;
-        let address = data.data.address;
-        let phone = data.data.phone;
-        let addressee = data.data.addressee;
         if (data.status != 200) {
           wx.showToast({
             title: data.msg,
@@ -269,6 +265,9 @@ Page({
             icon: 'none'
           })
         } else {
+          let address = data.data.address;
+          let phone = data.data.phone;
+          let addressee = data.data.addressee;
           that.setData({
             deliveryName: addressee,
             deliveryPhone: phone,

@@ -1,9 +1,9 @@
 {
   "pages": [
     "pages/login/login",
+    "pages/index/index",
     "pages/order/order",
     "pages/cart/cart",
-    "pages/index/index",
     "pages/apply/apply",
     "pages/thanks/thanks"
   ],
@@ -42,7 +42,7 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "你的位置信息将用于微券优品为你匹配到附近的店铺"
+      "desc": "你的位置信息将用于微券加盟为你匹配到附近的店铺"
     }
   },
   "debug": true,

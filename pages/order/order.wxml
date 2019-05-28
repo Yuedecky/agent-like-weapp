@@ -68,8 +68,8 @@
               <view class='to-paid-order-money'>
               合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
               <view class='contact-only flex-row'>
-                <view  classs='o-concat' bindtap='onContactUs'>
-                  <button type='primary' id='{{index}}' bindtap='onContactUs'>
+                <view  classs='o-concat'>
+                  <button type='primary' id='{{item.order.orderNo}}' bindtap='onContactUs'>
                   联系客服
                   </button>
                 </view>
