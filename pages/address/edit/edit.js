@@ -136,5 +136,58 @@ Page({
    */
   onShareAppMessage: function () {
     
+  },
+  changeSwitch:function(e){
+    //点击切换是否为默认地址
+    
   }
 })
+
+  /**
+   * 动画事件
+*/
+function animationEvents(that, moveY, show) {
+  console.log("moveY:" + moveY + "\nshow:" + show);
+  that.animation = wx.createAnimation({
+    transformOrigin: "50% 50%",
+    duration: 400,
+    timingFunction: "ease",
+    delay: 0
+  }
+  )
+  that.animation.translateY(moveY + 'vh').step()
+
+  that.setData({
+    animation: that.animation.export(),
+    show: show
+  })
+
+}
+
+// ---------------- 分割线 ---------------- 
+
+//获取省份数据
+function getProvinceData(that) {
+  var s;
+  provinces = [];
+  var num = 0;
+  for (var i = 0; i < areaInfo.length; i++) {
+    s = areaInfo[i];
+    if (s.di == "00" && s.xian == "00") {
+      provinces[num] = s;
+      num++;
+    }
+  }
+  that.setData({
+    provinces: provinces
+  })
+
+  //初始化调一次
+  getCityArr(0, that);
+  getCountyInfo(0, 0, that);
+  that.setData({
+    province: "北京市",
+    city: "市辖区",
+    county: "东城区",
+  })
+}
