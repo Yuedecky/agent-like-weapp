@@ -243,7 +243,7 @@ Page({
     });
   },
   onLoad: function (options) {
-    
+    console.log('onload cart:',options)
   },
 
   

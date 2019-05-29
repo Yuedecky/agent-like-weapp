@@ -24,55 +24,7 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
-    let auth = wx.getStorageSync('token')
-      wx.request({
-        url: app.appData.serverUrl+'brand/query',
-        method:'get',
-        header:{
-          'Authorization': auth
-        },
-        success:function(res){
-            let data= res.data;
-            if(data.status !=200){
-                wx.showToast({
-                  title: data.msg,
-                  icon:'none',
-                  duration:2000
-                })
-            }else{
-              let list = data.data;
-              that.setData({
-                'brands': list,
-                current: list[0].id
-              });
-              wx.request({
-                url: app.appData.serverUrl+'goods/query',
-                data:{
-                      brandCode: list[0].code,
-                      pageNum: 1,
-                      pageSize:10
-                },
-                header:{
-                  'Authorization': auth
-                },
-                success:function(res){
-                  let data = res.data;
-                  if(data.status!=200){
-                    wx.showToast({
-                      title: data.msg,
-                      icon:'none',
-                      duration:2000
-                    })
-                  }else{
-                    that.setData({
-                      products: data.data.list,
-                    })
-                  }
-                }
-              })
-            }
-        }
-      })
+    
   },
 
   onAddCart:function(e){
@@ -156,7 +108,64 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    let that = this;
+    let auth = wx.getStorageSync('token')
+    if(!auth){
+      wx.reLaunch({
+        url: '/pages/login/login',
+      })
+    }else{
+      //请求token是否过期
+      
+    }
+    wx.request({
+      url: app.appData.serverUrl + 'brand/query',
+      method: 'get',
+      header: {
+        'Authorization': auth
+      },
+      success: function (res) {
+        let data = res.data;
+        if (data.status != 200) {
+          wx.showToast({
+            title: data.msg,
+            icon: 'none',
+            duration: 2000
+          })
+        } else {
+          let list = data.data;
+          that.setData({
+            'brands': list,
+            current: list[0].id
+          });
+          wx.request({
+            url: app.appData.serverUrl + 'goods/query',
+            data: {
+              brandCode: list[0].code,
+              pageNum: 1,
+              pageSize: 10
+            },
+            header: {
+              'Authorization': auth
+            },
+            success: function (res) {
+              let data = res.data;
+              if (data.status != 200) {
+                wx.showToast({
+                  title: data.msg,
+                  icon: 'none',
+                  duration: 2000
+                })
+              } else {
+                that.setData({
+                  products: data.data.list,
+                })
+              }
+            }
+          })
+        }
+      }
+    })
   },
 
   /**

@@ -5,30 +5,40 @@ Page({
    * 页面的初始数据
    */
   data: {
-    myAddresses:[
-      {
-        id:1,
-        name: '张三',
-        phone:'182****1234',
-        address:"浙江省杭州市金华路123号203"
-      },
-      {
-        id:2,
-        name: '李四',
-        phone: '182****1234',
-        address: "浙江省杭州市西湖区穿杨新苑号20号楼203"
-      }
-    ]
+    myAddresses:[]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // let that = this;
-    // that.setData({
+    console.log('address onload:',options)
+    let that = this;
+    that.setData({
+      myAddresses:[
+        {
+          id: 1,
+          name: '张三',
+          phone: '182****1234',
+          address: "浙江省杭州市金华路123号203",
+          default:true
+        },
+        {
+          id: 2,
+          name: '李四',
+          phone: '182****1234',
+          address: "浙江省杭州市西湖区穿杨新苑号20号楼203",
+          default:false
+        }
+      ]
+    })
+  },
 
-    // })
+  onEditAddress:function(e){
+    let addressId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: '/pages/address/edit/edit?id=' + addressId,
+    })
   },
 
   /**

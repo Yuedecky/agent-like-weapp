@@ -4,20 +4,25 @@ Page({
    * 页面的初始数据
    */
   data: {
+    id:0,
     name:'',
     phone:'',
-    address:''
+    address:'',
+    default:false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log('address-template onload:',options)
     let that =this;
     that.setData({
+      id:options.id,
       address:options.address,
       name:options.name,
-      phone:options.phone
+      phone:options.phone,
+      default: true
     })
   },
 

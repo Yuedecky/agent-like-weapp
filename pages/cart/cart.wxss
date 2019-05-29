@@ -14,6 +14,7 @@ page{
 .address-img{
   width: 40rpx;
   height: 40rpx;
+  vertical-align: middle;
 }
 
 .delivery-info{
@@ -47,15 +48,15 @@ page{
   margin-left: 20rpx;
   margin-right: 20rpx;
 }
+
 .accept-address{
   margin-left: 10rpx;
   overflow:hidden; 
   width: 85%;
+  vertical-align: middle;
   text-overflow:ellipsis;
   white-space:nowrap;
 }
-
-
 
 
 .main{

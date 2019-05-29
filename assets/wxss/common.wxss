@@ -59,6 +59,12 @@ margin-top:10rpx;
 .left-20{
   margin-left: 20rpx;
 }
+.bottom-60{
+  margin-bottom: 60rpx;
+}
+.bottom-80{
+  margin-bottom: 80rpx;
+}
 .bottom-100{
   margin-bottom: 100rpx;
 }

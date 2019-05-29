@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/login/login",
     "pages/address/address",
+    "pages/address/edit/edit",
     "pages/protocol/protocol",
     "pages/order/order",
     "pages/cart/cart",

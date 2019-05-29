@@ -5,10 +5,10 @@
       <view class='delivery-name'>{{deliveryName}}</view>
       <view class='delivery-phone'>{{deliveryPhone}}</view>
     </view>
-    <view class='delivery-address flex-row'>
+    <view class='delivery-address flex-row' catchtap='onSwithAddress'>
     <view><image class='address-img' src='/assets/images/address.png'></image></view>
     <view class='accept-address'>收货地址：{{deliveryAddress}}</view>
-    <view class='right-arrow' catchtap='onSwithAddress'></view>
+    <view class='right-arrow' ></view>
     </view>
   </view>
   <view class='flex-row manage-header'>

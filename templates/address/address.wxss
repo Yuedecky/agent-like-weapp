@@ -6,29 +6,45 @@
 }
 
 .address-template-header{
-  font-size: 40rpx;
+  font-size: 34rpx;
   font-weight: bold;
-  height: 60rpx;
-  line-height: 60rpx;
+  height: 50rpx;
+  line-height: 50rpx;
 }
 
 .address-template-body{
-  font-size: 32rpx;
-  line-height: 60rpx;
-  height: 60rpx;
+  font-size: 30rpx;
+  line-height: 50rpx;
+  height: 50rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .address-detail{
   width: 80%;
-  height: 120rpx;
-  border-right: 1px solid gray;
+  height: 100rpx;
+  padding-right: 10rpx;
+  border-right: 1px solid #ccc;
 }
 
-.acttion-sheet{
-  width: 20%;
-  color: #666;
+.default-address{
   font-size: 30rpx;
-  line-height: 120rpx;
-  height: 120rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  padding-left: 10rpx;
+  padding-right: 10rpx;
+  vertical-align: middle;
+  color: rgb(12, 200, 12);
+  border: 1px solid rgb(12, 200, 12);
+}
+
+.action-sheet{
+  width: 20%;
+  color: #999;
+  font-size: 30rpx;
+  line-height: 100rpx;
+  height: 100rpx;
   text-align: center;
 }

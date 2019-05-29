@@ -1,0 +1,21 @@
+<view class='edit-address-container flex-column'>
+        <view class='acceptor-input bottom-60 '>
+           <input type="text" value="{{acceptorName}}" maxlength='20' placeholder="收货人" name="acceptorName" auto-focus='true' bindinput='getAcceptorName'/>
+        </view>
+        <view class='acceptor-input bottom-60'>
+           <input type="text" value="{{acceptorPhone}}" maxlength='20' placeholder="手机号" name="acceptorPhone" auto-focus='true' bindinput='getAcceptorPhone'/>
+        </view>
+        <view class='acceptor-input bottom-60 flex-row'>
+           <view class='school-address-holder'><input type="text" value="{{schoolAddress}}" disabled name="schoolAddress" maxlength='30' placeholder="所在地区"  bindtap='translate'/></view>
+        </view>
+         <view class='acceptor-input bottom-60'>
+          <input type='text' maxlength='50' value="{{roomNo}}" name="roomNo" placeholder='详细地址（精确到门牌号）' bindinput='getDetailAddressValue'/>
+        </view>
+          <view class="tui-menu-list bottom-60">
+            <switch class="tui-fr" checked="{{isChecked}}" bindchange="changeSwitch"/>
+            <text>设为默认地址</text>
+      </view>
+        <button type='primary' class="save-address-btn"  disabled='{{disabled}}'   hover-class='none'
+         bindtap='saveAddress'>保存</button>
+</view>
+
