@@ -35,6 +35,14 @@
               <view classs='o-concat'>
                 <button type='primary' id="{{item.order.orderNo}}" bindtap='onContactUs'>联系客服</button>
               </view>
+              <view>
+                <modal title="联系微信客服" hidden="{{modalHidden}}" bindconfirm="modalConfirm" bindcancel="modalCancel">
+    <view>
+      <image class="modal-image" src="/assets/images/customer.jpeg" mode='aspectFit'></image>
+    </view>
+    <view class='modal-text'>点击确定保存图片到本地</view>
+  </modal>
+              </view>
               <view classs='o-cancel'>
                 <button type='default' class='o-cancel-btn' bindtap='cancelOrder' data-orderid = '{{item.order.id}}'>取消</button>
               </view>

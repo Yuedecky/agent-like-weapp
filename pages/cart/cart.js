@@ -1,7 +1,7 @@
 var app = getApp();
 Page({
   data: {
-    adminShow: true,//管理      
+    adminShow: false,//管理      
     shopcarData: [],//购物车数据      
     total: 0,//总金额      
     allsel: false,//全选      
@@ -9,7 +9,9 @@ Page({
     hintText: '',//提示的内容      
     hintShow: false,//是否显示提示,
 
+    checkedCount:0,
 
+submitText:'',
     //---
     deliveryName:'',
     deliveryPhone:'',
@@ -71,6 +73,14 @@ Page({
         }
       }
     }
+    if(del.length <1){
+      wx.showToast({
+        title: '请选择要移出的商品',
+        duration:2000,
+        icon:'none'
+      })
+      return
+    }
     wx.request({
       url: app.appData.serverUrl+'choose/del',
       data:{
@@ -108,6 +118,15 @@ Page({
     this.setData({
       adminShow: !this.data.adminShow
     });
+    if(this.adminShow){
+      this.setData({
+        sumitText: '申请配送（'+this.checkedCount+'）'
+      })
+    }else{
+      this.setData({
+        submitText: '移出商品（'+this.checkedCount+')'
+      })
+    }
   },
   //点击单个选择按钮  
   checkTap: function (e) {
@@ -137,7 +156,8 @@ Page({
       shopcarData: shopcar,
       total: total,
       totalRebate: totalRebate,
-      selarr: selarr
+      selarr: selarr,
+      checkedCount: selarr.length
     });
     this.judgmentAll();//每次按钮点击后都判断是否满足全选的条件  
   },
@@ -243,7 +263,8 @@ Page({
     });
   },
   onLoad: function (options) {
-    console.log('onload cart:',options)
+    let that = this;
+  
   },
 
   

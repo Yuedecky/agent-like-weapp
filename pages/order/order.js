@@ -11,6 +11,9 @@ Page({
     silderWidth:110,
     popup: '',
 
+
+    modalHidden:true,
+
     phoneNumber:[{
       'name':'张先生',
       'phone':'18721634186'
@@ -166,11 +169,64 @@ Page({
    */
   onContactUs: function (e) {
     var that = this;
+    wx.showActionSheet({
+      itemList: ['微信联系','电话联系'],
+      success:function(res){
+        if (res.tapIndex ==0){
+          //微信联系客服
+          that.setData({
+            modalHidden:false
+          })
+        }else if(res.tapIndex ==1){
+          that.doContact()
+        }
+      }
+    })
+  },
+
+  
+
+  /**
+   *  点击确认
+   */
+  modalConfirm: function () {
+    // do something
+    let that = this;
+    this.setData({
+      modalHidden: true
+    });
+    wx.saveImageToPhotosAlbum({
+      filePath: '/assets/images/customer.jpeg',
+      success:function(res){
+        wx.showToast({
+          title: '保存成功',
+          icon:'success',
+          duration:2000
+        })
+      },
+      fail:function(res){
+        wx.showToast({
+          title: '保存失败',
+          icon:'none',
+          duration:2000
+        })
+      }
+    })
+  },
+
+  modalCancel:function(){
+    this.setData({
+      modalHidden:true
+    })
+  },
+
+  doContact:function(){
+    let that = this;
     //显示“呼叫”、“添加联系人”弹窗
     let phoneNumber = that.data.phoneNumber[0].phone;
     let phoneNumberName = that.data.phoneNumber[0].name;
     wx.showActionSheet({
-      itemList: [phoneNumber,'呼叫', '添加联系人'],
+      itemList: [phoneNumber, '呼叫', '添加联系人'],
       success: function (res) {
         console.log("点击电话 res：", res)
         if (res.tapIndex == 1) {//直接呼叫

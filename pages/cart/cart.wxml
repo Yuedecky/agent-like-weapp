@@ -12,12 +12,12 @@
     </view>
   </view>
   <view class='flex-row manage-header'>
-  <view class='check-box'> 
-     <image class='check-img' src='/assets/images/check-black.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
+  <view class='check-box'>
+     <image class='check-img' src='/assets/images/unchecked.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
      <image class='check-img' src='/assets/images/check.png' hidden='{{!allsel}}' catchtap='allcheckTap'></image>        
      <text class='check-text' catchtap='allcheckTap'>全选</text>    
   </view>
-  <view><text class='header-text' catchtap='adminTap'>{{adminShow?'取消管理':'管理'}}</text></view>
+  <view><text class='header-text' catchtap='adminTap'>{{adminShow?'完成':'管理'}}</text></view>
   </view>
   </view>
   <view class='main'>
@@ -25,7 +25,7 @@
       <view class='main-list'>
         <view class='shop' wx:for='{{shopcarData}}' wx:key='id' wx:for-item='item'>    
         <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>        
-            <image class='check-img' hidden='{{item.check}}' src='/assets/images/check-black.png'></image>        
+            <image class='check-img' hidden='{{item.check}}' src='/assets/images/unchecked.png'></image>        
             <image class='check-img' hidden='{{!item.check}}' src='/assets/images/check.png'></image>    
         </view>    
         <image 
@@ -75,10 +75,10 @@
 
   <view class='footer flex-row'>
   <view class='flex-column total-part'>
-   <view class='footer-total-text' wx:if='{{adminShow}}'>合计支付：<text class='footer-total-price'>￥{{total}}</text></view>
-   <view class='footer-total-text' wx:if='{{adminShow}}'>合计提成：<text class='footer-total-price'>￥{{totalRebate}}</text></view>
+   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计支付：<text class='footer-total-price' decode='true'>￥{{total}}</text></view>
+   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计提成：<text class='footer-total-price' decode='true'>￥{{totalRebate}}</text></view>
    </view>
-   <view class='footer-total-submit middle-center' wx:if="{{adminShow}}" catchtap='submitOrder'>申请配送</view>  
-   <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{!adminShow}}'>移除商品</view>  
+   <view class='footer-total-submit middle-center' wx:if="{{!adminShow}}" catchtap='submitOrder'>申请配送:{{checkedCount}}</view>  
+   <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{adminShow}}'>移除商品:{{checkedCount}}</view>  
   </view>
 </view>

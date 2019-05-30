@@ -38,6 +38,14 @@
   margin-right: 20rpx;
 }
 
+.modal-image{
+  width:540rpx;
+  height: 400rpx;
+}
+
+.modal-text{
+  text-align: center;
+}
 .none-data{
   text-align: center;
   font-size: 34rpx;
