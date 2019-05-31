@@ -5,6 +5,7 @@
   width: 90%;
   height: 100%;
   margin: 0 auto;
+  font-size: 30rpx;
 }
 
 .acceptor-input{
@@ -15,26 +16,17 @@
 
 .right-arrow {
     display :inline-block;
-    position: relative;
-    width: 36rpx;
-    height: 36rpx;
-    margin-right: 20rpx;
+    position: absolute;
+    width: 16rpx;
+    height: 16rpx;
+    right: -300rpx;
+    top:0rpx;
+}
+.position-holder{
+  position: relative;
 }
 
-.right-arrow::after {
-    display: inline-block;
-    content: " ";
-    height: 18rpx;
-    width: 18rpx;
-    border-width: 4rpx 4rpx 0 0;
-    border-color: #c7c7cc;
-    border-style: solid;
-    transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
-    position: absolute;
-    top: 50%;
-    right: 6rpx;
-    margin-top: -9rpx;
-}
+
 .infoText{
     margin-top: 20rpx;
     text-align: center;
@@ -42,9 +34,72 @@
     justify-content: center; 
 }
 
+
+
+.radio-item{
+  margin-right: 10rpx;
+  font-size: 30rpx;
+  line-height: 40rpx;
+  color: #999;
+}
+
+
+radio .wx-radio-input{ 
+  /* 自定义样式.... */
+    height: 30rpx; 
+    width: 30rpx;
+    margin-top: -4rpx;
+    border-radius: 50%;
+    border: 2rpx solid #999;
+    background: transparent;
+ }
+ 
+/* 选中后的 背景样式 （红色背景 无边框 可根据UI需求自己修改） */
+radio .wx-radio-input.wx-radio-input-checked{
+   border: none;
+   background: #50d2c2;
+}
+/* 选中后的 对勾样式 （白色对勾 可根据UI需求自己修改） */
+radio .wx-radio-input.wx-radio-input-checked::before{
+   border-radius: 50%;/* 圆角 */
+   width: 30rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+   height: 30rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+   line-height: 30rpx;
+   text-align: center;
+   font-size:30rpx; /* 对勾大小 30rpx */
+   color:#fff; /* 对勾颜色 白色 */
+   background: #50d2c2;
+   transform:translate(-50%, -50%) scale(1);
+   -webkit-transform:translate(-50%, -50%) scale(1);
+}
+
+
+.set-default{
+  color:#333;
+  font-size: 30rpx;
+  line-height: 40rpx;
+}
 .selector-address{
   width:20rpx;
   height: 40rpx;
+}
+
+/*swtich整体大小及背景色*/
+.wx-switch-input{
+    width:80rpx !important;
+    height:36rpx !important;
+    background: #50D2C2 !important;
+    border: #50d2c2 !important; /* 2018-07-18 重置开关边框颜色 */
+}
+/*白色样式（false的样式）*/
+.wx-switch-input::before{
+    width:80rpx !important;
+    height: 36rpx !important;
+}
+/*绿色样式（true的样式）*/
+.wx-switch-input::after{
+    width: 40rpx !important;
+    height: 36rpx !important;
 }
 
 
@@ -115,4 +170,74 @@ picker-view-column view{
 }
 .save-address-btn{
   width: 100%;
+}
+
+
+
+picker-view{
+  background-color: white;
+  padding: 0;
+  width: 100%; 
+  height: 380rpx;
+  bottom: 0;
+  position: fixed;
+}
+
+picker-view-column view{
+  vertical-align:middle; 
+  font-size: 28rpx;
+  line-height: 28rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ----------------------------------------- */
+
+.animation-element-wrapper {
+  display: flex;  
+  position: fixed;
+  left: 0;
+  top:0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.animation-element {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 470rpx;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+
+.animation-element-wrapper text{
+  color: #999999;
+  display: inline-flex;  
+  position: fixed;
+  margin-top: 20rpx;
+  height: 50rpx;
+  text-align: center;
+  line-height: 50rpx;
+  font-size: 34rpx;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.left-bt{
+  left: 30rpx;
+}
+.right-bt {
+  right: 30rpx;
+}
+
+.line{
+  display: block;
+  position: fixed;
+  height: 1rpx;
+  width: 100%;
+  margin-top: 89rpx; 
+  background-color: #eeeeee;
 }

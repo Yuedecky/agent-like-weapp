@@ -10,8 +10,9 @@ Page({
     hintShow: false,//是否显示提示,
 
     checkedCount:0,
-
-submitText:'',
+    
+    totalNum:0,
+    submitText:'',
     //---
     deliveryName:'',
     deliveryPhone:'',
@@ -42,7 +43,9 @@ submitText:'',
       shopcarData: shopcar,
       total: total,
       totalRebate: totalRebate,
-      selarr: that.data.selarr
+      selarr: that.data.selarr,
+      checkedCount: that.data.selarr.length,
+      totalNum: shopcar.length
     });
   },
   //点击移除商品  
@@ -90,7 +93,7 @@ submitText:'',
         'Authorization': auth
       },
       success:function(res){
-        console.log(res)
+       
         let data = res.data;
         if(data.status !=200){
           wx.showToast({
@@ -99,10 +102,14 @@ submitText:'',
             icon:'none'
           })
         }else{
+          console.log(that.data.selarr)
           that.setData({
             shopcarData: shopcar,
             total: 0,
-            totalRebate:0
+            totalRebate:0,
+            selarr:[],
+            checkedCount:0,
+            totalNum:shopcar.length
           });
         }
       }
@@ -157,7 +164,8 @@ submitText:'',
       total: total,
       totalRebate: totalRebate,
       selarr: selarr,
-      checkedCount: selarr.length
+      checkedCount: selarr.length,
+      totalNum: shopcar.length
     });
     this.judgmentAll();//每次按钮点击后都判断是否满足全选的条件  
   },

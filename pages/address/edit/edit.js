@@ -33,6 +33,20 @@ Page({
     countys: countys,
     value: [0, 0, 0],
 
+
+    sexes:[
+      {
+        name: '先生',
+        value: 'man',
+        checked:false
+      },
+      {
+        name:'女士',
+        value:'woman',
+        checked:true
+      }
+    ]
+
   },
 
   /**
@@ -42,7 +56,13 @@ Page({
     let that = this;
     that.setData({
       id:options.id
-    })
+    });
+    //获取省市区县数据
+    area.getAreaInfo(function (arr) {
+      areaInfo = arr;
+      //获取省份数据
+      getProvinceData(that);
+    });
   },
 
   //移动按钮点击事件
@@ -75,6 +95,11 @@ Page({
       wx.setStorageSync('school.schoolAddress', addressName)
     }
     animationEvents(this, moveY, show);
+  },
+
+//单选 ‘先生’、‘女士’
+  radioChange:function(e){
+      console.log(e)
   },
 
   /**
@@ -189,5 +214,50 @@ function getProvinceData(that) {
     province: "北京市",
     city: "市辖区",
     county: "东城区",
+  })
+}
+
+// 获取地级市数据
+function getCityArr(count, that) {
+  var c;
+  citys = [];
+  var num = 0;
+  for (var i = 0; i < areaInfo.length; i++) {
+    c = areaInfo[i];
+    if (c.xian == "00" && c.sheng == provinces[count].sheng && c.di != "00") {
+      citys[num] = c;
+      num++;
+    }
+  }
+  if (citys.length == 0) {
+    citys[0] = { name: '' };
+  }
+
+  that.setData({
+    city: "",
+    citys: citys,
+    value: [count, 0, 0]
+  })
+}
+
+// 获取区县数据
+function getCountyInfo(column0, column1, that) {
+  var c;
+  countys = [];
+  var num = 0;
+  for (var i = 0; i < areaInfo.length; i++) {
+    c = areaInfo[i];
+    if (c.xian != "00" && c.sheng == provinces[column0].sheng && c.di == citys[column1].di) {
+      countys[num] = c;
+      num++;
+    }
+  }
+  if (countys.length == 0) {
+    countys[0] = { name: '' };
+  }
+  that.setData({
+    county: "",
+    countys: countys,
+    value: [column0, column1, 0]
   })
 }

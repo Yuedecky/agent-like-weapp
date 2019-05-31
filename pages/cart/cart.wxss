@@ -52,7 +52,7 @@ page{
 .accept-address{
   margin-left: 10rpx;
   overflow:hidden; 
-  width: 85%;
+  width: 80%;
   vertical-align: middle;
   text-overflow:ellipsis;
   white-space:nowrap;

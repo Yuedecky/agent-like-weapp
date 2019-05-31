@@ -15,17 +15,18 @@
 .address-template-body{
   font-size: 30rpx;
   line-height: 50rpx;
-  height: 50rpx;
-  white-space: nowrap;
+  height: 100rpx;
   overflow: hidden;
+  word-wrap: break-word;
   text-overflow: ellipsis;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical; 
 }
 
 .address-detail{
   width: 80%;
   height: 100rpx;
   padding-right: 10rpx;
-  border-right: 1px solid #ccc;
 }
 
 .default-address{
@@ -44,7 +45,8 @@
   width: 20%;
   color: #999;
   font-size: 30rpx;
-  line-height: 100rpx;
-  height: 100rpx;
-  text-align: center;
+  line-height: 80rpx;
+  height: 80rpx;
+  border-left: 1px solid #cdcdcd;
+  padding-left: 26rpx;
 }

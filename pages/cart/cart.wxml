@@ -15,7 +15,7 @@
   <view class='check-box'>
      <image class='check-img' src='/assets/images/unchecked.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
      <image class='check-img' src='/assets/images/check.png' hidden='{{!allsel}}' catchtap='allcheckTap'></image>        
-     <text class='check-text' catchtap='allcheckTap'>全选</text>    
+     <text class='check-text' catchtap='allcheckTap'>全选</text>
   </view>
   <view><text class='header-text' catchtap='adminTap'>{{adminShow?'完成':'管理'}}</text></view>
   </view>

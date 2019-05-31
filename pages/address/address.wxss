@@ -7,3 +7,7 @@
 .address-section{
   margin-top: 20rpx;
 }
+
+.add-address-btn{
+  width: 80%;
+}

@@ -1,21 +1,56 @@
 <view class='edit-address-container flex-column'>
         <view class='acceptor-input bottom-60 '>
-           <input type="text" value="{{acceptorName}}" maxlength='20' placeholder="收货人" name="acceptorName" auto-focus='true' bindinput='getAcceptorName'/>
+           <input type="text" value="{{acceptorName}}" maxlength='20' placeholder="联系人" name="acceptorName" auto-focus='true' bindinput='getAcceptorName'/>
+        </view>
+        <view class='bottom-40'>
+          <radio-group class="flex-row" bindchange="radioChange">
+            <label class='radio-item' wx:for="{{sexes}}" wx:key='*this'>
+              <radio class="radio-item" value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.disabled}}">{{item.name}}</radio>
+            </label>
+          </radio-group>
         </view>
         <view class='acceptor-input bottom-60'>
-           <input type="text" value="{{acceptorPhone}}" maxlength='20' placeholder="手机号" name="acceptorPhone" auto-focus='true' bindinput='getAcceptorPhone'/>
+           <input type="text" value="{{acceptorPhone}}" maxlength='20' placeholder="手机号" name="acceptorPhone" bindinput='getAcceptorPhone'/>
         </view>
         <view class='acceptor-input bottom-60 flex-row'>
-           <view class='school-address-holder'><input type="text" value="{{schoolAddress}}" disabled name="schoolAddress" maxlength='30' placeholder="所在地区"  bindtap='translate'/></view>
+           <view class='position-holder'><input type="text" value="{{schoolAddress}}" disabled name="schoolAddress" maxlength='30' placeholder="所在地区"  bindtap='translate'/><i class='right-arrow'></i></view>
         </view>
          <view class='acceptor-input bottom-60'>
           <input type='text' maxlength='50' value="{{roomNo}}" name="roomNo" placeholder='详细地址（精确到门牌号）' bindinput='getDetailAddressValue'/>
         </view>
-          <view class="tui-menu-list bottom-60">
-            <switch class="tui-fr" checked="{{isChecked}}" bindchange="changeSwitch"/>
-            <text>设为默认地址</text>
+          <view class="bottom-60">
+            <switch class="swith-btn" checked="{{isChecked}}" bindchange="changeSwitch"/>
+            <text class='set-default'>设为默认地址</text>
       </view>
         <button type='primary' class="save-address-btn"  disabled='{{disabled}}'   hover-class='none'
          bindtap='saveAddress'>保存</button>
 </view>
+
+<view class="animation-element-wrapper" animation="{{animation}}" style="visibility:{{show ? 'visible':'hidden'}}" bindtap="hiddenFloatView" data-id="444">
+     <view class="animation-element">
+        <text class="left-bt" catchtap="hiddenFloatView" data-id="555">取消</text>
+        <text class="right-bt" catchtap="hiddenFloatView" data-id="666">确定</text>
+          <view class="line"></view> 
+        <picker-view indicator-style = "height: 50rpx;" value="{{value}}" bindchange="bindChange">
+        <!--省-->
+        <picker-view-column>
+           <view wx:for="{{provinces}}" wx:for-item="sheng" wx:key="*this">
+             {{sheng.name}}
+          </view>
+        </picker-view-column>
+        <!--地级市-->
+        <picker-view-column>
+          <view wx:for="{{citys}}" wx:key="*this">
+            {{item.name}}
+          </view>
+        </picker-view-column>
+        <!--区县-->
+        <picker-view-column>
+          <view wx:for="{{countys}}" wx:key="*this">
+            {{item.name}}
+          </view>
+        </picker-view-column>
+        </picker-view>
+    </view>
+  </view>
 
