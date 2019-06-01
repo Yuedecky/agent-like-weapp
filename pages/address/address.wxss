@@ -4,10 +4,41 @@
   height: 100%;
 }
 
-.address-section{
-  margin-top: 20rpx;
-}
+ .address-section{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 2vw;
+  margin-right: 2vw;
+} 
 
 .add-address-btn{
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 34rpx;
   width: 80%;
+}
+
+.address-main{
+  height: 90%;
+  flex: 1;
+  width: 100%;
+  position: relative;
+  border: 1px solid red;
+}
+
+.address-scroll{
+  height: 100%;
+  position: absolute;
+  top:0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+} 
+
+.address-bottom{
+  position: fixed;
+  bottom: 40rpx;
+  width: 100%;
+  margin: 0 auto;
 }

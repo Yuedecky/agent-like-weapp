@@ -37,16 +37,16 @@ Page({
         totalRebate += shopcar[i].rebatePrice * shopcar[i].count;
       }
     }
-    that.data.selarr = allsel ? shopcar : [];//如果选中状态为true那么所有商品为选中状态，将物品加入选中变量，否则为空    
     that.setData({
       allsel: allsel,
       shopcarData: shopcar,
       total: total,
       totalRebate: totalRebate,
-      selarr: that.data.selarr,
+      selarr: allsel ? shopcar : [],
       checkedCount: that.data.selarr.length,
       totalNum: shopcar.length
     });
+    wx.setStorageSync('selarr', that.data.selarr)
   },
   //点击移除商品  
   deleteshopTap: function () {
@@ -137,7 +137,6 @@ Page({
   },
   //点击单个选择按钮  
   checkTap: function (e) {
-    console.log(e)
     let that = this;
     let index = e.currentTarget.dataset.index;
     let shopcar =  that.data.shopcarData;
@@ -349,6 +348,7 @@ Page({
             icon:'none'
           })
         }else{
+          wx.clearStorageSync('selarr')
           wx.reLaunch({
             url: '/pages/order/order?activeIndex=0'
           })
@@ -365,7 +365,8 @@ Page({
   /**   * 生命周期函数--监听页面显示   */
   onShow: function () {
     let that = this;
-    let auth = wx.getStorageSync('token')
+    let auth = wx.getStorageSync('token');
+    let selarr = wx.getStorageSync('selarr') || that.data.selarr;
     wx.request({
       url: app.appData.serverUrl + 'choose/list',
       method: 'get',
@@ -373,7 +374,6 @@ Page({
         'Authorization': auth
       },
       success: function (res) {
-        console.log(res)
         let data = res.data;
         if (data.status != 200) {
           wx.showToast({
@@ -384,37 +384,33 @@ Page({
         } else {
           let list = data.data;
           if (list) {
-            for (var i = 0; i < list.length; i++) {
-              var product = list[i]
-              product.check = false;
-              product.platformPrice = Number(product.platformPrice)
-              product.rebatePrice = Number(product.rebatePrice)
+            var shopcarData = list
+            let total = that.data.total;
+            let totalRebate = that.data.totalRebate;
+            if(shopcarData &&selarr){
+              for (var i = 0; i < shopcarData.length; i++) {
+                for(var j=0;j<selarr.length;j++){
+                  if (selarr[j].id === shopcarData[i].id && selarr[j].check) {
+                    total += shopcarData[i].count * shopcarData[i].platformPrice;
+                    totalRebate += shopcarData[i].count * shopcarData[i].rebatePrice;
+                    shopcarData[i].check = true
+                  }
+                }
+              }
+              that.setData({
+                total: total,
+                totalRebate: totalRebate,
+                selarr: selarr,
+                shopcarData: shopcarData
+              });
+              that.judgmentAll();//判断是否全选  
             }
-            that.setData({
-              shopcarData: list,
-              allsel: false
-            })
-          }
+            }
+           
         }
       }
     })
-    var shopcarData = that.data.shopcarData;//这里我是把购物车的数据放到app.js里的，这里取出来，开发的时候视情况加载自己的数据
-     let  total = 0;
-     let totalRebate = 0;
-      let selarr = that.data.selarr;
-    for (let i = 0, len = shopcarData.length; i < len; i++) {//这里是对选中的商品的价格进行总结    
-      if (shopcarData[i].check) {
-        total += shopcarData[i].num * shopcarData[i].platformPrice;
-        totalRebate += shopcarData[i].count * shopcarData[i].rebatePrice;
-        selarr.push(shopcarData[i]);
-      }
-    }
-    this.setData({
-      total: total,
-      totalRebate:totalRebate,
-      selarr: selarr
-    });
-    this.judgmentAll();//判断是否全选  
+   
   }
 
 })
