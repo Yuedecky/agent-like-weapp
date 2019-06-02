@@ -18,7 +18,7 @@ Page({
 
   onApplyOpen:function(e){
     wx.navigateTo({
-      url: '/pages/apply/apply?pageIndex=1',
+      url: '/pages/apply/apply?pageIndex=2',
     })
   },
 
@@ -154,7 +154,6 @@ getCodeValue:function(e){
           password: that.data.code,
         },
         success:function(res){
-          console.log(res);
           let data = res.data;
           if(data.status != 200){
             wx.showToast({
@@ -163,7 +162,9 @@ getCodeValue:function(e){
               duration:2000
             })
           }else{
-            wx.setStorageSync('token',res.data.data)
+            console.log(data)
+            wx.setStorageSync('token',data.data.token)
+            wx.setStorageSync('role',data.data.role)
             wx.switchTab({
               url: '/pages/index/index',
             })

@@ -20,7 +20,9 @@
           <view class="left-section flex-column">
               <view class='item-name'>{{item.name}}</view>
               <view class='item-desc'>{{item.color}}/{{item.memory}}</view>
+              <view class='item-price'>官网价：<text class='offical-price'>{{item.orgPrice}}</text></view>
               <view class='item-price'>销售价：<text class='price-info'>{{item.platformPrice}}</text></view>
+              
               <view class='item-commission'>提成价：<text class='price-info'>{{item.rebatePrice}}</text></view>
           </view>
           <view class='right-section'>

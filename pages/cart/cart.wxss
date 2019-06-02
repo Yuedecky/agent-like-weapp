@@ -102,7 +102,8 @@ page{
 .check-box{  
     flex: 1;  
     display: flex;  
-    line-height: 90rpx;  
+    line-height: 
+    90rpx;  
     font-size: 30rpx;
 }
 .check-img{  
@@ -142,9 +143,9 @@ page{
   height: 100%;
   width: 100%;
 }
+
 .shop-name{
-  font-size: 34rpx;  
-  line-height: 40rpx;  
+  font-size: 32rpx;  
   font-weight: bold;
   word-break:break-all;  
   display:-webkit-box;  
@@ -152,11 +153,12 @@ page{
   -webkit-box-orient:vertical;  
   overflow:hidden;
 }
+
 .shop-type{
-  font-size: 32rpx;  
+  font-size: 30rpx;  
   color: #333; 
-  line-height: 40rpx;
 }
+
 .shop-detail-bottom{
   display: flex;
   width: 100%;
@@ -168,9 +170,9 @@ page{
 }
 
 .cart-price{
-  font-size: 34rpx;
+  font-size: 30rpx;
   font-weight: 500;
-  line-height: 40rpx;
+  line-height: 30rpx;
   color: #666;
 }
 .num-change{

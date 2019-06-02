@@ -20,7 +20,8 @@ Page({
     totalRebate:0,
     //--
     //----
-    shopcar: []
+    shopcar: [],
+    hasDefaultAddress:false
   },
 
   //点击全选  
@@ -29,6 +30,7 @@ Page({
       let that = this;
       let allsel = !that.data.allsel;//点击全选后allsel变化
       let total = 0;
+      let selarr = []
       let totalRebate = 0;
     for (let i = 0, len = shopcar.length; i < len; i++) {
       shopcar[i].check = allsel;//所有商品的选中状态和allsel值一样
@@ -36,14 +38,17 @@ Page({
         total += shopcar[i].platformPrice * shopcar[i].count;
         totalRebate += shopcar[i].rebatePrice * shopcar[i].count;
       }
+      if(shopcar[i].check){
+        selarr.push(shopcar[i])
+      }
     }
     that.setData({
       allsel: allsel,
       shopcarData: shopcar,
       total: total,
       totalRebate: totalRebate,
-      selarr: allsel ? shopcar : [],
-      checkedCount: that.data.selarr.length,
+      selarr: selarr,
+      checkedCount: selarr.length,
       totalNum: shopcar.length
     });
     wx.setStorageSync('selarr', that.data.selarr)
@@ -271,47 +276,13 @@ Page({
   },
   onLoad: function (options) {
     let that = this;
-  
   },
 
   
   onReady: function () {
     let that = this;
     let auth = wx.getStorageSync('token')
-    wx.request({
-      url: app.appData.serverUrl + 'address/query',
-      header: {
-        'Authorization': auth
-      },
-      method: 'get',
-      success: function (res) {
-        let data = res.data;
-        if (data.status != 200) {
-          wx.showToast({
-            title: data.msg,
-            duration: 2000,
-            icon: 'none'
-          })
-        } else {
-          let address = data.data.address;
-          let phone = data.data.phone;
-          let addressee = data.data.addressee;
-          that.setData({
-            deliveryName: addressee,
-            deliveryPhone: phone,
-            deliveryAddress: address
-          })
-        }
-      },
-      fail: function (res) {
-        console.log(res)
-        wx.showToast({
-          title: '获取收货地址失败',
-          icon: 'none',
-          duration: 2000
-        })
-      }
-    });
+    
   },
 
   submitOrder:function(e){
@@ -330,11 +301,13 @@ Page({
       return
     }
     let auth = wx.getStorageSync('token')
-    orderIds = JSON.stringify(orderIds)
+    orderIds = orderIds.join(',')
+    let addressId = that.data.addressId;
     wx.request({
       url: app.appData.serverUrl+'order/add',
       data:{
-        chooseIds: orderIds.replace('[','').replace(']','')
+        chooseIds: orderIds,
+        addressId: addressId,
       },
       header:{
         'Authorization': auth
@@ -362,10 +335,51 @@ Page({
       url: '/pages/address/address',
     })
   },
+
+
   /**   * 生命周期函数--监听页面显示   */
   onShow: function () {
     let that = this;
     let auth = wx.getStorageSync('token');
+    wx.request({
+      url: app.appData.serverUrl + 'address/default',
+      header: {
+        'Authorization': auth
+      },
+      method: 'get',
+      success: function (res) {
+        let data = res.data;
+        if (data.status != 200) {
+          wx.showToast({
+            title: data.msg,
+            duration: 2000,
+            icon: 'none'
+          })
+        } else {
+          if (data.data) {
+            let address = data.data.address;
+            let phone = data.data.phone;
+            let addressee = data.data.addressee;
+            let addressId = data.data.id;
+            that.setData({
+              addressId: addressId,
+              deliveryName: addressee,
+              deliveryPhone: phone,
+              deliveryAddress: address,
+              hasDefaultAddress: true
+            })
+          }
+        }
+      },
+      fail: function (res) {
+        wx.showToast({
+          title: '获取收货地址失败',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    });
+
     let selarr = wx.getStorageSync('selarr') || that.data.selarr;
     wx.request({
       url: app.appData.serverUrl + 'choose/list',

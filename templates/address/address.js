@@ -5,7 +5,7 @@ Page({
    */
   data: {
     id:0,
-    name:'',
+    addressee:'',
     phone:'',
     address:'',
     default:false
@@ -20,9 +20,9 @@ Page({
     that.setData({
       id:options.id,
       address:options.address,
-      name:options.name,
+      addressee:options.addressee,
       phone:options.phone,
-      default: true
+      defaultChoose: options.defaultAddr
     })
   },
 

@@ -1,17 +1,39 @@
 //app.js
 App({
   onLaunch: function () {
+    let auth = wx.getStorageSync('token')
+    console.log('app onLaunch,token:',auth)
+    if(auth){
+      wx.request({
+        url: this.appData.serverUrl + 'user/token/expires',
+        header: {
+          'Authorization': auth
+        },
+        success: function (res) {
+          let data = res.data;
+          if (data.status != 200) {
+            wx.showToast({
+              title: data.msg,
+              duration: 2000,
+              icon: 'none'
+            })
+          } else {
+            if (data.data) {
+              wx.reLaunch({
+                url: '/pages/login/login'
+              })
+            }
+          }
+        }
+      })
+    }else{
+      wx.reLaunch({
+        url: '/pages/login/login',
+      })
+    }
+    
     // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
+    
     // 获取用户信息
     wx.getSetting({
       success: res => {

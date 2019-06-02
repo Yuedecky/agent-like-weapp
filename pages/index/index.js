@@ -116,7 +116,29 @@ Page({
       })
     }else{
       //请求token是否过期
-      
+      wx.request({
+        url: app.appData.serverUrl+'user/token/expires',
+        header:{
+          Authorization: auth
+        },
+        success:function(res){
+          let data = res.data;
+          if(data.status !=200){
+            wx.showToast({
+              title: data.msg,
+              duration:2000,
+              icon:'none'
+            })
+          }else{
+            console.log(data)
+            if(data.data){
+              wx.reLaunch({
+                url: '/pages/login/login',
+              })
+            }
+          }
+        }
+      })
     }
     wx.request({
       url: app.appData.serverUrl + 'brand/query',

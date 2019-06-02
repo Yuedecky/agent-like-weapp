@@ -7,34 +7,37 @@
 </view>
 <view wx:elif="{{pageIndex==2}}">
     <template is ='school-info' data="{{...school}}"></template>
-    <view class="animation-element-wrapper" animation="{{animation}}" style="visibility:{{show ? 'visible':'hidden'}}" bindtap="hiddenFloatView" data-id="444">
-     <view class="animation-element" catchtap="nono">
-        <text class="left-bt" catchtap="hiddenFloatView" data-id="555">取消</text>
-        <text class="right-bt" catchtap="hiddenFloatView" data-id="666">确定</text>
+    <view class="animation-element-wrapper" animation="{{animation}}" style="visibility:{{show ? 'visible':'hidden'}}">
+     <view class="animation-element">
+        <text class="left-bt" catchtap="hiddenFloatView"
+         data-id="cancel">取消</text>
+        <text class="right-bt" catchtap="hiddenFloatView" 
+        data-id="makeSure">确定</text>
           <view class="line"></view> 
         <picker-view indicator-style = "height: 50rpx;" value="{{value}}" bindchange="bindChange">
         <!--省-->
         <picker-view-column>
-           <view wx:for="{{provinces}}" wx:for-item="sheng" wx:key="*this">
-             {{sheng.name}}
+           <view wx:for="{{provinces}}" wx:for-item="item" wx:key="id">
+             {{item.name}}
           </view>
         </picker-view-column>
         <!--地级市-->
         <picker-view-column>
-          <view wx:for="{{citys}}" wx:key="*this">
+          <view wx:for="{{citys}}" wx:key="id">
             {{item.name}}
           </view>
         </picker-view-column>
         <!--区县-->
         <picker-view-column>
-          <view wx:for="{{countys}}" wx:key="*this">
+          <view wx:for="{{countys}}" wx:key="id">
             {{item.name}}
           </view>
         </picker-view-column>
         </picker-view>
-    </view>
   </view>
 </view>
+</view>
+
 
 
 <view wx:else>
@@ -42,4 +45,3 @@
 </view>
 
 </view>
-

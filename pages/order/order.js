@@ -1,5 +1,6 @@
 var app = getApp();
 Page({
+  
   /**
    * 页面的初始数据
    */
@@ -106,7 +107,6 @@ Page({
         }
       })
     }
-
   },
 
   /**
@@ -250,7 +250,6 @@ Page({
   },
 
   tabClick: function (e) {
-    console.log('tabClick,e:',e)
     let that = this;
     that.setData({
       sliderOffset: e.currentTarget.offsetLeft,

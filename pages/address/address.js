@@ -14,103 +14,50 @@ Page({
   onLoad: function (options) {
     console.log('address onload:',options)
     let that = this;
-    that.setData({
-      myAddresses:[
-        {
-          id: 1,
-          name: '张三',
-          phone: '182****1234',
-          address: "浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号20323232323232323",
-          default:true
-        },
-        {
-          id: 2,
-          name: '李四',
-          phone: '182****1234',
-          address: "浙江省杭州市西湖区2321212222穿杨新苑号20号楼203",
-          default:false
-        },
-        {
-          id: 3,
-          name: '张三',
-          phone: '182****1234',
-          address: "浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号20323232323232323",
-          default: true
-        },
-        {
-          id: 4,
-          name: '李四',
-          phone: '182****1234',
-          address: "浙江省杭州市西湖区2321212222穿杨新苑号20号楼203",
-          default: false
-        },
-        {
-          id: 5,
-          name: '张三',
-          phone: '182****1234',
-          address: "浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号20323232323232323",
-          default: true
-        },
-        {
-          id: 6,
-          name: '李四',
-          phone: '182****1234',
-          address: "浙江省杭州市西湖区2321212222穿杨新苑号20号楼203",
-          default: false
-        },
-        {
-          id: 7,
-          name: '张三',
-          phone: '182****1234',
-          address: "浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号20323232323232323",
-          default: true
-        },
-        {
-          id: 8,
-          name: '李四',
-          phone: '182****1234',
-          address: "浙江省杭州市西湖区2321212222穿杨新苑号20号楼203",
-          default: false
-        },
-        {
-          id: 9,
-          name: '张三',
-          phone: '182****1234',
-          address: "浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号20323232323232323",
-          default: true
-        },
-        {
-          id: 10,
-          name: '李四',
-          phone: '182****1234',
-          address: "浙江省杭州市西湖区2321212222穿杨新苑号20号楼203",
-          default: false
-        },
-        {
-          id: 11,
-          name: '张三',
-          phone: '182****1234',
-          address: "浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号203浙江省杭州市金华路123号20323232323232323",
-          default: true
-        },
-        {
-          id: 12,
-          name: '李四',
-          phone: '182****1234',
-          address: "浙江省杭州市西湖区2321212222穿杨新苑号20号楼203",
-          default: false
+    let auth = wx.getStorageSync('token')
+    wx.request({
+      url: app.appData.serverUrl +'address/list',
+      header:{
+        'Authorization':auth
+      },
+      success:function(res){
+        let data = res.data;
+        console.log(data);
+        if(data.status !=200){
+          wx.showToast({
+            title: data.msg,
+            duration:2000,
+            icon:'none'
+          })
+        }else{
+          let addrList = data.data;
+          for(var i=0;i<addrList.length;i++){
+            if(addrList[i].defaultChoose ==1){
+              addrList[i].defaultAddr = true
+            }else{
+              addrList[i].defaultAddr = false
+            }
+          }
+          that.setData({
+            myAddresses: addrList
+          })
         }
-      ]
+      }
     })
   },
 
-  onEditAddress:function(e){
-    let addressId = e.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: '/pages/address/edit/edit?id=' + addressId,
-    })
-  },
 
+onEditAddress:function(e){
+ let aid = e.currentTarget.dataset.id;
+ wx.navigateTo({
+   url: '/pages/address/edit/edit?id='+aid
+ })
+},
+addAddress:function(){
+  wx.navigateTo({
+    url: '/pages/address/edit/edit?title=新增收货地址',
+  })
+},
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
