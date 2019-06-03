@@ -31,10 +31,9 @@
 
 .item-name {
   width: 280rpx;
-  font-size: 40rpx;
-  height: 50rpx;
+  font-size: 32rpx;
+  height: 40rpx;
   font-weight: bold;
-  line-height: 50rpx;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -44,8 +43,6 @@
 .item-desc{
   font-size: 30rpx;
   color: #333;
-  line-height: 50rpx;
-  height: 50rpx;
 }
 .price-info{
   color: red;
@@ -53,6 +50,7 @@
 .item-price,.item-commission{
   font-size: 30rpx;
   color: #666;
+  line-height: 34rpx;
 }
 
 .goods-num{

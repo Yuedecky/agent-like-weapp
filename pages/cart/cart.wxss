@@ -1,4 +1,5 @@
 @import "/assets/wxss/common.wxss";
+@import "/templates/footer/footer.wxss";
 page{
   width: 100%;
   height:100%;
@@ -11,6 +12,11 @@ page{
   height:100%;
 }
 
+.underline{
+  color: #999;
+  text-decoration: line-through;
+}
+
 .address-img{
   width: 40rpx;
   height: 40rpx;
@@ -20,6 +26,9 @@ page{
 .delivery-info{
   font-weight: bold;
 }
+.delivery-body{
+  width:80%;
+}
 
 .header-wrapper{
   color: #fff;
@@ -28,36 +37,54 @@ page{
 }
 
 .delivery-scope{
-  height: 120rpx;
   width: 100%;
-  line-height: 50rpx;
-  font-size: 30rpx;
-  text-align: left;
   padding-left: 20rpx;
-  padding-top: 20rpx;
   padding-right: 20rpx;
+  line-height: 50rpx;
+  height:100rpx;
+  font-size: 30rpx;
   background: #efefef;
   color: #221b1b;
 }
 
+.right-arrow{
+    width: 9px;
+    height: 9px;
+    border-top: 2px solid #999;
+    border-right: 2px solid #999;
+    position: absolute;
+    right: 30rpx;
+    top:30rpx;
+    display: flex;
+    transform: rotate(45deg);
+}
+
+.delivery-img{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .manage-header{
   padding: 0 20rpx;
 }
 
 .delivery-name{
-  margin-left: 20rpx;
+  margin-left: 10rpx;
   margin-right: 20rpx;
 }
 
 .accept-address{
   margin-left: 10rpx;
-  overflow:hidden; 
-  width: 80%;
+  overflow:hidden;
   vertical-align: middle;
   text-overflow:ellipsis;
   white-space:nowrap;
 }
-
+.select-address{
+  line-height: 100rpx;
+  color: red;
+  margin-left: 10rpx;
+}
 
 .main{
   flex: 1;
@@ -135,8 +162,8 @@ page{
   margin-top: 45rpx;
 }
 .shop-img{
-  width: 180rpx;  
-  height: 180rpx;  
+  width: 200rpx;  
+  height: 200rpx;  
   margin:0 20rpx;
 }
 .shop-detail{
@@ -144,17 +171,18 @@ page{
   width: 100%;
 }
 
-.shop-name{
+.cart-item-name{
   font-size: 32rpx;  
   font-weight: bold;
   word-break:break-all;  
-  display:-webkit-box;  
+  display:-webkit-box;
+  margin-bottom: -10rpx;
   -webkit-line-clamp:2;  
   -webkit-box-orient:vertical;  
   overflow:hidden;
 }
 
-.shop-type{
+.cart-item-type{
   font-size: 30rpx;  
   color: #333; 
 }
@@ -172,7 +200,7 @@ page{
 .cart-price{
   font-size: 30rpx;
   font-weight: 500;
-  line-height: 30rpx;
+  line-height: 34rpx;
   color: #666;
 }
 .num-change{
@@ -198,6 +226,7 @@ page{
 .total-part{
   width:80%;
   height: 100%;
+  text-align: left;
   color: #333;
 }
 
@@ -207,12 +236,11 @@ page{
 }
 
 .footer-total-text{
-  width: 100%;
   height: 40rpx;
   line-height: 40rpx;
   font-size: 34rpx;
+  margin-left: 20rpx;
   font-weight: bold;
-  padding-left: 20rpx;
   padding-top: 10rpx;
 }
 

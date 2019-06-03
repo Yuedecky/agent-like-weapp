@@ -152,7 +152,7 @@ Page({
               acceptorName: resData.name,
               acceptorPhone:resData.phone,
               detailAddress:resData.detailAddress,
-              location:resData.province + '\t' + resData.city+ '\t'+resData.area,
+              location:resData.province + ' ' + resData.city+ ' '+resData.area,
               gender:resData.gender
             })
           }
@@ -163,13 +163,11 @@ Page({
           title: options.title,
         })
       }
-     
     }
     
     wx.setNavigationBarTitle({
       title: that.data.title,
     })
-
 
     //获取省市区县数据
     let pid = 0;
@@ -273,10 +271,7 @@ Page({
     animationEvents(this, moveY, show);
   },
 
-//单选 ‘先生’、‘女士’
-  radioChange:function(e){
-      console.log(e)
-  },
+
 
   saveAddress:function(e){
     let that = this;
@@ -334,8 +329,8 @@ Page({
               duration:1000,
               icon:'none'
             })
-            wx.navigateTo({
-              url: '/pages/address/address',
+            wx.navigateBack({
+              
             })
           }
         },
@@ -373,8 +368,7 @@ Page({
               icon: 'none'
             })
           } else {
-            wx.navigateTo({
-              url: '/pages/address/address'
+            wx.navigateBack({
             })
           }
         }
@@ -386,7 +380,7 @@ Page({
   getSexValue:function(e){
     let that =this;
     that.setData({
-      gender: e.detail.value
+      gender: e.currentTarget.dataset.value
     })
   },
   /**
@@ -413,6 +407,7 @@ Page({
    */
   onShow: function () {
     
+
   },
 
 

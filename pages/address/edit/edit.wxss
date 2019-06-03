@@ -15,12 +15,11 @@
 }
 
 .right-arrow {
-    display :inline-block;
     position: absolute;
     width: 16rpx;
     height: 16rpx;
-    right: -300rpx;
-    top:0rpx;
+    top:350rpx;
+    right:40rpx;
 }
 .position-holder{
   position: relative;

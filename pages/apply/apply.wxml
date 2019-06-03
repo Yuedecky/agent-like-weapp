@@ -1,7 +1,7 @@
 <import src="/templates/apply-basic/apply-basic.wxml"></import>
 <import src="/templates/apply-address/apply-address.wxml"></import>
 <import src="/templates/apply-qualification/apply-qualification.wxml"></import>
-<view class='apply-container'>
+<view class='page'>
 <view wx:if="{{pageIndex == 1}}">
   <template is='basic-info' data="{{text:codeText,codeDisabled:codeDisabled}}"></template>
 </view>

@@ -1,5 +1,5 @@
 <template name='school-info'>
-<view class='school-container'>
+<view class='page'>
  <view class='basic-title bottom-100'>
 地址信息
   </view>

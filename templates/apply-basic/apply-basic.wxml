@@ -1,5 +1,5 @@
 <template name='basic-info'>
-<view class='baisc-info-container middle-center'>
+<view class='page middle-center'>
   <view class='basic-title bottom-100'>
   基本信息
   </view>

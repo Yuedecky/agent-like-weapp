@@ -321,7 +321,7 @@ Page({
             icon:'none'
           })
         }else{
-          wx.clearStorageSync('selarr')
+          wx.removeStorageSync('selarr')
           wx.reLaunch({
             url: '/pages/order/order?activeIndex=0'
           })
@@ -349,6 +349,7 @@ Page({
       method: 'get',
       success: function (res) {
         let data = res.data;
+        console.log('default address,',data)
         if (data.status != 200) {
           wx.showToast({
             title: data.msg,
@@ -356,7 +357,7 @@ Page({
             icon: 'none'
           })
         } else {
-          if (data.data) {
+          if (data.data != null) {
             let address = data.data.address;
             let phone = data.data.phone;
             let addressee = data.data.addressee;
@@ -367,6 +368,14 @@ Page({
               deliveryPhone: phone,
               deliveryAddress: address,
               hasDefaultAddress: true
+            })
+          } else {
+            that.setData({
+              addressId:0,
+              deliveryName:'',
+              deliveryPhone:'',
+              deliveryAddress:'',
+              hasDefaultAddress:false
             })
           }
         }

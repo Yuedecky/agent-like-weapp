@@ -1,11 +1,11 @@
-<view class='edit-address-container flex-column'>
+<view class='page edit-address-container flex-column'>
         <view class='acceptor-input bottom-60 '>
            <input type="text" value="{{acceptorName}}" maxlength='20' placeholder="联系人" name="acceptorName" auto-focus='true' bindinput='getAcceptorName'/>
         </view>
         <view class='bottom-40'>
-          <radio-group class="flex-row" bindchange="radioChange">
+          <radio-group class="flex-row">
             <label class='radio-item' wx:for="{{sexes}}" wx:key='*this'>
-              <radio class="radio-item" bindtap='getSexValue' value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.disabled}}">{{item.name}}</radio>
+              <radio class="radio-item" bindtap='getSexValue' data-value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.disabled}}">{{item.name}}</radio>
             </label>
           </radio-group>
         </view>
@@ -13,7 +13,9 @@
            <input type="text" value="{{acceptorPhone}}" maxlength='20' placeholder="手机号" name="acceptorPhone" bindinput='getAcceptorPhone'/>
         </view>
         <view class='acceptor-input bottom-60 flex-row'>
-           <view class='position-holder'><input type="text" value="{{location}}" disabled name="location" maxlength='30' placeholder="所在地区"  bindinput='getlocationValue' bindtap='translate'/><i class='right-arrow'></i></view>
+           <view class='position-holder'><input type="text" value="{{location}}" disabled name="location" placeholder="所在地区"  bindinput='getlocationValue' bindtap='translate'/>
+           </view>
+           <i class='right-arrow'></i>
         </view>
          <view class='acceptor-input bottom-60'>
           <input type='text' maxlength='50' value="{{detailAddress}}" name="detailAddress" placeholder='详细地址（精确到门牌号）' bindinput='getDetailAddressValue'/>

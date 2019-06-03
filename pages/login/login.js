@@ -18,7 +18,7 @@ Page({
 
   onApplyOpen:function(e){
     wx.navigateTo({
-      url: '/pages/apply/apply?pageIndex=2',
+      url: '/pages/apply/apply?pageIndex=1',
     })
   },
 

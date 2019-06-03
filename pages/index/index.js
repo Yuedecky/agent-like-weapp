@@ -165,7 +165,7 @@ Page({
             data: {
               brandCode: list[0].code,
               pageNum: 1,
-              pageSize: 10
+              pageSize: 40
             },
             header: {
               'Authorization': auth

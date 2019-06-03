@@ -1,16 +1,20 @@
-<view class='cart-wraper'>
+<view class='page cart-wraper'>
   <view class='header-wrapper'>
-  <view class='delivery-scope flex-column'>
-    <view class='delivery-info flex-row'>
-      <view class='delivery-name'>{{deliveryName}}</view>
-      <view class='delivery-phone'>{{deliveryPhone}}</view>
+  <view class='delivery-scope flex-row' catchtap='onSwithAddress'>
+    <view class='delivery-img'>
+          <image class='address-img' src='/assets/images/address.png'></image>
     </view>
-    <view class='delivery-address flex-row' catchtap='onSwithAddress'>
-    <view><image class='address-img' src='/assets/images/address.png'></image></view>
-    <view class='accept-address' wx:if="{{hasDefaultAddress}}">收货地址：{{deliveryAddress}}</view>
-    <view class='accept-address' wx:if="{{!hasDefaultAddress}}">请选择收货地址</view>
-    <view class='right-arrow' ></view>
-    </view>
+    <view class='flex-column delivery-body'>
+      <view class='delivery-info flex-row'>
+        <view class='delivery-name'>{{deliveryName}}</view>
+        <view class='delivery-name'>{{deliveryPhone}}</view>
+      </view>
+      <view class='delivery-address'>
+        <view class='accept-address' wx:if="{{hasDefaultAddress}}">收货地址：{{deliveryAddress}}</view>
+        <view class='select-address' wx:if="{{!hasDefaultAddress}}">请选择收货地址</view>
+      </view>
+      </view>
+      <view class='right-arrow' ></view>
   </view>
   <view class='flex-row manage-header'>
   <view class='check-box'>
@@ -36,11 +40,11 @@
             catchtap='phoneDetail'>
         </image>
         <view class='shop-detail' catchtap='phoneDetail'> 
-            <view class='shop-name'>{{item.name}}</view>        
-            <view class='shop-type'>{{item.color}}/{{item.memory}}</view>
+            <view class='cart-item-name'>{{item.name}}</view>        
+            <view class='cart-item-type'>{{item.color}}/{{item.memory}}</view>
             <view class='shop-detail-bottom flex-row'> 
                 <view class='flex-column cart-price'>
-                <view>官价：<text class='shop-price'>{{item.orgPrice}}</text></view>     
+                <view>官价：<text class='underline'>{{item.orgPrice}}</text></view>     
                   <view>售价：<text class='shop-price'>{{item.fullPlatformPrice}}</text></view>
                   <view>提成：<text class='shop-price'>{{item.fullRebatePrice}}</text></view>
                 </view>

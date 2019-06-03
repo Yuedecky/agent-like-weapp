@@ -1,5 +1,5 @@
 <template name='address-template'>
-<view class='address-template-container flex-row bottom-60'>
+<view class='address-template-container flex-row bottom-40'>
   <view class='address-detail'>
   <view class='address-template-header flex-row'>
     <view class='right-20'>{{addressee}}</view>

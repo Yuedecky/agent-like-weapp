@@ -1,5 +1,5 @@
 <import src="/templates/address/address.wxml"></import>
-<view class='address-container'>
+<view class='page'>
 <view class='address-main'>
 <scroll-view scroll-y class="address-scroll">
 <view class='address-section'>

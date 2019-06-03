@@ -14,7 +14,7 @@
 
 .order-p-count{
   color: red;
-  font-size: 40rpx;
+  font-size: 34rpx;
   font-weight: bold;
 }
 
@@ -30,14 +30,16 @@
 }
 
 .to-paid-order{
+  font-size: 34rpx;
+  line-height: 40rpx;
   margin-left: 360rpx;
 }
 
-.o-cancel-btn{
-  margin-left: 20rpx;
-  margin-right: 20rpx;
-}
 
+.order-btn{
+  height: 80rpx;
+  line-height: 80rpx;
+}
 .modal-image{
   width:540rpx;
   height: 400rpx;
@@ -48,7 +50,7 @@
 }
 .none-data{
   text-align: center;
-  font-size: 34rpx;
+  font-size: 30rpx;
   color: #ccc;
 }
 
