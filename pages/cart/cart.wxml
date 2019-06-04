@@ -25,9 +25,9 @@
   <view><text class='header-text' catchtap='adminTap'>{{adminShow?'完成':'管理'}}</text></view>
   </view>
   </view>
-  <view class='main'>
+  <view class='main' >
     <scroll-view class='main-scroll' scroll-y style="height: 100%">
-      <view class='main-list'>
+      <view class='main-list' wx:if='{{shopcarData.length >0}}'>
         <view class='shop' wx:for='{{shopcarData}}' wx:key='id' wx:for-item='item'>
         <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>  
             <image class='check-img' hidden='{{item.check}}' src='/assets/images/unchecked.png'></image>        
@@ -75,8 +75,20 @@
          </view>
         </view>
       </view>
+      <view wx:else class='empty-cart' class='flex-column'>
+        <view class='cart-image-view'>
+        <image class='empty-cart-img' src='/assets/images/empty-cart.png'/>
+        </view>
+        <view class='go-cart-desc bottom-20'>购物车是空的，赶紧去首页添加商品吧</view>
+        <view class='go-index-view'>
+          <button type='default' class="go-index-btn"    hover-class='none'
+         bindtap='goIndexPage'>去逛逛</button>
+         </view>
+      </view>
     </scroll-view>
+    
   </view>
+  
 
 
   <view class='footer flex-row'>

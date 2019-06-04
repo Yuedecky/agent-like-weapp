@@ -109,37 +109,8 @@ Page({
    */
   onShow: function () {
     let that = this;
+    let current = that.data.current;
     let auth = wx.getStorageSync('token')
-    if(!auth){
-      wx.reLaunch({
-        url: '/pages/login/login',
-      })
-    }else{
-      //请求token是否过期
-      wx.request({
-        url: app.appData.serverUrl+'user/token/expires',
-        header:{
-          Authorization: auth
-        },
-        success:function(res){
-          let data = res.data;
-          if(data.status !=200){
-            wx.showToast({
-              title: data.msg,
-              duration:2000,
-              icon:'none'
-            })
-          }else{
-            console.log(data)
-            if(data.data){
-              wx.reLaunch({
-                url: '/pages/login/login',
-              })
-            }
-          }
-        }
-      })
-    }
     wx.request({
       url: app.appData.serverUrl + 'brand/query',
       method: 'get',
@@ -158,12 +129,11 @@ Page({
           let list = data.data;
           that.setData({
             'brands': list,
-            current: list[0].id
           });
           wx.request({
             url: app.appData.serverUrl + 'goods/query',
             data: {
-              brandCode: list[0].code,
+              brandCode: list[current].code,
               pageNum: 1,
               pageSize: 40
             },
@@ -181,6 +151,7 @@ Page({
               } else {
                 that.setData({
                   products: data.data.list,
+                  current: list[current].id
                 })
               }
             }

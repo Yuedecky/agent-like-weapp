@@ -57,12 +57,11 @@ Page({
   deleteshopTap: function () {
     let that = this;
     var allsel = that.data.allsel;
-      var shopcar = that.data.shopcarData;
-     var selarr = that.data.selarr;
-     var del= []
-     let auth = wx.getStorageSync('token')
+    var shopcar = that.data.shopcarData;
+    var selarr = that.data.selarr;
+    var del= []
+    let auth = wx.getStorageSync('token')
     if (allsel) {
-      shopcar = [];
       for(var i=0;i<shopcar.length;i++){
         del.push(shopcar[i].id)
       }
@@ -70,10 +69,8 @@ Page({
         allsel: false
       });
     } else {
-      for (var i = 0, len = selarr.length; i < len; i++) {//将选中的商品从购物车移除        
-        console.log(selarr[i].id);
+      for (var i = 0, len = selarr.length; i < len; i++) {//将选中的商品从购物车移除
         for (var lens = shopcar.length - 1, j = lens; j >= 0; j--) {
-          console.log(shopcar[j].id);
           if (selarr[i].id == shopcar[j].id) {
             shopcar.splice(j, 1);
             del.push(selarr[i].id)
@@ -92,13 +89,12 @@ Page({
     wx.request({
       url: app.appData.serverUrl+'choose/del',
       data:{
-        chooseIds:JSON.parse(del)
+        chooseIds:del.join(',')
       },
       header:{
         'Authorization': auth
       },
       success:function(res){
-       
         let data = res.data;
         if(data.status !=200){
           wx.showToast({
@@ -107,9 +103,13 @@ Page({
             icon:'none'
           })
         }else{
-          console.log(that.data.selarr)
+          wx.showToast({
+            title: '移出成功',
+            duration:2000,
+            icon:'none'
+          })
           that.setData({
-            shopcarData: shopcar,
+            shopcarData: allsel?[]: shopcar,
             total: 0,
             totalRebate:0,
             selarr:[],
@@ -119,7 +119,12 @@ Page({
         }
       }
     })
-    
+  },
+
+  goIndexPage:function(e){
+    wx.reLaunch({
+      url: '/pages/index/index',
+    })
   },
   //点击加入收藏夹，这里按自己需求写吧  
   addcollectTap: function () {
@@ -280,8 +285,6 @@ Page({
 
   
   onReady: function () {
-    let that = this;
-    let auth = wx.getStorageSync('token')
     
   },
 
@@ -297,6 +300,14 @@ Page({
         title: '请选择商品',
         duration:2000,
         icon:'none'
+      })
+      return
+    }
+    if(that.data.addressId == null || that.data.addressId == 0){
+      wx.showToast({
+        title: '请选择收货地址',
+        duration: 2000,
+        icon: 'none'
       })
       return
     }
@@ -337,7 +348,9 @@ Page({
   },
 
 
-  /**   * 生命周期函数--监听页面显示   */
+  /**  
+   * 生命周期函数--监听页面显示 
+   */
   onShow: function () {
     let that = this;
     let auth = wx.getStorageSync('token');
@@ -349,7 +362,6 @@ Page({
       method: 'get',
       success: function (res) {
         let data = res.data;
-        console.log('default address,',data)
         if (data.status != 200) {
           wx.showToast({
             title: data.msg,
@@ -389,7 +401,7 @@ Page({
       }
     });
 
-    let selarr = wx.getStorageSync('selarr') || that.data.selarr;
+    let selarr =  that.data.selarr;
     wx.request({
       url: app.appData.serverUrl + 'choose/list',
       method: 'get',
@@ -407,23 +419,26 @@ Page({
         } else {
           let list = data.data;
           if (list) {
-            var shopcarData = list
+            var shopcarData = list;
             let total = that.data.total;
             let totalRebate = that.data.totalRebate;
-            if(shopcarData &&selarr){
-              for (var i = 0; i < shopcarData.length; i++) {
-                for(var j=0;j<selarr.length;j++){
-                  if (selarr[j].id === shopcarData[i].id && selarr[j].check) {
+            if(shopcarData && selarr){
+              for (var i = 0 ; i < shopcarData.length; i++) {
+                  if (shopcarData[i].check) {
                     total += shopcarData[i].count * shopcarData[i].platformPrice;
                     totalRebate += shopcarData[i].count * shopcarData[i].rebatePrice;
-                    shopcarData[i].check = true
                   }
-                }
+                  for(var j =0;j<selarr.length;j++){
+                    let sel = selarr[j];
+                    if(sel.id = shopcarData[i].id){
+                      shopcarData[i].check = true
+                    }
+                  }
               }
+
               that.setData({
                 total: total,
                 totalRebate: totalRebate,
-                selarr: selarr,
                 shopcarData: shopcarData
               });
               that.judgmentAll();//判断是否全选  

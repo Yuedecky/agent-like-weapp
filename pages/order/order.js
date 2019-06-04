@@ -14,6 +14,7 @@ Page({
 
 
     modalHidden:true,
+    modalFinished:true,
 
     phoneNumber:[{
       'name':'张先生',
@@ -167,16 +168,16 @@ Page({
   /**
    * 确认
    */
-  onContactUs: function (e) {
+  onContactUsProcess: function (e) {
     var that = this;
     wx.showActionSheet({
       itemList: ['微信联系','电话联系'],
       success:function(res){
         if (res.tapIndex ==0){
           //微信联系客服
-          that.setData({
-            modalHidden:false
-          })
+            that.setData({
+              modalHidden: false
+            })
         }else if(res.tapIndex ==1){
           that.doContact()
         }
@@ -185,16 +186,33 @@ Page({
   },
 
   
+  onContactUsFinished: function (e) {
+    var that = this;
+    wx.showActionSheet({
+      itemList: ['微信联系', '电话联系'],
+      success: function (res) {
+        if (res.tapIndex == 0) {
+          //微信联系客服
+          that.setData({
+            modalFinished: false
+          })
+        } else if (res.tapIndex == 1) {
+          that.doContact()
+        }
+      }
+    })
+  },
 
   /**
    *  点击确认
    */
-  modalConfirm: function () {
-    // do something
+  modalConfirmProcess: function (e) {
     let that = this;
-    this.setData({
-      modalHidden: true
-    });
+    // do something
+      that.setData({
+        modalHidden: true
+      });
+    
     wx.saveImageToPhotosAlbum({
       filePath: '/assets/images/customer.jpeg',
       success:function(res){
@@ -214,9 +232,46 @@ Page({
     })
   },
 
-  modalCancel:function(){
-    this.setData({
-      modalHidden:true
+  /**
+   * 
+   *点击确认
+  */
+  modalConfirmFinished: function (e) {
+    let that = this;
+    // do something
+    that.setData({
+      modalFinished: true
+    });
+    wx.saveImageToPhotosAlbum({
+      filePath: '/assets/images/customer.jpeg',
+      success: function (res) {
+        wx.showToast({
+          title: '保存成功',
+          icon: 'success',
+          duration: 2000
+        })
+      },
+      fail: function (res) {
+        wx.showToast({
+          title: '保存失败',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+
+  modalCancelProcess:function(e){
+      let that = this;
+      that.setData({
+        modalHidden:true
+      })
+  },
+
+  modalCancelFinished: function (e) {
+    let that = this;
+    that.setData({
+      modalFinished: true
     })
   },
 

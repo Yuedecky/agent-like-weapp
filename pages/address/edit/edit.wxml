@@ -12,8 +12,8 @@
         <view class='acceptor-input bottom-60'>
            <input type="text" value="{{acceptorPhone}}" maxlength='20' placeholder="手机号" name="acceptorPhone" bindinput='getAcceptorPhone'/>
         </view>
-        <view class='acceptor-input bottom-60 flex-row'>
-           <view class='position-holder'><input type="text" value="{{location}}" disabled name="location" placeholder="所在地区"  bindinput='getlocationValue' bindtap='translate'/>
+        <view class='acceptor-input bottom-60 flex-row' bindtap='translate'>
+           <view class='position-holder'><input type="text" value="{{location}}" disabled name="location" placeholder="所在地区"  bindinput='getlocationValue' />
            </view>
            <i class='right-arrow'></i>
         </view>

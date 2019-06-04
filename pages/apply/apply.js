@@ -458,41 +458,60 @@ Page({
     if (index[0] != val[0]) {
       val[1] = 0;
       val[2] = 0;
-      let pid=provinces[val[0]].id;
-      that.getCityArr(pid).then(res=>{
+      if (provinces != null && provinces.length > 0) {
+        let pid = provinces[val[0]].id;
+        let province = provinces[val[0]].name;
         that.setData({
-          citys: res.data.data
+          province: province
         })
-        let cid = res.data.data[0].id
-        that.getCountyInfo(cid).then(countys=>{
-        ///获取地级市数据
-          that.setData({
-            countys: countys.data.data
-          })
-        })
-      });
+        that.getCityArr(pid).then(res => {
+          let cityData = res.data.data;
+          if (cityData != null && cityData.length > 0) {
+            let city = cityData[0].name;
+            that.setData({
+              citys: res.data.data,
+              city: city
+            })
+            let cid = res.data.data[0].id
+            that.getCountyInfo(cid).then(countys => {
+              ///获取地级市数据
+              let countysData = countys.data.data;
+              if (countysData != null && countysData.length > 0) {
+                let county = countysData[0].name;
+                that.setData({
+                  countys: countys.data.data,
+                  county: county
+                })
+              }
+            })
+          }
+        });
+      }
+
     } else {    //若省份column未做滑动，地级市做了滑动则定位区县第一位
       if (index[1] != val[1]) {
         val[2] = 0;
         let citys = that.data.citys;
         let cid = citys[val[1]].id;
-        getCountyInfoSync(cid).then(res=>{
+        getCountyInfoSync(cid).then(res => {
           //获取区县数据
-          that.setData({
-            countys: res.data.data
-          })
+          let resData = res.data.data;
+          if (resData != null) {
+            let county = resData[0].name
+            that.setData({
+              countys: res.data.data,
+              county: county
+            })
+          }
         })
-     }
+      }
     }
     //更新数据
     index = val;
     let citys = that.data.citys;
     let countys = that.data.countys;
     that.setData({
-      value: [val[0], val[1], val[2]],
-      province: provinces[val[0]].name,
-      city: citys[val[1]].name,
-      county: countys[val[2]].name
+      value: [val[0], val[1], val[2]]
     })
   },
   onLoad: function (options) {
