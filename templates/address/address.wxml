@@ -1,19 +1,21 @@
 <template name='address-template'>
-<view class='address-template-container flex-row bottom-40'>
+<view class='address-template-container flex-row bottom-40' catchlongtap='onLongTapAddress' data-id='{{id}}' catchtap='onCatchAddressTap'>
   <view class='address-detail'>
-  <view class='address-template-header flex-row'>
-    <view class='right-20'>{{addressee}}</view>
-    <view class='right-20'>{{phone}}</view>
-    <view wx:if="{{defaultAddr}}" class='default-address'>
-      默认
-    </view>
+    <view class='address-template-header flex-row'>
+    <view class='address-default-view'><image class='address-default right-20' hidden='{{!defaultAddr}}' src='/assets/images/check.png'/></view>
+      <view class='right-20'>{{addressee}}</view>
+      <view class='right-20'>{{phone}}</view>
+      <view wx:if="{{defaultAddr}}" class='default-address'>
+        默认
+      </view>
   </view>
   <view class='address-template-body'>
     {{address}}
   </view>
 </view>
-<view class='action-sheet' catchtap='onEditAddress' data-id='{{id}}'>
-  编辑
+ <view class='action-sheet' catchtap='onEditAddress' data-id='{{id}}'>
+    编辑
 </view>
+
 </view>
 </template>

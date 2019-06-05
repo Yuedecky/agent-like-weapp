@@ -8,22 +8,14 @@ Page({
     addressee:'',
     phone:'',
     address:'',
-    default:false
+    defaultChoose:2
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log('address-template onload:',options)
-    let that =this;
-    that.setData({
-      id:options.id,
-      address:options.address,
-      addressee:options.addressee,
-      phone:options.phone,
-      defaultChoose: options.defaultAddr
-    })
+    
   },
 
   /**

@@ -6,8 +6,6 @@ page{
 }
 
 .cart-wraper{
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height:100%;
 }
@@ -18,6 +16,7 @@ page{
 }
 
 .cart-image-view{
+  margin-top: 200rpx;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -86,7 +85,7 @@ button::after{
   padding-left: 20rpx;
   padding-right: 20rpx;
   line-height: 50rpx;
-  height:100rpx;
+  height:150rpx;
   font-size: 30rpx;
   background: #efefef;
   color: #221b1b;
@@ -99,7 +98,7 @@ button::after{
     border-right: 2px solid #999;
     position: absolute;
     right: 30rpx;
-    top:30rpx;
+    top:50rpx;
     display: flex;
     transform: rotate(45deg);
 }
@@ -122,11 +121,10 @@ button::after{
   margin-left: 10rpx;
   overflow:hidden;
   vertical-align: middle;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+  white-space:wrap;
 }
 .select-address{
-  line-height: 100rpx;
+  line-height: 150rpx;
   color: red;
   margin-left: 10rpx;
 }
@@ -159,6 +157,7 @@ button::after{
   width: 100%;
   font-size: 30rpx;
   color: #ccc;
+  border-top: 1px solid #ccc;
   line-height: 100rpx;
   flex: 0 0 100rpx; /* 不放大不缩小固定100rpx */
 }
@@ -203,6 +202,7 @@ button::after{
   padding:20rpx;  
   border-bottom: 1px solid #efefef;
 }
+
 .shop-check-box{
   margin-top: 45rpx;
 }
@@ -285,7 +285,6 @@ button::after{
   line-height: 40rpx;
   font-size: 34rpx;
   margin-left: 20rpx;
-  font-weight: bold;
   padding-top: 10rpx;
 }
 
@@ -294,12 +293,16 @@ button::after{
 }
 
 .footer-total-submit{
-  background:rgb(245, 1, 16);
-  font-weight: bold;
   line-height: 100rpx;
   height: 100rpx;
   color:white;
-  font-size: 46rpx;
+  font-size: 40rpx;
   width: 280rpx;
   text-align: center;
+}
+
+.send-submit-btn{
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
 }

@@ -1,4 +1,4 @@
-<view class='page cart-wraper'>
+<view class='page cart-wraper flex-column'>
   <view class='header-wrapper'>
   <view class='delivery-scope flex-row' catchtap='onSwithAddress'>
     <view class='delivery-img'>
@@ -39,7 +39,7 @@
             mode='aspectFill' 
             catchtap='phoneDetail'>
         </image>
-        <view class='shop-detail' catchtap='phoneDetail'> 
+        <view class='shop-detail'> 
             <view class='cart-item-name'>{{item.name}}</view>        
             <view class='cart-item-type'>{{item.color}}/{{item.memory}}</view>
             <view class='shop-detail-bottom flex-row'> 
@@ -49,19 +49,13 @@
                   <view>提成：<text class='shop-price'>{{item.fullRebatePrice}}</text></view>
                 </view>
                 <view class='num-change flex-row'>                
-                    <view><image 
+                    <view data-id="{{item.id}}"><image 
                         class='minus-icon' 
-                        hidden='{{item.count<2}}' 
                         src='/assets/images/decrease.png' 
                         data-index='{{index}}' 
                         data-types='minus'  
                         catchtap='numchangeTap'>
                     </image></view>
-                    <view><image 
-                        class='minus-icon' 
-                        hidden='{{item.count>=2}}' 
-                        src='/assets/images/decrease.png'>
-                     </image></view>               
                     <view class='shop-num'>{{item.count}}</view>                
                     <view><image 
                         class='add-icon' 
@@ -77,7 +71,7 @@
       </view>
       <view wx:else class='empty-cart' class='flex-column'>
         <view class='cart-image-view'>
-        <image class='empty-cart-img' src='/assets/images/empty-cart.png'/>
+            <image class='empty-cart-img' src='/assets/images/empty-cart.png'/>
         </view>
         <view class='go-cart-desc bottom-20'>购物车是空的，赶紧去首页添加商品吧</view>
         <view class='go-index-view'>
@@ -93,10 +87,10 @@
 
   <view class='footer flex-row'>
   <view class='flex-column total-part'>
-   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计支付：<text class='footer-total-price' decode='true'>￥{{total}}</text></view>
-   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计提成：<text class='footer-total-price' decode='true'>￥{{totalRebate}}</text></view>
+   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计支付<text class='footer-total-price' decode='true'>￥{{total}}</text></view>
+   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计提成<text class='footer-total-price' decode='true'>￥{{totalRebate}}</text></view>
    </view>
-   <view class='footer-total-submit middle-center' wx:if="{{!adminShow}}" catchtap='submitOrder'>申请配送:{{checkedCount}}</view>  
-   <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{adminShow}}'>移除商品:{{checkedCount}}</view>  
+   <view class='footer-total-submit' wx:if="{{!adminShow}}" catchtap='submitOrder'><button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>申请配送{{checkedCount}}</button></view>  
+   <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{adminShow}}'><button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>移出商品{{checkedCount}}</button></view>  
   </view>
 </view>

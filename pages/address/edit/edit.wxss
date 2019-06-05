@@ -36,7 +36,7 @@
 
 
 .radio-item{
-  margin-right: 10rpx;
+  margin-right: 20rpx;
   font-size: 30rpx;
   line-height: 40rpx;
   color: #999;

@@ -52,6 +52,10 @@ margin-top:10rpx;
   display: flex;
   flex-direction: row;
 }
+
+.top-20{
+  margin-top:20rpx;
+}
 .flex-column{
   display: flex;
   flex-direction: column;

@@ -7,15 +7,28 @@
 
 .address-template-header{
   font-size: 34rpx;
+  margin-bottom: 10rpx;
   font-weight: bold;
-  height: 50rpx;
-  line-height: 50rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
+.address-default-view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.address-default{
+  width: 30rpx;
+  height: 30rpx;
+}
 .address-template-body{
-  font-size: 30rpx;
-  line-height: 50rpx;
-  height: 100rpx;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  height: 80rpx;
   overflow: hidden;
   word-wrap: break-word;
   text-overflow: ellipsis;
@@ -24,29 +37,29 @@
 }
 
 .address-detail{
-  width: 88%;
+  width: 85%;
   height: 100rpx;
 }
 
 .default-address{
   font-size: 30rpx;
-  height: 40rpx;
-  line-height: 40rpx;
+  height: 35rpx;
+  line-height: 35rpx;
   text-align: center;
+  font-weight: normal;
   padding-left: 10rpx;
   padding-right: 10rpx;
-  vertical-align: middle;
   color: rgb(12, 200, 12);
-  border: 1px solid rgb(12, 200, 12);
+  border: 1px solid rgb(12,200,12);
 }
 
 .action-sheet{
-  width: 12%;
+  width: 10%;
   color: #999;
   font-size: 30rpx;
   line-height: 60rpx;
   height: 60rpx;
+  padding-left: 20rpx;
   text-align: center;
   border-left: 1px solid #cdcdcd;
-  padding-left: 26rpx;
 }

@@ -17,7 +17,7 @@
         <block wx:for="{{orderListProcessing}}" wx:key="order.id"
            wx:for-index="index">
         <view class='order-part bottom-20'>
-          <view class='m-order-header flex-row'>
+          <view class='m-order-header flex-row top-20'>
             <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
             <view class='order-p-status'>{{item.order.statusDesc}}</view>
           </view>
@@ -61,7 +61,7 @@
           <block wx:for="{{orderListFinished}}" wx:key="order.id"
             wx:for-index="index">
           <view class='order-part bottom-20'>
-            <view class='m-order-header flex-row'>
+            <view class='m-order-header flex-row top-20'>
               <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
               <view class='order-p-status'>{{item.order.statusDesc}}</view>
             </view>

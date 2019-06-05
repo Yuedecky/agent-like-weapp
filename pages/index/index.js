@@ -51,7 +51,7 @@ Page({
           })
         }else{
           wx.showToast({
-            title: '加入成功',
+            title: '加购成功',
             duration: 2000,
             icon: 'success'
           })

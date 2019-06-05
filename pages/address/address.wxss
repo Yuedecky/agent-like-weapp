@@ -1,5 +1,13 @@
 @import '/templates/address/address.wxss';
+page{
+  width: 100%;
+  height: 100%;
+}
 
+.address-main{
+  height: 90%;
+  border: 1px solid red;
+}
 
  .address-section{
   display: flex;
@@ -8,6 +16,11 @@
   margin-left: 2vw;
   margin-right: 2vw;
 } 
+
+.address-scroll{
+  height: 90%;
+  width: 100%;
+}
 
 .add-address-btn{
   height: 80rpx;
@@ -18,9 +31,7 @@
 
 .address-main{
   height: 90%;
-  flex: 1;
   width: 100%;
-  position: relative;
 }
 
 
@@ -31,3 +42,4 @@
   width: 100%;
   margin: 0 auto;
 }
+

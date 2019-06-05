@@ -21,8 +21,11 @@ Page({
     //--
     //----
     shopcar: [],
+    cartColor: 'red',
     hasDefaultAddress:false
   },
+
+  
 
   //点击全选  
   allcheckTap: function () {
@@ -49,9 +52,16 @@ Page({
       totalRebate: totalRebate,
       selarr: selarr,
       checkedCount: selarr.length,
-      totalNum: shopcar.length
+      totalNum: shopcar.length,
+      cartDisabled: selarr.length <1
     });
-    wx.setStorageSync('selarr', that.data.selarr)
+    if(that.data.cartDisabled){
+      
+    }else{
+      that.setData({
+        cartColor: 'red'
+      })
+    }
   },
   //点击移除商品  
   deleteshopTap: function () {
@@ -106,7 +116,7 @@ Page({
           wx.showToast({
             title: '移出成功',
             duration:2000,
-            icon:'none'
+            icon:'success'
           })
           that.setData({
             shopcarData: allsel?[]: shopcar,
@@ -114,8 +124,18 @@ Page({
             totalRebate:0,
             selarr:[],
             checkedCount:0,
-            totalNum:shopcar.length
+            totalNum:shopcar.length,
           });
+          that.setData({
+            cartDisabled: that.data.selarr.length < 1
+          })
+          if(that.data.cartDisabled){
+            
+          }else{
+            that.setData({
+              cartColor: 'red'
+            })
+          }
         }
       }
     })
@@ -132,18 +152,10 @@ Page({
   },
   //点击管理按钮，是否显示管理的选项  
   adminTap: function () {
-    this.setData({
-      adminShow: !this.data.adminShow
+    let that = this;
+    that.setData({
+      adminShow: !that.data.adminShow
     });
-    if(this.adminShow){
-      this.setData({
-        sumitText: '申请配送（'+this.checkedCount+'）'
-      })
-    }else{
-      this.setData({
-        submitText: '移出商品（'+this.checkedCount+')'
-      })
-    }
   },
   //点击单个选择按钮  
   checkTap: function (e) {
@@ -174,8 +186,16 @@ Page({
       totalRebate: totalRebate,
       selarr: selarr,
       checkedCount: selarr.length,
-      totalNum: shopcar.length
+      totalNum: shopcar.length,
+      cartDisabled: selarr.length<1
     });
+    if(that.data.cartDisabled){
+      
+    }else{
+      that.setData({
+        cartColor: 'red'
+      })
+    }
     this.judgmentAll();//每次按钮点击后都判断是否满足全选的条件  
   },
   //点击加减按钮  
@@ -219,7 +239,21 @@ Page({
         })
         break;
       case 'minus':
-        shopcar[index].num--;//对应商品的数量-1      
+        if (shopcar[index].count == 1){
+          wx.showModal({
+            title: '提示',
+            content: '确定删除该商品',
+            success:function(res){
+              if(res.cancel){
+
+              }else{
+                that.delCount(shopcar[index].id, that)
+              }
+            }
+          })
+          break;
+        } 
+        shopcar[index].num--;//对应商品的数量-1 
         shopcar[index].check 
         && (total -= parseInt(shopcar[index].platformPrice))
         && (totalRebate += parseInt(shopcar[index].rebatePrice));//如果商品为选中的，则合计价格-商品单价    
@@ -279,8 +313,20 @@ Page({
       allsel: lenIndex == shoplen//如果购物车选中的个数和购物车里货物的总数相同，则为全选，反之为未全选    
     });
   },
+
   onLoad: function (options) {
     let that = this;
+    wx.set
+    if(that.data.selarr.length >0){
+      that.setData({
+        cartColor: 'red',
+        cartDisabled: false
+      })
+    }else{
+      that.setData({
+        cartDisabled:true
+      })
+    }
   },
 
   
@@ -347,12 +393,59 @@ Page({
     })
   },
 
-
+  delCount:function(id,that){
+    let auth =  wx.getStorageSync('token')
+    let chooseIds =[]
+    chooseIds.push(id)
+    wx.request({
+      url: app.appData.serverUrl+'choose/del',
+      header:{
+        'Authorization':auth
+      },
+      data:{
+        chooseIds: chooseIds.join(',')
+      },
+      success:function(res){
+        let data = res.data;
+        if(data.status !=200){
+          wx.showToast({
+            title: data.msg,
+            icon:'none',
+            duration:1500
+          })
+        }else{
+          wx.showToast({
+            title: '删除成功',
+            duration:2000,
+            icon:'success'
+          })
+          that.loadChooseList(auth,that)
+        }
+      },
+      fail:function(res){
+        wx.showToast({
+          title: '删除商品失败',
+          duration:2000,
+          icon:'none'
+        })
+      }
+    })
+  },
   /**  
    * 生命周期函数--监听页面显示 
    */
   onShow: function () {
     let that = this;
+    if (that.data.selarr.length > 0) {
+      that.setData({
+        cartColor: 'red',
+        cartDisabled: false
+      })
+    } else {
+      that.setData({
+        cartDisabled: true
+      })
+    }
     let auth = wx.getStorageSync('token');
     wx.request({
       url: app.appData.serverUrl + 'address/default',
@@ -400,8 +493,12 @@ Page({
         })
       }
     });
-
     let selarr =  that.data.selarr;
+    that.loadChooseList(auth,that)
+  },
+
+  loadChooseList:function(auth,that){
+    let selarr = that.data.selarr;
     wx.request({
       url: app.appData.serverUrl + 'choose/list',
       method: 'get',
@@ -410,6 +507,7 @@ Page({
       },
       success: function (res) {
         let data = res.data;
+       
         if (data.status != 200) {
           wx.showToast({
             title: data.msg,
@@ -418,22 +516,22 @@ Page({
           })
         } else {
           let list = data.data;
-          if (list) {
+          if (list !=null) {
             var shopcarData = list;
             let total = that.data.total;
             let totalRebate = that.data.totalRebate;
-            if(shopcarData && selarr){
-              for (var i = 0 ; i < shopcarData.length; i++) {
-                  if (shopcarData[i].check) {
-                    total += shopcarData[i].count * shopcarData[i].platformPrice;
-                    totalRebate += shopcarData[i].count * shopcarData[i].rebatePrice;
+            if (shopcarData && selarr) {
+              for (var i = 0; i < shopcarData.length; i++) {
+                if (shopcarData[i].check) {
+                  total += shopcarData[i].count * shopcarData[i].platformPrice;
+                  totalRebate += shopcarData[i].count * shopcarData[i].rebatePrice;
+                }
+                for (var j = 0; j < selarr.length; j++) {
+                  let sel = selarr[j];
+                  if (sel.id = shopcarData[i].id) {
+                    shopcarData[i].check = true
                   }
-                  for(var j =0;j<selarr.length;j++){
-                    let sel = selarr[j];
-                    if(sel.id = shopcarData[i].id){
-                      shopcarData[i].check = true
-                    }
-                  }
+                }
               }
 
               that.setData({
@@ -443,12 +541,21 @@ Page({
               });
               that.judgmentAll();//判断是否全选  
             }
-            }
-           
+          }else{
+              that.setData({
+                total: 0,
+                totalRebate: 0,
+                shopcarData: [],
+                selarr: [],
+                shopcar: []
+              })
+              that.judgmentAll()
+              return
+          }
+
         }
       }
     })
-   
   }
 
 })
