@@ -2,7 +2,6 @@
 App({
   onLaunch: function () {
     let auth = wx.getStorageSync('token')
-    console.log('app onLaunch,token:',auth)
     if(auth){
       wx.request({
         url: this.appData.serverUrl + 'user/token/expires',
@@ -43,7 +42,6 @@ App({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo
-
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
@@ -59,6 +57,7 @@ App({
     logoName: '微券加盟',
     logoUrl: 'http://image.qfstatic.com/897/2019/201904/20190429/8D5C9103C78643A190513340FA3FA294.jpeg',
     version: 0.1,
-    serverUrl:"http://47.102.44.202/",
+    serverUrl:"https://www.wqyp.shop/",
+    tabbars:[]
   }
 })

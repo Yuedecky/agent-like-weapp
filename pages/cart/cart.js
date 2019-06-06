@@ -436,6 +436,12 @@ Page({
    */
   onShow: function () {
     let that = this;
+    if (typeof this.getTabBar === 'function' &&
+      this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 0 //这个数是，tabBar从左到右的下标，从0开始
+      })
+    }
     if (that.data.selarr.length > 0) {
       that.setData({
         cartColor: 'red',

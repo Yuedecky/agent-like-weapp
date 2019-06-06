@@ -8,7 +8,8 @@
     "pages/address/edit/edit",
     "pages/protocol/protocol",
     "pages/apply/apply",
-    "pages/thanks/thanks"
+    "pages/thanks/thanks",
+    "pages/send/send"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -16,7 +17,9 @@
     "navigationBarTitleText": "微券加盟",
     "navigationBarTextStyle": "black"
   },
+  "usingComponents":{},
   "tabBar": {
+    "custom":true,
     "borderStyle": "white",
     "list": [
       {
@@ -36,6 +39,12 @@
         "text": "订单",
         "iconPath": "/assets/images/order-black.png",
         "selectedIconPath": "/assets/images/order.png"
+      },
+      {
+        "pagePath": "pages/send/send",
+        "text": "派送",
+        "iconPath": "/assets/images/send-black.png",
+        "selectedIconPath": "/assets/images/send.png"
       }
     ]
   },

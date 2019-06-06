@@ -21,6 +21,6 @@
     color: #fff;
     border-radius: 10rpx;
     text-align: center;
-    background: rgb(60, 155, 60);
+    background: green;
     font-weight: 600;
 }

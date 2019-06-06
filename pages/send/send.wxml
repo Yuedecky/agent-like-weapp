@@ -1,3 +1,104 @@
-<view>
-
+<import src="/templates/order-item/order-item.wxml"></import>
+<import src='/templates/footer/footer.wxml'></import>
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-tab">
+      <view class="weui-navbar">
+        <block wx:for="{{tabs}}" wx:key="*this">
+          <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+            <view class="weui-navbar__title">{{item}}</view>
+          </view>
+        </block>
+        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+      </view>
+      <view class="weui-tab__panel">
+        <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
+        <view wx:if="{{orderListProcessing.length >0}}">
+        <block wx:for="{{orderListProcessing}}" wx:key="order.id"
+           wx:for-index="index">
+        <view class='order-part bottom-20'>
+          <view class='m-order-header flex-row top-20'>
+            <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
+            <view class='order-p-status'>{{item.order.statusDesc}}</view>
+          </view>
+          <block wx:for="{{orderListProcessing[index].orderDetails}}" 
+              wx:key="id" wx:for-item="ditem">
+            <template is="order-item" data="{{...ditem}}"/>
+          </block>
+          <view class='to-paid-order'>
+            <view class='to-paid-order-money'>
+            须支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
+            </view>
+            <view class='to-paid-order-money bottom-20'>
+            合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
+            </view>
+            <view class='contact-or-cancel flex-row'>
+              <view classs='o-concat'>
+                <button type='primary' class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='onContactUsProcess'>联系客服</button>
+              </view>
+              <view>
+                <modal title="联系微信客服" hidden="{{modalHidden}}" bindconfirm="modalConfirmProcess" bindcancel="modalCancelProcess" data-value='process'>
+    <view>
+      <image class="modal-image" src="/assets/images/customer.jpeg" mode='aspectFit'></image>
+    </view>
+    <view class='modal-text'>点击确定保存图片到本地</view>
+  </modal>
+              </view>
+              <view classs='o-cancel'>
+                <button type='default' class='order-btn' bindtap='cancelOrder' data-orderid = '{{item.order.id}}'>取消</button>
+              </view>
+            </view>
+            </view>
+        </view>
+        </block>
+        </view>
+        <view class='none-data' wx:else>
+        暂无数据
+        </view>
+        </view>
+        <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
+        <view wx:if="{{orderListFinished.length>0}}">
+          <block wx:for="{{orderListFinished}}" wx:key="order.id"
+            wx:for-index="index">
+          <view class='order-part bottom-20'>
+            <view class='m-order-header flex-row top-20'>
+              <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
+              <view class='order-p-status'>{{item.order.statusDesc}}</view>
+            </view>
+            <block wx:for="{{orderListFinished[index].orderDetails}}" 
+                wx:key="id" wx:for-item="ditem">
+              <template is="order-item" data="{{...ditem}}"/>
+            </block>
+            <view class='to-paid-order'>
+              <view class='to-paid-order-money'>
+              须支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
+              </view>
+              <view class='to-paid-order-money bottom-20'>
+              合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text></view>
+              <view class='contact-only flex-row'>
+                <view  classs='o-concat'>
+                  <button type='primary' class='order-btn' id='{{item.order.orderNo}}' bindtap='onContactUsFinished'>
+                  联系客服
+                  </button>
+                </view>
+                <view>
+                <modal title="联系微信客服" hidden="{{modalFinished}}" bindconfirm="modalConfirmFinished" bindcancel="modalCancelFinished">
+    <view>
+      <image class="modal-image" src="/assets/images/customer.jpeg" mode='aspectFit'></image>
+    </view>
+    <view class='modal-text'>点击确定保存图片到本地</view>
+  </modal>
+              </view>
+              </view>
+            </view>
+          </view>
+          </block>
+        </view>
+        <view class='none-data' wx:else>
+        暂无数据
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
 </view>

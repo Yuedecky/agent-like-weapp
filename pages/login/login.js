@@ -27,6 +27,7 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
+    wx.clearStorageSync()
     that.setData({
       logoName: app.appData.logoName,
       logoUrl: app.appData.logoUrl,
@@ -165,6 +166,54 @@ getCodeValue:function(e){
             console.log(data)
             wx.setStorageSync('token',data.data.token)
             wx.setStorageSync('role',data.data.role)
+            if (data.data.role == 16) {
+              //配送人员
+              app.appData.tabbars = [{
+                "pagePath": "/pages/index/index",
+                "text": "首页",
+                "iconPath": "/assets/images/index-black.png",
+                "selectedIconPath": "/assets/images/index.png"
+              },
+                {
+                  "pagePath": "/pages/cart/cart",
+                  "text": "购物车",
+                  "iconPath": "/assets/images/cart-black.png",
+                  "selectedIconPath": "/assets/images/cart.png"
+                },
+                {
+                  "pagePath": "/pages/order/order",
+                  "text": "订单",
+                  "iconPath": "/assets/images/order-black.png",
+                  "selectedIconPath": "/assets/images/order.png"
+                },
+                {
+                  "pagePath": "/pages/send/send",
+                  "text": "派送",
+                  "iconPath": "/assets/images/send-black.png",
+                  "selectedIconPath": "/assets/images/send.png"
+                }]
+            }else{
+              app.appData.tabbars=[
+                {
+                  "pagePath": "/pages/index/index",
+                  "text": "首页",
+                  "iconPath": "/assets/images/index-black.png",
+                  "selectedIconPath": "/assets/images/index.png"
+                },
+                {
+                  "pagePath": "/pages/cart/cart",
+                  "text": "购物车",
+                  "iconPath": "/assets/images/cart-black.png",
+                  "selectedIconPath": "/assets/images/cart.png"
+                },
+                {
+                  "pagePath": "/pages/order/order",
+                  "text": "订单",
+                  "iconPath": "/assets/images/order-black.png",
+                  "selectedIconPath": "/assets/images/order.png"
+                }
+              ]
+            }
             wx.switchTab({
               url: '/pages/index/index',
             })
