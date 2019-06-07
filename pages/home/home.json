@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "index": "/pages/index/index",
+    "cart": "/pages/cart/cart",
+    "order": "/pages/order/order",
+    "send":"/pages/send/send"
+  }
+}

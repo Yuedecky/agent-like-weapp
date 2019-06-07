@@ -29,8 +29,8 @@ Page({
     let that = this;
     wx.clearStorageSync()
     that.setData({
-      logoName: app.appData.logoName,
-      logoUrl: app.appData.logoUrl,
+      logoName: app.globalData.logoName,
+      logoUrl: app.globalData.logoUrl,
     })
   },
 
@@ -58,7 +58,7 @@ getCodeValue:function(e){
     } else {
       //当手机号正确的时候提示用户短信验证码已经发送
       wx.request({
-        url:app.appData.serverUrl + 'verify/code/send',
+        url:app.globalData.serverUrl + 'verify/code/send',
         data:{
           phone: phone,
           type:1
@@ -149,7 +149,7 @@ getCodeValue:function(e){
       return false;
     } else {
       wx.request({
-        url: app.appData.serverUrl+'user/login',
+        url: app.globalData.serverUrl+'user/login',
         data:{
           loginName: that.data.phone,
           password: that.data.code,
@@ -163,65 +163,16 @@ getCodeValue:function(e){
               duration:2000
             })
           }else{
-            console.log(data)
             wx.setStorageSync('token',data.data.token)
             wx.setStorageSync('role',data.data.role)
-            if (data.data.role == 16) {
-              //配送人员
-              app.appData.tabbars = [{
-                "pagePath": "/pages/index/index",
-                "text": "首页",
-                "iconPath": "/assets/images/index-black.png",
-                "selectedIconPath": "/assets/images/index.png"
-              },
-                {
-                  "pagePath": "/pages/cart/cart",
-                  "text": "购物车",
-                  "iconPath": "/assets/images/cart-black.png",
-                  "selectedIconPath": "/assets/images/cart.png"
-                },
-                {
-                  "pagePath": "/pages/order/order",
-                  "text": "订单",
-                  "iconPath": "/assets/images/order-black.png",
-                  "selectedIconPath": "/assets/images/order.png"
-                },
-                {
-                  "pagePath": "/pages/send/send",
-                  "text": "派送",
-                  "iconPath": "/assets/images/send-black.png",
-                  "selectedIconPath": "/assets/images/send.png"
-                }]
-            }else{
-              app.appData.tabbars=[
-                {
-                  "pagePath": "/pages/index/index",
-                  "text": "首页",
-                  "iconPath": "/assets/images/index-black.png",
-                  "selectedIconPath": "/assets/images/index.png"
-                },
-                {
-                  "pagePath": "/pages/cart/cart",
-                  "text": "购物车",
-                  "iconPath": "/assets/images/cart-black.png",
-                  "selectedIconPath": "/assets/images/cart.png"
-                },
-                {
-                  "pagePath": "/pages/order/order",
-                  "text": "订单",
-                  "iconPath": "/assets/images/order-black.png",
-                  "selectedIconPath": "/assets/images/order.png"
-                }
-              ]
-            }
-            wx.switchTab({
-              url: '/pages/index/index',
+            wx.reLaunch({
+              url: '/pages/home/home',
             })
           }
         },
         fail:function(e){
           wx.showToast({
-            title: '登陆失败',
+            title: '登录失败',
             icon:"none"
           })
         }

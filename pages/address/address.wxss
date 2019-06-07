@@ -1,45 +1,138 @@
-@import '/templates/address/address.wxss';
 page{
-  width: 100%;
+    height: 100%;
+    width: 100%;
+    background: #f4f4f4;
+}
+
+.address-container{
   height: 100%;
+  width: 100%;
 }
 
-.address-main{
-  height: 90%;
-  border: 1px solid red;
+.address-list{
+    padding-left: 31.25rpx;
+    background: #fff url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/address-bg-bd30f2bfeb.png) 0 0 repeat-x;
+    background-size: auto 10.5rpx;
+    margin-bottom: 90rpx;
 }
 
- .address-section{
+.address-list .item{
+    height: 156.55rpx;
+    align-items: center;
+    display: flex;
+    border-bottom: 1rpx solid #DCD9D9;
+}
+
+.address-list .l{
+    width: 125rpx;
+    height: 100rpx;
+    overflow: hidden;
+}
+
+.address-list .name{
+    width: 125rpx;
+    height: 50rpx;
+    font-size: 30rpx;
+    line-height: 50rpx;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 6.5rpx;
+}
+
+.address-list .default-address{
+    width: 62.5rpx;
+    height: 30rpx;
+    line-height: 30rpx;
+    text-align: center;
+    font-size: 20rpx;
+    color: #b4282d;
+    border: 1rpx solid #b4282d;
+    visibility: visible;
+    justify-content: center;
+}
+
+
+.address-list .c{
+    flex: 1;
+    height: auto;
+    overflow: hidden;
+}
+
+.address-list .mobile{
+    height: 50rpx;
+    font-size: 30rpx;
+    line-height: 50rpx;
+    overflow: hidden;
+    color: #333;
+}
+
+.address-list .address{
+    height: 50rpx;
+    font-size: 25rpx;
+    line-height: 50rpx;
+    overflow: hidden;
+    color: #666;
+}
+
+.address-list .r{
+    width: 52rpx;
+    height: auto;
+    overflow: hidden;
+    margin-right: 16.5rpx;
+}
+
+.address-list .del{
+    display: block;
+    width: 40rpx;
+    height: 40rpx;
+}
+
+.switch-view{
+  width: 125rpx;
+  height: 50rpx;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-left: 2vw;
-  margin-right: 2vw;
-} 
+}
 
-.address-scroll{
-  height: 90%;
+.address-check{
+  width: 34rpx;
+  height:34rpx;
+}
+
+.add-address{
+    background: #b4282d;
+    text-align: center;
+    width: 100%;
+    height: 99rpx;
+    line-height: 99rpx;
+    position: fixed;
+    border-radius: 0;
+    border: none;
+    color: #fff;
+    font-size: 29rpx;
+    bottom: 0;
+    left:0;
+}
+
+.empty-view{
+  height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.add-address-btn{
-  height: 80rpx;
-  line-height: 80rpx;
-  font-size: 34rpx;
-  width: 80%;
+.empty-view .icon{
+  height: 248rpx;
+  width: 258rpx;
+  margin-bottom: 10rpx;
 }
 
-.address-main{
-  height: 90%;
-  width: 100%;
+.empty-view .text{
+  width: auto;
+  font-size: 28rpx;
+  line-height: 35rpx;
+  color: #999;
 }
-
-
-
-.address-bottom{
-  position: fixed;
-  bottom: 40rpx;
-  width: 100%;
-  margin: 0 auto;
-}
-

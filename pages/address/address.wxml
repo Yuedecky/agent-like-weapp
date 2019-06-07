@@ -1,12 +1,25 @@
-<import src="/templates/address/address.wxml"></import>
-<view class='page'>
-      <view class='address-section'>
-          <block wx:for="{{myAddresses}}" wx:key="id" wx:for-item="item">
-            <template is='address-template' data="{{...item}}"></template>
-          </block>
-  </view>
-<view class='address-bottom'>
-  <button type='primary' class="add-address-btn"    hover-class='none'
-          bindtap='addAddress'>新增收货地址</button>
-</view>
+<view class="page address-container">
+    <view class="address-list" wx:if="{{ myAddresses.length > 0 }}">
+        <view class="item" wx:for="{{myAddresses}}" wx:key="{{item.id}}" data-address-id="{{item.id}}" catchtap='onEditAddress'>
+            <view class="l">
+                <view class="name">{{item.addressee}}</view>
+                <view class="default-address" wx:if="{{item.defaultAddr}}">默认</view>
+                <view wx:else class='switch-view' data-address-id='{{item.id}}' catchtap='setDefaultAddress'>
+                    <image class='address-check' src='/assets/images/check-black.png'/>
+                </view>
+            </view>
+            <view class="c">
+                <view class="mobile">{{item.phone}}</view>
+                <view class="address">{{item.address}}</view>
+            </view>
+            <view class="r">
+                <image catchtap="deleteAddress" data-address-id="{{item.id}}" class="del" src="/assets/images/delete.png"></image>
+            </view>
+        </view>
+    </view>
+    <view class="empty-view" wx:else>
+      <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noAddress-26d570cefa.png"></image>
+      <text class="text">收货地址在哪里</text>
+    </view>
+    <view class="add-address" bindtap="addressAddOrUpdate" data-address-id="0">新建收货地址</view>
 </view>

@@ -88,7 +88,7 @@ Page({
     studentIdCards = that.data.qualification.images.join(',')
     //2.提交申请
     wx.request({
-      url: app.appData.serverUrl + 'user/apply',
+      url: app.globalData.serverUrl + 'user/apply',
       data: {
         loginName: applyPhone,
         verifyCode: applyCode,
@@ -224,7 +224,7 @@ Page({
       return;
     }
     let currentTime = that.data.currentTime;
-    let sendUrl = app.appData.serverUrl + 'verify/code/send';
+    let sendUrl = app.globalData.serverUrl + 'verify/code/send';
     wx.request({
       url: sendUrl,
       data: {
@@ -316,7 +316,7 @@ Page({
       return
     } else {
       wx.request({
-        url: app.appData.serverUrl + 'verify/code/pre/check',
+        url: app.globalData.serverUrl + 'verify/code/pre/check',
         data: {
           phone: wx.getStorageSync('applicant.applyPhone'),
           verifyCode: wx.getStorageSync('applicant.applyCode'),
@@ -375,7 +375,7 @@ Page({
       success: function (res) {
         var tempFilePaths = res.tempFilePaths
         wx.uploadFile({
-          url: app.appData.serverUrl + 'upload', //开发者服务器 url
+          url: app.globalData.serverUrl + 'upload', //开发者服务器 url
           filePath: tempFilePaths[0],
           name: 'file',
           success: function (res) {
@@ -555,7 +555,7 @@ Page({
     let that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: app.appData.serverUrl + 'suggest/province',
+        url: app.globalData.serverUrl + 'suggest/province',
         method: 'get',
         success: (res) => {
           that.setData({
@@ -575,7 +575,7 @@ getCityArr:function(pid) {
     let that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: app.appData.serverUrl + 'suggest/city',
+        url: app.globalData.serverUrl + 'suggest/city',
         data: {
           provinceId: pid
         },
@@ -598,7 +598,7 @@ getCountyInfo:function(cid){
     let that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: app.appData.serverUrl + 'suggest/area',
+        url: app.globalData.serverUrl + 'suggest/area',
         data: {
           cityId: cid
         },

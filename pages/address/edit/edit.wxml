@@ -5,7 +5,7 @@
         <view class='bottom-40'>
           <radio-group class="flex-row">
             <label class='radio-item' wx:for="{{sexes}}" wx:key='*this'>
-              <radio class="radio-item" bindtap='getSexValue' data-value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.disabled}}">{{item.name}}</radio>
+              <radio  bindtap='getSexValue' data-value="{{item.value}}" checked="{{item.checked}}" disabled="{{item.disabled}}">{{item.name}}</radio>
             </label>
           </radio-group>
         </view>

@@ -1,10 +1,11 @@
 //app.js
 App({
   onLaunch: function () {
+    this.getSystemInfo();
     let auth = wx.getStorageSync('token')
     if(auth){
       wx.request({
-        url: this.appData.serverUrl + 'user/token/expires',
+        url: this.globalData.serverUrl + 'user/token/expires',
         header: {
           'Authorization': auth
         },
@@ -53,7 +54,34 @@ App({
       }
     })
   },
-  appData: {
+
+  onShow: function () {
+    //隐藏系统tabbar
+  },
+  getSystemInfo: function () {
+    let t = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        t.globalData.systemInfo = res;
+      }
+    });
+  },
+
+  editTabbar: function () {
+    let tabbar = this.globalData.tabbars;
+    let currentPages = getCurrentPages();
+    let _this = currentPages[currentPages.length - 1];
+    let pagePath = _this.route;
+    (pagePath.indexOf('/') != 0) && (pagePath = '/' + pagePath);
+    for (let i in tabbar.list) {
+      tabbar.list[i].selected = false;
+      (tabbar.list[i].pagePath == pagePath) && (tabbar.list[i].selected = true);
+    }
+    _this.setData({
+      tabbar: tabbar
+    });
+  },
+  globalData: {
     logoName: '微券加盟',
     logoUrl: 'http://image.qfstatic.com/897/2019/201904/20190429/8D5C9103C78643A190513340FA3FA294.jpeg',
     version: 0.1,

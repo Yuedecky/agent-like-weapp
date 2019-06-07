@@ -1,15 +1,10 @@
 {
   "pages": [
     "pages/login/login",
-    "pages/cart/cart",
-    "pages/order/order",
-    "pages/index/index",
-    "pages/address/address",
-    "pages/address/edit/edit",
+    "pages/home/home",
     "pages/protocol/protocol",
     "pages/apply/apply",
-    "pages/thanks/thanks",
-    "pages/send/send"
+    "pages/thanks/thanks"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -18,36 +13,6 @@
     "navigationBarTextStyle": "black"
   },
   "usingComponents":{},
-  "tabBar": {
-    "custom":true,
-    "borderStyle": "white",
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页",
-        "iconPath": "/assets/images/index-black.png",
-        "selectedIconPath": "/assets/images/index.png"
-      },
-      {
-        "pagePath": "pages/cart/cart",
-        "text": "购物车",
-        "iconPath": "/assets/images/cart-black.png",
-        "selectedIconPath": "/assets/images/cart.png"
-      },
-      {
-        "pagePath": "pages/order/order",
-        "text": "订单",
-        "iconPath": "/assets/images/order-black.png",
-        "selectedIconPath": "/assets/images/order.png"
-      },
-      {
-        "pagePath": "pages/send/send",
-        "text": "派送",
-        "iconPath": "/assets/images/send-black.png",
-        "selectedIconPath": "/assets/images/send.png"
-      }
-    ]
-  },
   "networkTimeout": {
     "request": 10000,
     "downloadFile": 10000

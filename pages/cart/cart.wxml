@@ -1,3 +1,4 @@
+<import src="/templates/footer/footer.wxml"/>
 <view class='page cart-wraper flex-column'>
   <view class='header-wrapper'>
   <view class='delivery-scope flex-row' catchtap='onSwithAddress'>
@@ -25,49 +26,62 @@
   <view><text class='header-text' catchtap='adminTap'>{{adminShow?'完成':'管理'}}</text></view>
   </view>
   </view>
-  <view class='main' >
-    <scroll-view class='main-scroll' scroll-y style="height: 100%">
+  <view class='cart-main'>
+    <scroll-view class='main-scroll' scroll-y style='height:100%;'>
       <view class='main-list' wx:if='{{shopcarData.length >0}}'>
-        <view class='shop' wx:for='{{shopcarData}}' wx:key='id' wx:for-item='item'>
-        <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>  
-            <image class='check-img' hidden='{{item.check}}' src='/assets/images/unchecked.png'></image>        
-            <image class='check-img' hidden='{{!item.check}}' src='/assets/images/check.png'></image>    
-        </view>    
-        <image 
-            class='shop-img' 
-            src='{{item.coverImg}}' 
-            mode='aspectFill' 
-            catchtap='phoneDetail'>
-        </image>
-        <view class='shop-detail'> 
-            <view class='cart-item-name'>{{item.name}}</view>        
-            <view class='cart-item-type'>{{item.color}}/{{item.memory}}</view>
-            <view class='shop-detail-bottom flex-row'> 
-                <view class='flex-column cart-price'>
-                <view>官价：<text class='underline'>{{item.orgPrice}}</text></view>     
-                  <view>售价：<text class='shop-price'>{{item.fullPlatformPrice}}</text></view>
-                  <view>提成：<text class='shop-price'>{{item.fullRebatePrice}}</text></view>
-                </view>
-                <view class='num-change flex-row'>                
-                    <view data-id="{{item.id}}"><image 
-                        class='minus-icon' 
-                        src='/assets/images/decrease.png' 
-                        data-index='{{index}}' 
-                        data-types='minus'  
-                        catchtap='numchangeTap'>
-                    </image></view>
-                    <view class='shop-num'>{{item.count}}</view>                
-                    <view><image 
-                        class='add-icon' 
-                        data-index='{{index}}' 
-                        data-types='add'  
-                        catchtap='numchangeTap' 
-                        src='/assets/images/plus.png'>
-                    </image></view>            
-                </view> 
-         </view>
-         </view>
-        </view>
+        <block wx:for='{{shopcarData}}' wx:key='id' wx:for-item='item' wx:for-index='index'>
+          <view class='flex-row shop'>
+          <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>
+              <image class='check-img' hidden='{{item.check}}' src='/assets/images/unchecked.png'></image>        
+              <image class='check-img' hidden='{{!item.check}}' src='/assets/images/check.png'></image>    
+          </view>
+          <view class='cart-item-image'>
+            <image 
+              class='cart-img' 
+              src='{{item.coverImg}}' 
+              mode='aspectFill' 
+              catchtap='phoneDetail'>
+            </image>
+          </view>
+          <view class='shop-detail'>
+              <view class='cart-item-name'>{{item.name}}</view>        
+              <view class='cart-item-type'>{{item.color}}/{{item.memory}}</view>
+                <view class='cart-price'>
+                    <view>官价：
+                      <text class='underline'>{{item.orgPrice}}</text>
+                    </view>     
+                    <view>售价：
+                      <text class='shop-price'>{{item.fullPlatformPrice}}</text>
+                    </view>
+                    <view>提成：
+                      <text class='shop-price'>{{item.fullRebatePrice}}</text>
+                    </view>
+              </view>
+          </view>
+          <view class='num-change flex-row'>                
+              <view data-id="{{item.id}}">
+                <image 
+                    class='minus-icon' 
+                    src='/assets/images/decrease.png' 
+                    data-index='{{index}}' 
+                    data-types='minus'  
+                    catchtap='numchangeTap'>
+                </image>
+              </view>
+              <view class='shop-num'>{{item.count}}</view>                
+              <view>
+                <image 
+                    class='add-icon' 
+                    data-index='{{index}}' 
+                    data-types='add'  
+                    catchtap='numchangeTap' 
+                    src='/assets/images/plus.png'>
+                </image>
+              </view>            
+          </view> 
+          </view>
+        </block>
+        <template is='footer' data='{{text:"没有更多了"}}'/>
       </view>
       <view wx:else class='empty-cart' class='flex-column'>
         <view class='cart-image-view'>
@@ -80,12 +94,8 @@
          </view>
       </view>
     </scroll-view>
-    
   </view>
-  
-
-
-  <view class='footer flex-row'>
+  <view class='cart-footer flex-row'>
   <view class='flex-column total-part'>
    <view class='footer-total-text' wx:if='{{!adminShow}}'>合计支付<text class='footer-total-price' decode='true'>￥{{total}}</text></view>
    <view class='footer-total-text' wx:if='{{!adminShow}}'>合计提成<text class='footer-total-price' decode='true'>￥{{totalRebate}}</text></view>

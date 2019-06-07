@@ -13,39 +13,42 @@
       </view>
       <view class="weui-tab__panel">
         <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
-        <view wx:if="{{orderListProcessing.length >0}}">
-        <block wx:for="{{orderListProcessing}}" wx:key="order.id"
+        <view wx:if="{{orderToSend.length >0}}">
+        <block wx:for="{{orderToSend}}" wx:key="order.id"
            wx:for-index="index">
         <view class='order-part bottom-20'>
           <view class='m-order-header flex-row top-20'>
             <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
             <view class='order-p-status'>{{item.order.statusDesc}}</view>
           </view>
-          <block wx:for="{{orderListProcessing[index].orderDetails}}" 
+          <block wx:for="{{orderToSend[index].orderDetails}}" 
               wx:key="id" wx:for-item="ditem">
             <template is="order-item" data="{{...ditem}}"/>
           </block>
           <view class='to-paid-order'>
             <view class='to-paid-order-money'>
-            须支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
+            需支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
             </view>
             <view class='to-paid-order-money bottom-20'>
             合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
             </view>
-            <view class='contact-or-cancel flex-row'>
-              <view classs='o-concat'>
-                <button type='primary' class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='onContactUsProcess'>联系客服</button>
+            </view>
+            <view class='address-around bottom-20'>
+              <template is='footer' data='{{text:"配送信息"}}'/>
+              <view class='flex-column delivery-scope bottom-20'>
+                  <view class='delivery-info'>收货人<text class='address-info-text'>{{item.address.addressee}}</text></view>
+                  <view class='delivery-info'>联系电话<text class='address-info-text'>{{item.address.phone}}</text></view>
+                  <view class='delivery-address'>收货地址<text class='address-info-text'>{{item.address.address}}</text></view>
+            </view>
+            <view class='contact-or-cancel flex-row top-20'>
+              <view class='o-concat'>
+                <button type='primary' class='order-btn right-20' id="{{item.order.id}}" bindtap='contactCustomer'>联系顾客</button>
               </view>
-              <view>
-                <modal title="联系微信客服" hidden="{{modalHidden}}" bindconfirm="modalConfirmProcess" bindcancel="modalCancelProcess" data-value='process'>
-    <view>
-      <image class="modal-image" src="/assets/images/customer.jpeg" mode='aspectFit'></image>
-    </view>
-    <view class='modal-text'>点击确定保存图片到本地</view>
-  </modal>
+               <view class='o-concat'>
+                <button type='primary' class='order-btn right-20' data-order-id="{{item.order.id}}" bindtap='beginSend'>开始配送</button>
               </view>
-              <view classs='o-cancel'>
-                <button type='default' class='order-btn' bindtap='cancelOrder' data-orderid = '{{item.order.id}}'>取消</button>
+              <view class='o-cancel'>
+                <button type='default' class='order-btn' bindtap='cancelOrderToSend' data-order-id = '{{item.order.id}}'>取消</button>
               </view>
             </view>
             </view>
@@ -57,39 +60,44 @@
         </view>
         </view>
         <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
-        <view wx:if="{{orderListFinished.length>0}}">
-          <block wx:for="{{orderListFinished}}" wx:key="order.id"
+        <view wx:if="{{orderSending.length>0}}">
+          <block wx:for="{{orderSending}}" wx:key="order.id"
             wx:for-index="index">
           <view class='order-part bottom-20'>
             <view class='m-order-header flex-row top-20'>
               <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
               <view class='order-p-status'>{{item.order.statusDesc}}</view>
             </view>
-            <block wx:for="{{orderListFinished[index].orderDetails}}" 
+            <block wx:for="{{orderSending[index].orderDetails}}" 
                 wx:key="id" wx:for-item="ditem">
               <template is="order-item" data="{{...ditem}}"/>
             </block>
             <view class='to-paid-order'>
-              <view class='to-paid-order-money'>
-              须支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
+            <view class='to-paid-order-money'>
+            需支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
+            </view>
+            <view class='to-paid-order-money bottom-20'>
+            合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
+            </view>
+            </view>
+            <view class='address-around bottom-20'>
+              <template is='footer' data='{{text:"配送信息"}}'/>
+              <view class='flex-column delivery-scope bottom-20'>
+                  <view class='delivery-info'>收货人<text class='address-info-text'>{{item.address.addressee}}</text></view>
+                  <view class='delivery-info'>联系电话<text class='address-info-text'>{{item.address.phone}}</text></view>
+                  <view class='delivery-address'>收货地址<text class='address-info-text'>{{item.address.address}}</text></view>
+            </view>
+            <view class='contact-or-cancel flex-row top-20'>
+              <view classs='o-concat'>
+                <button type='primary' class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='contactCustomer'>联系顾客</button>
               </view>
-              <view class='to-paid-order-money bottom-20'>
-              合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text></view>
-              <view class='contact-only flex-row'>
-                <view  classs='o-concat'>
-                  <button type='primary' class='order-btn' id='{{item.order.orderNo}}' bindtap='onContactUsFinished'>
-                  联系客服
-                  </button>
-                </view>
-                <view>
-                <modal title="联系微信客服" hidden="{{modalFinished}}" bindconfirm="modalConfirmFinished" bindcancel="modalCancelFinished">
-    <view>
-      <image class="modal-image" src="/assets/images/customer.jpeg" mode='aspectFit'></image>
-    </view>
-    <view class='modal-text'>点击确定保存图片到本地</view>
-  </modal>
+               <view classs='o-concat'>
+                <button type='primary' class='order-btn right-20' data-order-id="{{item.order.id}}" bindtap='sendFinished'>配送完成</button>
               </view>
+              <view classs='o-cancel'>
+                <button type='default' class='order-btn' bindtap='cancelOrder' data-order-id = '{{item.order.id}}' catchtap='cancelOrderSending'>取消</button>
               </view>
+            </view>
             </view>
           </view>
           </block>
@@ -98,6 +106,50 @@
         暂无数据
         </view>
       </view>
+
+      <!-- 已完成-->
+<view class="weui-tab__content" hidden="{{activeIndex != 2}}">
+        <view wx:if="{{orderSent.length>0}}">
+          <block wx:for="{{orderSent}}" wx:key="order.id"
+            wx:for-index="index">
+          <view class='order-part bottom-20'>
+            <view class='m-order-header flex-row top-20'>
+              <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
+              <view class='order-p-status'>{{item.order.statusDesc}}</view>
+            </view>
+            <block wx:for="{{orderSent[index].orderDetails}}" 
+                wx:key="id" wx:for-item="sitem">
+              <template is="order-item" data="{{...sitem}}"/>
+            </block>
+            <view class='to-paid-order'>
+            <view class='to-paid-order-money'>
+            需支付：<text class='order-p-count'>{{item.order.totalPaymentPrice}}</text>
+            </view>
+            <view class='to-paid-order-money bottom-20'>
+            合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
+            </view>
+            </view>
+            <view class='address-around bottom-20'>
+              <template is='footer' data='{{text:"配送信息"}}'/>
+              <view class='flex-column delivery-scope bottom-20'>
+                  <view class='delivery-info'>收货人<text class='address-info-text'>{{item.address.addressee}}</text></view>
+                  <view class='delivery-info'>联系电话<text class='address-info-text'>{{item.address.phone}}</text></view>
+                  <view class='delivery-address'>收货地址<text class='address-info-text'>{{item.address.address}}</text></view>
+            </view>
+            <view class='contact-or-cancel flex-row top-20'>
+              <view classs='o-concat'>
+                <button type='primary' class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='onContactUsProcess'>联系顾客</button>
+              </view>
+            </view>
+            </view>
+        </view>
+          </block>
+        </view>
+        <view class='none-data' wx:else>
+        暂无数据
+        </view>
+      </view>
+      <!--已完成 -->
     </view>
   </view>
 </view>

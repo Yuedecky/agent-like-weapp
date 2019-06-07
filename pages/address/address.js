@@ -9,9 +9,9 @@ Page({
   },
 
   
-  onLongTapAddress:function(e){
+  deleteAddress:function(e){
     let that = this;
-    let aid = e.currentTarget.dataset.id;
+    let aid = e.currentTarget.dataset.addressId;
     let auth = wx.getStorageSync('token')
     wx.showModal({
       title: '提示',
@@ -21,7 +21,7 @@ Page({
 
         }else{
           wx.request({
-            url: app.appData.serverUrl + 'address/delete',
+            url: app.globalData.serverUrl + 'address/delete',
             header:{
               'Authorization':auth
             },
@@ -62,12 +62,12 @@ Page({
     })
   },
 
-  onCatchAddressTap:function(e){
+  setDefaultAddress:function(e){
     let that = this;
     let auth = wx.getStorageSync('token')
-    let aid = e.currentTarget.dataset.id;
+    let aid = e.currentTarget.dataset.addressId;
     wx.request({
-      url: app.appData.serverUrl+'address/set/default',
+      url: app.globalData.serverUrl+'address/set/default',
       header:{
         'Authorization':auth
       },
@@ -99,12 +99,13 @@ Page({
 
 
 onEditAddress:function(e){
- let aid = e.currentTarget.dataset.id;
+ let aid = e.currentTarget.dataset.addressId;
  wx.navigateTo({
    url: '/pages/address/edit/edit?id='+aid
  })
 },
-addAddress:function(){
+
+addressAddOrUpdate:function(){
   wx.navigateTo({
     url: '/pages/address/edit/edit?title=新增收货地址',
   })
@@ -126,7 +127,7 @@ addAddress:function(){
 
   loadAddressList:function(auth,that){
     wx.request({
-      url: app.appData.serverUrl + 'address/list',
+      url: app.globalData.serverUrl + 'address/list',
       header: {
         'Authorization': auth
       },

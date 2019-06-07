@@ -57,3 +57,34 @@
 .contact-only{
   margin-left: 130rpx;
 }
+
+.delivery-scope{
+  width: 90%;
+  margin: 0 auto;
+  background: #fdfdfd;
+  font-size: 34rpx;
+  line-height: 40rpx;
+  padding-left: 20rpx;
+}
+
+
+.address-info-text{
+  color: #999;
+  margin-left: 20rpx;
+  padding-right: 20rpx;
+}
+
+.contact-or-cancel{
+  width:90%;
+  margin: 0 auto;
+}
+.delivery-address{
+  text-overflow: hidden;
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp:2;
+}
+.address-around{
+  width: 100%;
+}

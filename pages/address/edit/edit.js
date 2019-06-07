@@ -92,7 +92,7 @@ Page({
         id: options.id
       })
       wx.request({
-        url: app.appData.serverUrl+'address/detail',
+        url: app.globalData.serverUrl+'address/detail',
         data:{
           addressId:options.id
         },
@@ -325,7 +325,7 @@ Page({
     if(id >0){
       //edit
       wx.request({
-        url: app.appData.serverUrl+'address/add',
+        url: app.globalData.serverUrl+'address/add',
         header:{
           'Authorization':auth
         },
@@ -370,7 +370,7 @@ Page({
     }else{
     //save
       wx.request({
-        url: app.appData.serverUrl + 'address/add',
+        url: app.globalData.serverUrl + 'address/add',
         data: {
           name: name ,
           phone: phone ,
@@ -442,7 +442,7 @@ Page({
     let that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: app.appData.serverUrl + 'suggest/city',
+        url: app.globalData.serverUrl + 'suggest/city',
         data: {
           provinceId: pid
         },
@@ -464,7 +464,7 @@ Page({
     let that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: app.appData.serverUrl + 'suggest/province',
+        url: app.globalData.serverUrl + 'suggest/province',
         method: 'get',
         success: (res) => {
           that.setData({
@@ -485,7 +485,7 @@ Page({
     let that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: app.appData.serverUrl + 'suggest/area',
+        url: app.globalData.serverUrl + 'suggest/area',
         data: {
           cityId: cid
         },
