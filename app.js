@@ -55,9 +55,11 @@ App({
     })
   },
 
+
   onShow: function () {
     //隐藏系统tabbar
   },
+  
   getSystemInfo: function () {
     let t = this;
     wx.getSystemInfo({
@@ -83,7 +85,7 @@ App({
   },
   globalData: {
     logoName: '微券加盟',
-    logoUrl: 'http://image.qfstatic.com/897/2019/201904/20190429/8D5C9103C78643A190513340FA3FA294.jpeg',
+    logoUrl: 'https://www.wqyp.shop/data/images/logo/logo.jpeg',
     version: 0.1,
     serverUrl:"https://www.wqyp.shop/",
     tabbars:[]

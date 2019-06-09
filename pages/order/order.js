@@ -1,6 +1,12 @@
 var app = getApp();
 Component({
   
+
+  /* 开启全局样式设置 */
+  options: {
+    addGlobalClass: true,
+  },
+
   /**
    * 页面的初始数据
    */
@@ -8,8 +14,8 @@ Component({
     tabs:['未完成','已完成'],
     activeIndex:0,
     sliderOffset: 0,
-    sliderLeft:0, 
-    silderWidth:140,
+    sliderLeft:16, 
+    silderWidth:110,
     modalHidden:true,
     modalFinished:true,
 
@@ -28,52 +34,25 @@ Component({
     orderListFinished: []
   },
   properties:{
-    tabs:{
-      type:Array
-    },
-    activeIndex:{
-      type:Number
-    },
-    sliderOffset:{
-      type:Number
-    },
-    sliderLeft:{
-      type:Number
-    },
-    silderWidth:{
-      type:Number
-    },
-    modalHidden:{
-      type:Boolean
-    },
-    modalFinished:{
-      type:Boolean
-    },
-    phoneNumber:{
-      type:Array
-    },
-    orderPTotal:{
-      type:Number
-    },
-    orderPReturn:{
-      type:Number
-    },
-    ordersP:{
-      type:Array
-    },
-    orderListProcessing:{
-      type:Array
-    },
-    orderListFinished:{
-      type:Array
+    name:{
+      type:String,
+      value:'order'
     }
   },
 
-    lifetimes:{
-      
-    },
-
   attached: function (options) {
+    // 显示设置
+    var res = wx.getSystemInfoSync();
+    var device = new RegExp("iOS");
+    var result = device.test(res.system);
+    let tmp = 46;
+    let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
+    this.setData({
+      mainHeight: h,
+    });
+    // wx.showLoading({
+    //   title: '加载中',
+    // })
     var that = this;
     let activeIndex = 0;
     if(options != undefined && options.activeIndex != undefined){
@@ -204,7 +183,7 @@ Component({
                     })
                   } else {
                     wx.reLaunch({
-                      url: '/pages/order/order?activeIndex=1',
+                      url: '/pages/home/home?currentTab=2',
                     })
                   }
                 }
@@ -335,7 +314,6 @@ Component({
         wx.showActionSheet({
           itemList: [phoneNumber, '呼叫', '添加联系人'],
           success: function (res) {
-            console.log("点击电话 res：", res)
             if (res.tapIndex == 1) {//直接呼叫
               wx.makePhoneCall({
                 phoneNumber: phoneNumber,

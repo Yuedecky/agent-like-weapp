@@ -84,7 +84,7 @@ Page({
           })
         }else{
           wx.reLaunch({
-            url: '/pages/cart/cart',
+            url: '/pages/home/home?currentTab=1',
           })
         }
       }

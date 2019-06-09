@@ -1,10 +1,9 @@
 /**index.wxss**/
-page {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 
+.home-container{
+  height:90%;
+  width: 100%;
+}
 .nav-tabs {
   width: 100%;
   display: flex;
@@ -19,13 +18,12 @@ page {
   flex-direction: column-reverse;
   background: #fcfcfc;
   height: 120rpx;
-
 }
 
 .tab-text {
   font-size: 24rpx;
   line-height: 35rpx;
-  color: #5f5f5f;
+  color:#333;
 }
 
 .iconPath {

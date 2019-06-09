@@ -14,6 +14,7 @@
       <view class="weui-tab__panel">
         <view class="weui-tab__content" hidden="{{activeIndex != 0}}">
         <view wx:if="{{orderToSend.length >0}}">
+      <scroll-view scroll-y style='height:{{mainHeight}}px;'>
         <block wx:for="{{orderToSend}}" wx:key="order.id"
            wx:for-index="index">
         <view class='order-part bottom-20'>
@@ -42,7 +43,9 @@
             </view>
             <view class='contact-or-cancel flex-row top-20'>
               <view class='o-concat'>
-                <button type='primary' class='order-btn right-20' id="{{item.order.id}}" bindtap='contactCustomer'>联系顾客</button>
+                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.phone}}" 
+                data-customer-name='{{item.address.addressee}}' 
+                bindtap='contactCustomer'>联系顾客</button>
               </view>
                <view class='o-concat'>
                 <button type='primary' class='order-btn right-20' data-order-id="{{item.order.id}}" bindtap='beginSend'>开始配送</button>
@@ -54,6 +57,7 @@
             </view>
         </view>
         </block>
+        </scroll-view>
         </view>
         <view class='none-data' wx:else>
         暂无数据
@@ -61,6 +65,7 @@
         </view>
         <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
         <view wx:if="{{orderSending.length>0}}">
+          <scroll-view scroll-y style='height:{{mainHeight}}px;'>
           <block wx:for="{{orderSending}}" wx:key="order.id"
             wx:for-index="index">
           <view class='order-part bottom-20'>
@@ -89,7 +94,8 @@
             </view>
             <view class='contact-or-cancel flex-row top-20'>
               <view classs='o-concat'>
-                <button type='primary' class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='contactCustomer'>联系顾客</button>
+                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.phone}}" 
+                data-customer-name='{{item.address.addressee}}' bindtap='contactCustomer'>联系顾客</button>
               </view>
                <view classs='o-concat'>
                 <button type='primary' class='order-btn right-20' data-order-id="{{item.order.id}}" bindtap='sendFinished'>配送完成</button>
@@ -101,6 +107,7 @@
             </view>
           </view>
           </block>
+          </scroll-view>
         </view>
         <view class='none-data' wx:else>
         暂无数据
@@ -110,6 +117,7 @@
       <!-- 已完成-->
 <view class="weui-tab__content" hidden="{{activeIndex != 2}}">
         <view wx:if="{{orderSent.length>0}}">
+      <scroll-view scroll-y style='height:{{mainHeight}}px;'>
           <block wx:for="{{orderSent}}" wx:key="order.id"
             wx:for-index="index">
           <view class='order-part bottom-20'>
@@ -138,12 +146,15 @@
             </view>
             <view class='contact-or-cancel flex-row top-20'>
               <view classs='o-concat'>
-                <button type='primary' class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='onContactUsProcess'>联系顾客</button>
+                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.phone}}"
+                data-customer-name='{{item.address.addressee}}' 
+                 bindtap='contactCustomer'>联系顾客</button>
               </view>
             </view>
             </view>
         </view>
           </block>
+          </scroll-view>
         </view>
         <view class='none-data' wx:else>
         暂无数据

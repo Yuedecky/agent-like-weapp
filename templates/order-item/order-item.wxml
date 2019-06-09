@@ -9,13 +9,13 @@
               <view class='item-desc'>{{color}}/{{memory}}</view>
               <view class='item-price'>
               <view>
-                官网价：<text class='price-info'>{{platformPrice}}</text>
+                官网价：<text class='price-info'>{{orgPrice}}</text>
               </view>
               <view>
                 销售价：<text class='price-info'>{{platformPrice}}</text>
               </view>
               <view>
-                提成价：<text class='price-info'>{{rebatePrice}}</text></view>
+                提成：<text class='price-info'>{{rebatePrice}}</text></view>
               </view>
               </view>
           <view class='right-section'>

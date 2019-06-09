@@ -27,8 +27,8 @@
   </view>
   </view>
   <view class='cart-main'>
-    <scroll-view class='main-scroll' scroll-y style='height:100%;'>
-      <view class='main-list' wx:if='{{shopcarData.length >0}}'>
+    <scroll-view class='main-scroll' scroll-y style='height:{{mainHeight}}px;' bindscrolltolower='scrollDown'  bindtouchstart="start_fn" bindtouchend='end_fn' scroll-top='{{scrollTop}}' id="cart-scroll-wrap">
+      <view class='main-list' id="inner-wrap">
         <block wx:for='{{shopcarData}}' wx:key='id' wx:for-item='item' wx:for-index='index'>
           <view class='flex-row shop'>
           <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>
@@ -39,13 +39,13 @@
             <image 
               class='cart-img' 
               src='{{item.coverImg}}' 
-              mode='aspectFill' 
+              mode='aspectFit' 
               catchtap='phoneDetail'>
             </image>
           </view>
           <view class='shop-detail'>
-              <view class='cart-item-name'>{{item.name}}</view>        
-              <view class='cart-item-type'>{{item.color}}/{{item.memory}}</view>
+              <view class='cart-item-names'>{{item.name}}</view>        
+              <view class='cart-item-type'><text>{{item.color}}/{{item.memory}}</text></view>
                 <view class='cart-price'>
                     <view>官价：
                       <text class='underline'>{{item.orgPrice}}</text>
@@ -81,19 +81,22 @@
           </view> 
           </view>
         </block>
-        <template is='footer' data='{{text:"没有更多了"}}'/>
       </view>
-      <view wx:else class='empty-cart' class='flex-column'>
+      <view wx:if='{{shopcarData.length ==0}}' class='empty-cart' class='flex-column'>
         <view class='cart-image-view'>
             <image class='empty-cart-img' src='/assets/images/empty-cart.png'/>
         </view>
-        <view class='go-cart-desc bottom-20'>购物车是空的，赶紧去首页添加商品吧</view>
+        <view class='go-cart-desc bottom-20'>购物车是空的，去首页或者下拉刷新试试</view>
         <view class='go-index-view'>
           <button type='default' class="go-index-btn"    hover-class='none'
          bindtap='goIndexPage'>去逛逛</button>
          </view>
       </view>
+      <view class="load-flag-text" wx:if="{{!loadFlag}}">
+        <view class="cart-warn">没有更多啦~</view>
+      </view>
     </scroll-view>
+    
   </view>
   <view class='cart-footer flex-row'>
   <view class='flex-column total-part'>

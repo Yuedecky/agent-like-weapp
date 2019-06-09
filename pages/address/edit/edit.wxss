@@ -49,7 +49,7 @@ radio .wx-radio-input{
     width: 30rpx;
     margin-top: -4rpx;
     border-radius: 50%;
-    border: 2rpx solid #999;
+    border: 2rpx solid #006699;
     background: transparent;
  }
  
@@ -57,7 +57,7 @@ radio .wx-radio-input{
 radio .wx-radio-input.wx-radio-input-checked{
    width: 30rpx;
    height: 30rpx;
-   background: #50d2c2;
+   background: #006699;
 }
 /* 选中后的 对勾样式 （白色对勾 可根据UI需求自己修改） */
 radio .wx-radio-input.wx-radio-input-checked::before{
@@ -68,7 +68,7 @@ radio .wx-radio-input.wx-radio-input-checked::before{
    text-align: center;
    font-size:30rpx; /* 对勾大小 30rpx */
    color:#fff; /* 对勾颜色 白色 */
-   background: #50d2c2;
+   background: #006699;
    transform:translate(-50%, -50%) scale(1);
    -webkit-transform:translate(-50%, -50%) scale(1);
 }
@@ -88,8 +88,8 @@ radio .wx-radio-input.wx-radio-input-checked::before{
 .wx-switch-input{
     width:80rpx !important;
     height:36rpx !important;
-    background: #50D2C2 !important;
-    border: #50d2c2 !important; /* 2018-07-18 重置开关边框颜色 */
+    background: #006699 !important;
+    border: #006699 !important; /* 2018-07-18 重置开关边框颜色 */
 }
 /*白色样式（false的样式）*/
 .wx-switch-input::before{

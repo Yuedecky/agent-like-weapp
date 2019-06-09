@@ -1,14 +1,15 @@
 {
   "pages": [
-    "pages/login/login",
     "pages/home/home",
+    "pages/login/login",
     "pages/protocol/protocol",
     "pages/apply/apply",
     "pages/thanks/thanks"
   ],
   "window": {
+    "enablePullDownRefresh": true,
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#efefef",
     "navigationBarTitleText": "微券加盟",
     "navigationBarTextStyle": "black"
   },

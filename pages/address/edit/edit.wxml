@@ -25,7 +25,7 @@
             <text class='set-default'>设为默认地址</text>
       </view>
         <button type='primary' class="save-address-btn"  disabled='{{disabled}}'   hover-class='none'
-         bindtap='saveAddress'>保存</button>
+         bindtap='saveAddress'>保存并使用</button>
 </view>
 
 <view class="animation-element-wrapper" animation="{{animation}}" style="visibility:{{show ? 'visible':'hidden'}}"  data-id="444">

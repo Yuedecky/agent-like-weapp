@@ -1,5 +1,11 @@
 var app = getApp();
 Component({
+
+  /* 开启全局样式设置 */
+  options: {
+    addGlobalClass: true,
+  },
+
   data: {
     adminShow: false,//管理      
     shopcarData: [],//购物车数据      
@@ -20,76 +26,147 @@ Component({
     //----
     shopcar: [],
     cartColor: 'red',
-    hasDefaultAddress:false
+    hasDefaultAddress:false,
+
+    pageNum:1,
+    pageSize:5,
+
+    canRequest:false,
+    maxCount: 250,
+    loadFlag: true,
+    count: 0,
+    pullLoading: false,
+    dataList: [],
+    contentWaitingShow: false,
+
+
+    touchDown:0,
+    innerHeight:0,
+    startScroll:0,
+    height:0,
+    scrollTop:0,
   },
   properties:{
-    adminShow:{
-      type: Boolean
+    name:{
+      type:String,
+      value:'cart'
     },
-    shopcarData:{
-      type: Array
-    },
-    shopcar:{
-      type:Array
-    },
-    deliveryName:{
-      type:String
-    },
-    totalRebate:{
-      type: Number
-    },
-    cartColor:{
-      type:String
-    },
-    deliveryAddress:{
-      type:String
-    },
-    deliveryPhone:{
-      type:String
-    },
-    submitText:{
-      type:String
-    },
-    totalNum:{
-      type:Number
-    },
-    checkedCount:{
-      type:Number
-    },
-    selarr:{
-      type: Array
-    },
-    allsel:{
-      type:Boolean
-    },
-    total:{
-      type:Number
+
+   
+  },
+
+  observers:{
+    'shopcarData':function(field){
+        console.log('触发了observer,field:',field)
     }
-
-
   },
 
   lifetimes:{
-    attached: function () { 
-      console.log('cart attached')
+    created:function(){
     },
-    moved: function () { },
-    detached: function () { },
-
+    attached: function () {
+      // 显示设置
+      var res = wx.getSystemInfoSync();
+      var device = new RegExp("iOS");
+      var result = device.test(res.system);
+      let tmp = 190;
+      let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
+      this.setData({
+        mainHeight: h,
+      });
+      this.getCartMainData();
+    },
+    ready: function () {
+      console.log('cart ready')
+    },
+    detached: function () { 
+      console.log('cart detached')
+    },
   },
-  pageLifetimes:{
-    show:function(){
+  methods:{
+    getCartMainData:function(){
+      //是否首次加载
+      let auth = wx.getStorageSync('token')
+      this.getDefaultAddress();
+      this.loadChooseList(auth,this,null);
+    },
+
+    scrollDown:function(){
       let that = this;
-      if (that.data.selarr.length > 0) {
-        that.setData({
-          cartColor: 'red',
-          cartDisabled: false
+      if (that.data.canRequest) {
+        wx.showLoading({
+          title: '加载中',
         })
-      } else {
-        that.setData({
-          cartDisabled: true
-        })
+        if (that.data.count < that.data.maxCount) {
+          let auth = wx.getStorageSync('token')
+          let pageNum = that.data.pageNum+1;
+          that.setData({
+            pageNum:pageNum
+          })
+          if (that.data.loadFlag) {
+            that.setData({
+              pullLoading: true
+            })
+            wx.request({
+              url: app.globalData.serverUrl + 'choose/list',
+              header: { 'Authorization': auth },
+              data: {
+                pageNum: that.data.pageNum,    // 继续请求
+                pageSize: that.data.pageSize,    // 每次请求的数目
+              },
+              success: function (res) {
+                let data = res.data;
+                if (data.status == 200) {
+                  if(res.data.data.list != null 
+                  && res.data.data.list.length >0){
+                    let tempData = that.data.shopcarData.concat(res.data.data.list);
+                    that.setData({
+                      count: that.data.count + that.data.pageNum * that.data.pageSize,
+                      shopcarData: tempData,
+                      loadFlag: tempData.length >= parseInt(res.data.data.page.total) ? false : true,
+                      pullLoading: false,
+                      canRequest: tempData.length >= parseInt(res.data.data.page.total) ? false : true,
+                      pageNum: ++pageNum
+                    })
+                  }
+                  
+                } else {
+                  wx.showToast({
+                    title: data.msg,
+                    duration: 1500,
+                    icon: 'none'
+                  })
+                }
+              },
+              fail: function (err) {
+                wx.showToast({
+                  title: '下拉加载商品失败',
+                  duration: 1500,
+                  icon: 'none'
+                })
+              },
+              complete:function(){
+                wx.hideLoading()
+              }
+            })
+          } else {
+            return
+          }
+        } else {
+          console.log('已经不能加载了')
+          this.setData({
+            canRequest: false,
+            loadFlag: false,
+          })
+        }
       }
+    },
+
+    /**
+     * 获取默认地址
+     */
+    getDefaultAddress:function(){
+      let that = this;
       let auth = wx.getStorageSync('token');
       wx.request({
         url: app.globalData.serverUrl + 'address/default',
@@ -118,15 +195,7 @@ Component({
                 deliveryAddress: address,
                 hasDefaultAddress: true
               })
-            } else {
-              that.setData({
-                addressId: 0,
-                deliveryName: '',
-                deliveryPhone: '',
-                deliveryAddress: '',
-                hasDefaultAddress: false
-              })
-            }
+            } 
           }
         },
         fail: function (res) {
@@ -137,18 +206,23 @@ Component({
           })
         }
       });
-      let selarr = that.data.selarr;
-      that.loadChooseList(auth, that)
     },
-    hide:function(){
-      
-    },
-    resize:function(){
-      
-    }
-  },
 
-  methods:{
+    onPullDownRefresh: function () {
+      // 我们用total和count来控制分页，total代表已请求数据的总数，count代表每次请求的个数。
+      // 刷新时需把total重置为0，代表重新从第一条请求。
+      let that = this;
+      // this.data.dataArray 是页面中绑定的数据源
+      that.data.shopcarData = [];
+      // 网络请求，重新请求一遍数据
+      let auth = wx.getStorageSync('token')
+      this.loadChooseList(auth,this,that.data.maxCount);
+      // 小程序提供的api，通知页面停止下拉刷新效果
+      wx.stopPullDownRefresh;
+    },
+
+   
+
     //点击全选  
     allcheckTap: function () {
       let shopcar = this.data.shopcarData;
@@ -263,9 +337,69 @@ Component({
       })
     },
 
+    loadMore:function(){
+      console.log('in load more...')
+    },
+
+
+    start_fn(e) {
+     let self = this;
+     let touchDown = e.touches[0].clientY;
+     this.data.touchDown = touchDown;
+         // 获取 inner-wrap 的高度
+    var innerWrap = wx.createSelectorQuery();
+      innerWrap.select('#inner-wrap')
+      innerWrap.boundingClientRect();
+      innerWrap.exec(function(rect){
+        if (rect != null) {
+          self.data.innerHeight = rect.height;
+        } else {
+          self.data.innerHeight = 100;
+        }
+    });
+      
+   // 获取 scroll-wrap 的高度和当前的 scrollTop 位置
+   var cartScrollWrap =wx.createSelectorQuery();
+   cartScrollWrap.select('#cart-scroll-wrap').fields({
+               scrollOffset: true,
+               size: true
+    }, function (rect) {
+      if(rect != null){
+        self.data.startScroll = rect.scrollTop;
+        self.data.height = rect.height;
+      }else{
+        self.data.startScroll = 100;
+        self.data.height=100;
+      }
+    }).exec();
+  },
+
+    end_fn(e) {
+         let currentY= e.changedTouches[0].clientY;
+         let self = this;
+          let { startScroll, innerHeight, height, touchDown } = this.data;
+          /**
+           * 1、下拉刷新
+           * 2、上拉加载
+           */
+      if (currentY > touchDown &&
+       currentY - touchDown > 20 
+       && startScroll == 0) {
+               // 下拉刷新 的请求和逻辑处理等
+          console.log('开始下拉刷新...')
+          that.scrollDown()
+      } else if (currentY < touchDown && touchDown - currentY >= 20 && innerHeight - height == startScroll) {
+               // 上拉加载 的请求和逻辑处理等
+        console.log("开始上拉加载...")
+        that.scrollDown();
+      }
+    },
+
+
+
     goIndexPage: function (e) {
       wx.reLaunch({
-        url: '/pages/index/index',
+        url: '/pages/home/home?currentTab=0',
       })
     },
 
@@ -465,7 +599,7 @@ Component({
           } else {
             wx.removeStorageSync('selarr')
             wx.reLaunch({
-              url: '/pages/order/order?activeIndex=0'
+              url: '/pages/home/home?currentTab=2'
             })
           }
         }
@@ -522,7 +656,7 @@ Component({
               duration: 2000,
               icon: 'success'
             })
-            that.loadChooseList(auth, that)
+            that.loadChooseList(auth, that,1)
           }
         },
         fail: function (res) {
@@ -535,7 +669,11 @@ Component({
       })
     },
 
-    loadChooseList: function (auth, that) {
+    loadChooseList: function (auth, that,pageNum) {
+      let curPage = pageNum ==null? 
+                that.data.pageNum:
+                pageNum;
+      let pageSize = that.data.pageSize;
       let selarr = that.data.selarr;
       wx.request({
         url: app.globalData.serverUrl + 'choose/list',
@@ -543,9 +681,12 @@ Component({
         header: {
           'Authorization': auth
         },
+        data:{
+            pageNum: curPage,
+            pageSize:pageSize
+        },
         success: function (res) {
           let data = res.data;
-
           if (data.status != 200) {
             wx.showToast({
               title: data.msg,
@@ -553,11 +694,17 @@ Component({
               duration: 2000
             })
           } else {
-            let list = data.data;
-            if (list != null) {
+            let list = data.data.list;
+            let page = data.data.page;
+            if (list != null && list.length>0) {
               var shopcarData = list;
               let total = that.data.total;
               let totalRebate = that.data.totalRebate;
+              let canRequest = false;
+              if(page.total <= that.data.pageSize){
+              }else{
+                canRequest = true;
+              }
               if (shopcarData && selarr) {
                 for (var i = 0; i < shopcarData.length; i++) {
                   if (shopcarData[i].check) {
@@ -571,11 +718,12 @@ Component({
                     }
                   }
                 }
-
                 that.setData({
                   total: total,
                   totalRebate: totalRebate,
-                  shopcarData: shopcarData
+                  shopcarData: shopcarData,
+                  count: page.size,
+                  canRequest:canRequest
                 });
                 that.judgmentAll();//判断是否全选  
               }

@@ -354,8 +354,8 @@ Page({
               duration:1000,
               icon:'none'
             })
-            wx.navigateBack({
-              
+            wx.reLaunch({
+              url: '/pages/home/home?currentTab=1',
             })
           }
         },
