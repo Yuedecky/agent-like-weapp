@@ -69,7 +69,7 @@ Component({
       var res = wx.getSystemInfoSync();
       var device = new RegExp("iOS");
       var result = device.test(res.system);
-      let tmp = 180;
+      let tmp = 174;
       let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
       this.setData({
         mainHeight: h,
