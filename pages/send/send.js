@@ -66,6 +66,10 @@ Component({
 
     switchTabIndex: function (index, auth) {
       let that = this;
+      wx.showLoading({
+        title: '加载中',
+        mask:true
+      })
       if (index == 0) {
         //代配送
         let status = [1].join(',')
@@ -93,6 +97,16 @@ Component({
                 orderToSend: data.data.data,
               })
             }
+          },
+          fail:function(){
+            wx.showToast({
+              title: '加载失败',
+              duration:1500,
+              icon:'none'
+            })
+          },
+          complete:function(){
+            wx.hideLoading()
           }
         })
       } else if (index == 1) {
@@ -122,6 +136,16 @@ Component({
                 })
               }
             }
+          },
+          fail:function(){
+            wx.showToast({
+              title: '加载失败',
+              duration:1500,
+              icon:'none'
+            })
+          },
+          complete:function(){
+            wx.hideLoading()
           }
         })
       } else {
@@ -152,6 +176,16 @@ Component({
                 })
               }
             }
+          },
+          fail:function(e){
+            wx.showToast({
+              title: '加载失败',
+              duration:1500,
+              icon:'none'
+            })
+          },
+          complete:function(e){
+            wx.hideLoading()
           }
         })
       }

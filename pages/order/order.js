@@ -99,6 +99,10 @@ Component({
     methods: {
       switchTabIndex: function (index, auth) {
         let that = this;
+        wx.showLoading({
+          title: '加载中',
+          mask:true
+        })
         if (index == 0) {
           let status = [1, 2].join(',')
           wx.request({
@@ -122,6 +126,16 @@ Component({
                   orderListProcessing: data.data,
                 })
               }
+            },
+            fail:function(e){
+                wx.showToast({
+                  title: '加载失败',
+                  duration:1500,
+                  icon:'none'
+                })
+            },
+            complete:function(e){
+              wx.hideLoading()
             }
           })
         } else {
@@ -147,9 +161,20 @@ Component({
                   orderListFinished: data.data,
                 })
               }
+            },
+            fail:function(e){
+              wx.showToast({
+                title: '加载失败',
+                duration:1500,
+                icon:'none'
+              })
+            },
+            complete:function(){
+              wx.hideLoading()
             }
           })
         }
+        
       },
 
 
