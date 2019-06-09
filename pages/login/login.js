@@ -27,11 +27,39 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
-    wx.clearStorageSync()
     that.setData({
       logoName: app.globalData.logoName,
       logoUrl: app.globalData.logoUrl,
     })
+    let auth = wx.getStorageSync('token')
+    if (auth!=null && auth !='') {
+      console.log('auth in login page:',auth)
+      wx.request({
+        url: app.globalData.serverUrl + 'user/token/expires',
+        header: {
+          'Authorization': auth
+        },
+        success: function (res) {
+          let data = res.data;
+          if (data.status != 200) {
+            wx.showToast({
+              title: data.msg,
+              duration: 2000,
+              icon: 'none'
+            })
+          } else {
+            if (data.data) {
+              
+            }else{
+              //token未过期
+              wx.reLaunch({
+                url: '/pages/home/home?currentTab=0',
+              })
+            }
+          }
+        }
+      })
+    }
   },
 
 getPhoneValue:function(e){

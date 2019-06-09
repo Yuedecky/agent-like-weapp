@@ -15,6 +15,8 @@ page{
   color: #999;
 }
 
+
+
 .empty-cart-img{
   width:180rpx;
   height: 200rpx;
@@ -222,7 +224,7 @@ button::after{
 
 .shop-detail{
   height: 100%;
-  width: 380rpx;
+  width: 370rpx;
 }
 
 .cart-item-names{
