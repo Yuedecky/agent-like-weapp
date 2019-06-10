@@ -22,10 +22,9 @@ Component({
     deliveryPhone:'',
     deliveryAddress:'',
     totalRebate:0,
-    //--
-    //----
+
     shopcar: [],
-    cartColor: 'red',
+    cartColor: '#006699',
     hasDefaultAddress:false,
 
     pageNum:1,
@@ -74,6 +73,17 @@ Component({
       this.setData({
         mainHeight: h,
       });
+      let that = this;
+      if(that.data.selarr.length >0){
+        that.setData({
+          cartColor: '#006699',
+          cartDisabled: false
+        })
+      }else{
+        that.setData({
+          cartDisabled:true
+        })
+      }
       this.getCartMainData();
     },
     ready: function () {
@@ -117,19 +127,23 @@ Component({
               success: function (res) {
                 let data = res.data;
                 if (data.status == 200) {
-                  if(res.data.data.list != null 
-                  && res.data.data.list.length >0){
-                    let tempData = that.data.shopcarData.concat(res.data.data.list);
+                  let list = res.data.data.list;
+                  if( list!= null && list.length >0){
+                    if (that.data.allsel) {
+                      for(var i =0;i<list.length;i++){
+                        list[i].check = true
+                      }
+                    }
+                    let tempData = that.data.shopcarData.concat(list);
                     that.setData({
                       count: that.data.count + that.data.pageNum * that.data.pageSize,
-                      shopcarData: tempData,
                       loadFlag: tempData.length >= parseInt(res.data.data.page.total) ? false : true,
                       pullLoading: false,
                       canRequest: tempData.length >= parseInt(res.data.data.page.total) ? false : true,
-                      pageNum: ++pageNum
+                      pageNum: ++pageNum,
                     })
+                    that.computePriceAndRebate(tempData,that.data.allsel);
                   }
-                  
                 } else {
                   wx.showToast({
                     title: data.msg,
@@ -228,8 +242,13 @@ Component({
       let shopcar = this.data.shopcarData;
       let that = this;
       let allsel = !that.data.allsel;//点击全选后allsel变化
-      let total = 0;
-      let selarr = []
+      that.computePriceAndRebate(shopcar,allsel);
+    },
+
+    computePriceAndRebate(shopcar,allsel){
+      let that = this;
+      let selarr = [];
+      let total=0;
       let totalRebate = 0;
       for (let i = 0, len = shopcar.length; i < len; i++) {
         shopcar[i].check = allsel;//所有商品的选中状态和allsel值一样
@@ -255,7 +274,7 @@ Component({
 
       } else {
         that.setData({
-          cartColor: 'red'
+          cartColor: '#006699'
         })
       }
     },
@@ -321,17 +340,10 @@ Component({
               selarr: [],
               checkedCount: 0,
               totalNum: shopcar.length,
+              cartDisabled: that.data.selarr.length < 1,
+              cartColor: !that.data.selarr.length<1?'#006699':'',
+              loadFlag: !shopcar.length <1
             });
-            that.setData({
-              cartDisabled: that.data.selarr.length < 1
-            })
-            if (that.data.cartDisabled) {
-
-            } else {
-              that.setData({
-                cartColor: 'red'
-              })
-            }
           }
         }
       })
@@ -347,10 +359,10 @@ Component({
      let touchDown = e.touches[0].clientY;
      this.data.touchDown = touchDown;
          // 获取 inner-wrap 的高度
-    var innerWrap = wx.createSelectorQuery();
-      innerWrap.select('#inner-wrap')
-      innerWrap.boundingClientRect();
-      innerWrap.exec(function(rect){
+    var innerWrapQuery = wx.createSelectorQuery();
+      var innerWrap=innerWrapQuery.select('#inner-wrap')
+      var clientRect=innerWrap.boundingClientRect();
+      clientRect.exec(function(rect){
         if (rect != null) {
           self.data.innerHeight = rect.height;
         } else {
@@ -387,11 +399,11 @@ Component({
        && startScroll == 0) {
                // 下拉刷新 的请求和逻辑处理等
           console.log('开始下拉刷新...')
-          that.scrollDown()
+        self.scrollDown()
       } else if (currentY < touchDown && touchDown - currentY >= 20 && innerHeight - height == startScroll) {
                // 上拉加载 的请求和逻辑处理等
         console.log("开始上拉加载...")
-        that.scrollDown();
+        self.scrollDown();
       }
     },
 
@@ -447,7 +459,7 @@ Component({
 
       } else {
         that.setData({
-          cartColor: 'red'
+          cartColor: '#006699'
         })
       }
       this.judgmentAll();//每次按钮点击后都判断是否满足全选的条件  
@@ -758,17 +770,7 @@ Component({
   
 
   // onLoad: function (options) {
-  //   let that = this;
-  //   if(that.data.selarr.length >0){
-  //     that.setData({
-  //       cartColor: 'red',
-  //       cartDisabled: false
-  //     })
-  //   }else{
-  //     that.setData({
-  //       cartDisabled:true
-  //     })
-  //   }
+  // 
   // },
 
   

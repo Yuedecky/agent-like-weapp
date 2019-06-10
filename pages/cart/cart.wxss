@@ -158,12 +158,11 @@ button::after{
 
 
 .cart-footer{
-  height:100rpx;
   width: 100%;
   font-size: 30rpx;
   color: #ccc;
   border-top: 1px solid #ccc;
-  line-height: 100rpx;
+  line-height: 80rpx;
   flex: 0 0 100rpx; /* 不放大不缩小固定100rpx */
 }
 
@@ -196,7 +195,7 @@ button::after{
   font-size: 30rpx;  
   line-height: 90rpx;  
   padding:0 6rpx;  
-  color: red;
+  color: #006699;
 }
 
 .shop{

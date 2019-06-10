@@ -33,7 +33,6 @@ Page({
     })
     let auth = wx.getStorageSync('token')
     if (auth!=null && auth !='') {
-      console.log('auth in login page:',auth)
       wx.request({
         url: app.globalData.serverUrl + 'user/token/expires',
         header: {
@@ -52,6 +51,13 @@ Page({
               
             }else{
               //token未过期
+              setTimeout(function(){
+                wx.showLoading({
+                  title: '正在自动登录',
+                  mask:true
+                })
+              },1000)
+              wx.hideLoading()
               wx.reLaunch({
                 url: '/pages/home/home?currentTab=0',
               })

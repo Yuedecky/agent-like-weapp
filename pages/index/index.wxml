@@ -27,7 +27,7 @@
               <view class='item-commission'>提成：<text class='price-info'>{{item.rebatePrice}}</text></view>
           </view>
           <view class='right-section'>
-            <image src='/assets/images/add.png' class='add-cart' bindtap='onAddCart' id="the-cart-{{item.id}}" data-pid='{{item.id}}'></image>
+            <image src='/assets/images/add-cart.png' class='add-cart' bindtap='onAddCart' id="the-cart-{{item.id}}" data-pid='{{item.id}}'></image>
           </view>
           </view>
       </view>
