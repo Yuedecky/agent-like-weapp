@@ -32,7 +32,7 @@
      <view class="animation-element">
         <text class="left-bt" catchtap="hiddenFloatView" data-id="cancel">取消</text>
         <text class="right-bt" catchtap="hiddenFloatView" data-id="makeSure">确定</text>
-          <view class="line"></view> 
+          <view class="line"></view>
         <picker-view indicator-style = "height: 50rpx;" value="{{value}}" bindchange="bindChange">
         <!--省-->
         <picker-view-column>

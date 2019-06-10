@@ -493,16 +493,24 @@ Page({
         val[2] = 0;
         let citys = that.data.citys;
         let cid = citys[val[1]].id;
-        getCountyInfoSync(cid).then(res => {
+        let city = citys[val[1]].name;
+        that.getCountyInfo(cid).then(res => {
           //获取区县数据
           let resData = res.data.data;
           if (resData != null) {
             let county = resData[0].name
             that.setData({
               countys: res.data.data,
-              county: county
+              county: county,
+              city: city
             })
           }
+        })
+      } else if (index[2] != val[2]) {
+        //更新了區域
+        let countys = that.data.countys;
+        that.setData({
+          county: countys[val[2]].name
         })
       }
     }

@@ -4,6 +4,11 @@
 .school-address-selector{
   padding-top:16rpx;
 }
+.schoolname-input {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 .right-arrow {
     display :inline-block;

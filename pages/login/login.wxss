@@ -67,10 +67,10 @@
   margin-top: 16px;
 }
 .protocol text{
-  color: green;
+  color: #006699;
 }
 
 .apply-agent{
   font-size: 40rpx;
-  color: #19e;
+  color: #006699;
 }
