@@ -51,15 +51,21 @@ Page({
               
             }else{
               //token未过期
-              setTimeout(function(){
+             var id= setInterval(function(){
                 wx.showLoading({
                   title: '正在自动登录',
-                  mask:true
+                  mask: true
                 })
               },1000)
-              wx.hideLoading()
               wx.reLaunch({
                 url: '/pages/home/home?currentTab=0',
+                success:function(){
+                  console.log('success relaunch...')
+                },
+                complete:function(){
+                  clearInterval(id)
+                  wx.hideLoading()
+                }
               })
             }
           }
