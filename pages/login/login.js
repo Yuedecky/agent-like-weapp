@@ -6,17 +6,17 @@ Page({
    */
   data: {
     logoName: '',
-    logoUrl:'',
+    logoUrl: '',
     loginDisabled: false,
-    codeDisabled:false,
+    codeDisabled: false,
     phone: '',
-    code:'',
-    text:'获取验证码',
+    code: '',
+    text: '获取验证码',
     currentTime: 60,
     validateCode: ''
   },
 
-  onApplyOpen:function(e){
+  onApplyOpen: function(e) {
     wx.navigateTo({
       url: '/pages/apply/apply?pageIndex=1',
     })
@@ -25,20 +25,20 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     let that = this;
     that.setData({
       logoName: app.globalData.logoName,
       logoUrl: app.globalData.logoUrl,
     })
     let auth = wx.getStorageSync('token')
-    if (auth!=null && auth !='') {
+    if (auth != null && auth != '') {
       wx.request({
         url: app.globalData.serverUrl + 'user/token/expires',
         header: {
           'Authorization': auth
         },
-        success: function (res) {
+        success: function(res) {
           let data = res.data;
           if (data.status != 200) {
             wx.showToast({
@@ -48,21 +48,21 @@ Page({
             })
           } else {
             if (data.data) {
-              
-            }else{
+
+            } else {
               //token未过期
-             var id= setInterval(function(){
+              var id = setInterval(function() {
                 wx.showLoading({
                   title: '正在自动登录',
                   mask: true
                 })
-              },1000)
+              }, 1000)
               wx.reLaunch({
                 url: '/pages/home/home?currentTab=0',
-                success:function(){
+                success: function() {
                   console.log('success relaunch...')
                 },
-                complete:function(){
+                complete: function() {
                   clearInterval(id)
                   wx.hideLoading()
                 }
@@ -74,18 +74,18 @@ Page({
     }
   },
 
-getPhoneValue:function(e){
+  getPhoneValue: function(e) {
     this.setData({
       phone: e.detail.value
     })
-},
-getCodeValue:function(e){
-  this.setData({
-    code:e.detail.value
-  })
+  },
+  getCodeValue: function(e) {
+    this.setData({
+      code: e.detail.value
+    })
 
-},
-  getCode:function(e){
+  },
+  getCode: function(e) {
     let that = this;
     let phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
     var phone = that.data.phone;
@@ -93,56 +93,56 @@ getCodeValue:function(e){
     var warn = null; //warn为当手机号为空或格式不正确时提示用户的文字，默认为空
     if (phone == '' || phone == undefined) {
       warn = "手机号码不能为空";
-    } else if (phone.trim().length != 11 || ! phoneReg.test(phone)) {
+    } else if (phone.trim().length != 11 || !phoneReg.test(phone)) {
       warn = "手机号格式不正确";
     } else {
       //当手机号正确的时候提示用户短信验证码已经发送
       wx.request({
-        url:app.globalData.serverUrl + 'verify/code/send',
-        data:{
+        url: app.globalData.serverUrl + 'verify/code/send',
+        data: {
           phone: phone,
-          type:1
+          type: 1
         },
-        success:function(res){
+        success: function(res) {
           let data = res.data;
-          if(data.status !=200){
+          if (data.status != 200) {
             wx.showToast({
               title: data.msg,
-              duration:2000,
-              icon:'none'
+              duration: 2000,
+              icon: 'none'
             })
-          }else{
+          } else {
             wx.showToast({
               title: '发送验证码成功',
-              duration:2000
+              duration: 2000
             })
           }
         },
-        fail:function(e){
+        fail: function(e) {
           wx.showToast({
             title: '获取验证码失败',
-            icon:'none',
-            duration:2000
+            icon: 'none',
+            duration: 2000
           })
         }
       })
     }
 
-      //判断 当提示错误信息文字不为空 即手机号输入有问题时提示用户错误信息 并且提示完之后一定要让按钮为可用状态 因为点击按钮时设置了只要点击了按钮就让按钮禁用的情况
-      if (warn != null) {
-        wx.showToast({
-          title: warn,
-          icon: 'none'
-        })
-        that.setData({
-          codeDisabled: false,
-          color: '#59b550'
-        })
-        return;
-      }
+    //判断 当提示错误信息文字不为空 即手机号输入有问题时提示用户错误信息 并且提示完之后一定要让按钮为可用状态 因为点击按钮时设置了只要点击了按钮就让按钮禁用的情况
+    if (warn != null) {
+      wx.showToast({
+        title: warn,
+        icon: 'none'
+      })
+      that.setData({
+        codeDisabled: false,
+        color: '#59b550'
+      })
+      return;
+    }
 
     //设置一分钟的倒计时
-    var interval = setInterval(function () {
+    var interval = setInterval(function() {
       currentTime--; //每执行一次让倒计时秒数减一
       that.setData({
         codeDisabled: true,
@@ -162,7 +162,7 @@ getCodeValue:function(e){
   },
 
   //提交表单信息
-  submitInfo: function () {
+  submitInfo: function() {
     var phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
     let that = this;
     if (that.data.phone == "" || that.data.phone == undefined) {
@@ -189,38 +189,38 @@ getCodeValue:function(e){
       return false;
     } else {
       wx.request({
-        url: app.globalData.serverUrl+'user/login',
-        data:{
+        url: app.globalData.serverUrl + 'user/login',
+        data: {
           loginName: that.data.phone,
           password: that.data.code,
         },
-        success:function(res){
+        success: function(res) {
           let data = res.data;
-          if(data.status != 200){
+          if (data.status != 200) {
             wx.showToast({
               title: data.msg,
-              icon:'none',
-              duration:2000
+              icon: 'none',
+              duration: 2000
             })
-          }else{
-            wx.setStorageSync('token',data.data.token)
-            wx.setStorageSync('role',data.data.role)
+          } else {
+            wx.setStorageSync('token', data.data.token)
+            wx.setStorageSync('role', data.data.role)
             wx.reLaunch({
               url: '/pages/home/home',
             })
           }
         },
-        fail:function(e){
+        fail: function(e) {
           wx.showToast({
             title: '登录失败',
-            icon:"none"
+            icon: "none"
           })
         }
       })
     }
   },
 
-  onShowProtocol:function(e){
+  onShowProtocol: function(e) {
     wx.navigateTo({
       url: '/pages/protocol/protocol',
     })
@@ -229,49 +229,49 @@ getCodeValue:function(e){
   /**
    * 生命周期函数--监听页面加载
    */
-  onReady: function () {
-    
+  onReady: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    
+  onShow: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
-    
+  onHide: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-    
+  onUnload: function() {
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
-    
+  onPullDownRefresh: function() {
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
-    
+  onReachBottom: function() {
+
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-    
+  onShareAppMessage: function() {
+
   }
 })

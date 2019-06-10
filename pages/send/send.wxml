@@ -34,12 +34,12 @@
             合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
             </view>
             </view>
-            <view class='address-around bottom-20'>
+            <view class='address-around'>
               <template is='footer' data='{{text:"配送信息"}}'/>
-              <view class='flex-column delivery-scope bottom-20'>
-                  <view class='delivery-info'>收货人<text class='address-info-text'>{{item.address.addressee}}</text></view>
-                  <view class='delivery-info'>联系电话<text class='address-info-text'>{{item.address.phone}}</text></view>
-                  <view class='delivery-address'>收货地址<text class='address-info-text'>{{item.address.address}}</text></view>
+              <view class='flex-column s-delivery-scope'>
+                  <view class='s-delivery-info'>收货人<text class='address-info-text'>{{item.address.addressee}}</text></view>
+                  <view class='s-delivery-info'>联系电话<text class='address-info-text'>{{item.address.phone}}</text></view>
+                  <view class='s-delivery-address'>收货地址<text class='address-info-text'>{{item.address.address}}</text></view>
             </view>
             <view class='contact-or-cancel flex-row top-20'>
               <view class='o-concat'>
@@ -87,7 +87,7 @@
             </view>
             <view class='address-around bottom-20'>
               <template is='footer' data='{{text:"配送信息"}}'/>
-              <view class='flex-column delivery-scope bottom-20'>
+              <view class='flex-column s-delivery-scope'>
                   <view class='delivery-info'>收货人<text class='address-info-text'>{{item.address.addressee}}</text></view>
                   <view class='delivery-info'>联系电话<text class='address-info-text'>{{item.address.phone}}</text></view>
                   <view class='delivery-address'>收货地址<text class='address-info-text'>{{item.address.address}}</text></view>
@@ -139,7 +139,7 @@
             </view>
             <view class='address-around bottom-20'>
               <template is='footer' data='{{text:"配送信息"}}'/>
-              <view class='flex-column delivery-scope bottom-20'>
+              <view class='flex-column s-delivery-scope bottom-20'>
                   <view class='delivery-info'>收货人<text class='address-info-text'>{{item.address.addressee}}</text></view>
                   <view class='delivery-info'>联系电话<text class='address-info-text'>{{item.address.phone}}</text></view>
                   <view class='delivery-address'>收货地址<text class='address-info-text'>{{item.address.address}}</text></view>

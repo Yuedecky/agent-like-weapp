@@ -13,14 +13,13 @@ Component({
   data: {
     tabs: ['待配送', '配送中','已完成'],
     activeIndex: 0,
-    sliderOffset: 0,
+    sliderOffset: 20,
     sliderLeft: 0,
-    silderWidth: 110,
+    silderWidth: 120,
 
     orderToSend:[],
     orderSending:[],
     orderSent:[],
-
     customerPhone:'',
   },
   properties:{

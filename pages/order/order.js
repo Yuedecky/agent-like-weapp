@@ -14,8 +14,8 @@ Component({
     tabs:['未完成','已完成'],
     activeIndex:0,
     sliderOffset: 0,
-    sliderLeft:16, 
-    silderWidth:110,
+    sliderLeft:20, 
+    silderWidth:120,
     modalHidden:true,
     modalFinished:true,
 
