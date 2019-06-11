@@ -43,7 +43,7 @@
             </view>
             <view class='contact-or-cancel flex-row top-20'>
               <view class='o-concat'>
-                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.phone}}" 
+                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.fullPhone}}" 
                 data-customer-name='{{item.address.addressee}}' 
                 bindtap='contactCustomer'>联系顾客</button>
               </view>
@@ -94,7 +94,7 @@
             </view>
             <view class='contact-or-cancel flex-row top-20'>
               <view classs='o-concat'>
-                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.phone}}" 
+                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.fullPhone}}" 
                 data-customer-name='{{item.address.addressee}}' bindtap='contactCustomer'>联系顾客</button>
               </view>
                <view classs='o-concat'>
@@ -146,7 +146,7 @@
             </view>
             <view class='contact-or-cancel flex-row top-20'>
               <view classs='o-concat'>
-                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.phone}}"
+                <button type='primary' class='order-btn right-20' data-customer-phone="{{item.address.fullPhone}}"
                 data-customer-name='{{item.address.addressee}}' 
                  bindtap='contactCustomer'>联系顾客</button>
               </view>

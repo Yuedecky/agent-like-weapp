@@ -1,34 +1,12 @@
 const promisify = require('../../assets/js/promise.util.js');
 import { $init, $digest } from '../../assets/js/common.util';
 var app = getApp();
-var areaInfo = [];//所有省市区县数据
-var provinces = [];//省
-var citys = [];//城市
-var countys = [];//区县
-var index = [0, 0, 0];
-var cellId;
-var t = 0;
-var show = false;
-var moveY = 200;
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-
-    animationAddressMenu: {},
-    addressMenuIsShow: false,
-    ///bind:::;
-
-    show: show,
-    provinces: provinces,
-    citys: citys,
-    countys: countys,
-    value: [0, 0, 0],
-
-
-
     //
     codeDisabled: false,
     codeText: '发送验证码',
@@ -40,11 +18,7 @@ Page({
       applyPhone: '',
       applyCode: '',
     },
-    school: {
-      schoolName: '',
-      schoolAddress: '',
-      roomNo: '',
-    },
+   
     qualification: {
       images: [],
       upImgUrl: '',
@@ -52,6 +26,8 @@ Page({
 
     pageIndex: 1,
     warn: '',
+
+    barTitle:''
   },
 
   uploadImageFile: function (idx) {
@@ -76,15 +52,13 @@ Page({
         duration: 2000,
         icon: 'none'
       })
+      return 
     }
     //1.先调用上传
     let studentIdCards = wx.getStorageSync('qualification.images');
     let realName = wx.getStorageSync('applicant.realName')
     let applyPhone = wx.getStorageSync('applicant.applyPhone')
     let applyCode = wx.getStorageSync('applicant.applyCode')
-    let schoolName = wx.getStorageSync('school.schoolName');
-    let schoolAddress = wx.getStorageSync('school.schoolAddress')
-    let schoolDetailAddress = wx.getStorageSync('school.roomNo');
     studentIdCards = that.data.qualification.images.join(',')
     //2.提交申请
     wx.request({
@@ -93,11 +67,6 @@ Page({
         loginName: applyPhone,
         verifyCode: applyCode,
         realName: realName,
-        schoolName: schoolName,
-        province:that.data.province,
-        city:that.data.city,
-        area: that.data.county,
-        detailAddress:schoolDetailAddress,
         studentIdCards: studentIdCards
       },
       success: function (res) {
@@ -109,6 +78,7 @@ Page({
             duration: 2000
           })
         } else {
+          wx.clearStorageSync()
           wx.reLaunch({
             url: '/pages/thanks/thanks',
           })
@@ -120,68 +90,14 @@ Page({
           duration: 2000,
           icon: 'none'
         })
+      },
+      complete:function(){
       }
     })
 
   },
 
-  nextStepTwo: function (e) {
-    var that = this;
-    wx.getStorageSync({
-      key: 'school.schoolName',
-      success: function (res) {
-        that.setData({
-          'school.schoolName': res.data
-        })
-      },
-    })
-    wx.getStorageSync({
-      key: 'school.schoolAddress',
-      success: function (res) {
-        that.setData({
-          'school.schoolAddress': res.data
-        })
-      },
-    })
-    wx.getStorageSync({
-      key: 'school.roomNo',
-      success: function (res) {
-        that.setData({
-          'school.roomNo': res.data
-        })
-      },
-    })
-    var warn = '';
-    var schoolName = that.data.school.schoolName;
-    var schoolAddress = that.data.school.schoolAddress;
-    var roomNo = that.data.school.roomNo;
-    if (schoolName == '' || schoolName == undefined) {
-      warn = '请填写学校/小区名称';
-    } else if (schoolAddress == '' || schoolAddress == undefined) {
-      warn = '请输入学校/小区地址';
-    } else if (roomNo == '' || roomNo == undefined) {
-      warn = '请填写详细地址';
-    }
-
-    if (warn == '' || warn == undefined) {
-      wx.navigateTo({
-        url: '/pages/apply/apply?pageIndex=3',
-      })
-    } else {
-      wx.showToast({
-        title: warn,
-        duration: 2000,
-        icon: 'none'
-      })
-    }
-  },
-  getSchoolNameValue: function (e) {
-    let that = this;
-    that.setData({
-      'school.schoolName': e.detail.value
-    })
-    wx.setStorageSync('school.schoolName', e.detail.value)
-  },
+  
 
   getPhoneNumberValue: function (e) {
     let that = this;
@@ -193,13 +109,7 @@ Page({
 
 
 
-  getRoomNoValue: function (e) {
-    let that = this;
-    that.setData({
-      'school.roomNo': e.detail.value
-    })
-    wx.setStorageSync('school.roomNo', e.detail.value)
-  },
+
 
 
 
@@ -215,6 +125,8 @@ Page({
       warn = '请填写真实姓名';
     } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
       warn = '请填写正确的手机号';
+    } else if(applyCode == '' || applyCode == undefined || applyCode.length != 6){
+      warn = '请输入6位数字验证码'
     }
     if (warn != '') {
       wx.showToast({
@@ -304,8 +216,8 @@ Page({
       warn = '请填写真实姓名';
     } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
       warn = '请填写正确的手机号';
-    } else if (applyCode == '' || applyCode == undefined) {
-      warn = '请填写验证码';
+    } else if (applyCode == '' || applyCode == undefined || applyCode.length !=6) {
+      warn = '请填写6位验证码';
     }
     if (warn != '') {
       wx.showToast({
@@ -450,248 +362,36 @@ Page({
 
  
 
-  //滑动事件
-  bindChange: function (e) {
-    var val = e.detail.value
-    let that = this;
-    let provinces = that.data.provinces;
-    if (index[0] != val[0]) {
-      val[1] = 0;
-      val[2] = 0;
-      if (provinces != null && provinces.length > 0) {
-        let pid = provinces[val[0]].id;
-        let province = provinces[val[0]].name;
-        that.setData({
-          province: province
-        })
-        that.getCityArr(pid).then(res => {
-          let cityData = res.data.data;
-          if (cityData != null && cityData.length > 0) {
-            let city = cityData[0].name;
-            that.setData({
-              citys: res.data.data,
-              city: city
-            })
-            let cid = res.data.data[0].id
-            that.getCountyInfo(cid).then(countys => {
-              ///获取地级市数据
-              let countysData = countys.data.data;
-              if (countysData != null && countysData.length > 0) {
-                let county = countysData[0].name;
-                that.setData({
-                  countys: countys.data.data,
-                  county: county
-                })
-              }
-            })
-          }
-        });
-      }
-
-    } else {    //若省份column未做滑动，地级市做了滑动则定位区县第一位
-      if (index[1] != val[1]) {
-        val[2] = 0;
-        let citys = that.data.citys;
-        let cid = citys[val[1]].id;
-        let city = citys[val[1]].name;
-        that.getCountyInfo(cid).then(res => {
-          //获取区县数据
-          let resData = res.data.data;
-          if (resData != null) {
-            let county = resData[0].name
-            that.setData({
-              countys: res.data.data,
-              county: county,
-              city: city
-            })
-          }
-        })
-      } else if (index[2] != val[2]) {
-        //更新了區域
-        let countys = that.data.countys;
-        that.setData({
-          county: countys[val[2]].name
-        })
-      }
-    }
-    //更新数据
-    index = val;
-    let citys = that.data.citys;
-    let countys = that.data.countys;
-    that.setData({
-      value: [val[0], val[1], val[2]]
-    })
-  },
+ 
+ /**
+  * 
+  */
   onLoad: function (options) {
-    cellId = options.cellId;
     var that = this;
     that.setData({
       pageIndex: options.pageIndex
     })
     if (options.pageIndex == 1) {
+      wx.setNavigationBarTitle({
+        title: '基本信息',
+      })
       wx.clearStorageSync()
+    }else if(options.pageIndex ==2){
+      wx.setNavigationBarTitle({
+        title: '证件信息',
+      })
     }
     //获取省市区县数据
-    let pid = 0;
-    let cid =0;
-    let pname='';
-    let cname='';
-    that.getProvinceData().then(res1=>{
-      pid = res1.data.data[0].id;
-      pname = res1.data.data[0].name;
-      that.getCityArr(pid).then(res2 => {
-        cid = res2.data.data[0].id;
-        cname = res2.data.data[0].name;
-        that.getCountyInfo(cid).then(res3=>{
-          that.setData({
-              province: pname,
-              city: cname,
-              county: res3.data.data[0].name,
-            })
-        }).catch(res3=>{
-        })
-      }).catch(res2=>{
-      })
-    }).catch(res1=>{
-    })
-  },
-
-  // ---------------- 分割线 ---------------- 
-
-  //获取省份数据
-  getProvinceData: function() {
-    let that = this;
-    return new Promise(function (resolve, reject) {
-      wx.request({
-        url: app.globalData.serverUrl + 'suggest/province',
-        method: 'get',
-        success: (res) => {
-          that.setData({
-            provinces: res.data.data
-          })
-          resolve(res)
-        },
-        fail: res => {
-          reject(res)
-        }
-      })
-    })
-  },
-
-// 获取地级市数据
-getCityArr:function(pid) {
-    let that = this;
-    return new Promise(function (resolve, reject) {
-      wx.request({
-        url: app.globalData.serverUrl + 'suggest/city',
-        data: {
-          provinceId: pid
-        },
-        success: function (res) {
-          that.setData({
-            citys: res.data.data
-          })
-          resolve(res);
-        },
-        fail: res => {
-          reject(res)
-        }
-      })
-    })
   },
 
 
-// 获取区县数据
-getCountyInfo:function(cid){
-    let that = this;
-    return new Promise(function (resolve, reject) {
-      wx.request({
-        url: app.globalData.serverUrl + 'suggest/area',
-        data: {
-          cityId: cid
-        },
-        success: function (res) {
-          that.setData({
-            countys: res.data.data
-          })
-          resolve(res);
-        },
-        fail: function (res) {
-          reject(res)
-        }
-      })
-    })
-},
-
-
-  // ------------------- 分割线 --------------------
-  onReady: function () {
-    let that = this;
-    that.animation = wx.createAnimation({
-      transformOrigin: "50% 50%",
-      duration: 0,
-      timingFunction: "ease",
-      delay: 0
-    }
-    )
-    that.animation.translateY(200 + 'vh').step();
-    that.setData({
-      animation: this.animation.export(),
-      show: show
-    })
-  },
-  //移动按钮点击事件
-  translate: function (e) {
-    if (t == 0) {
-      moveY = 0;
-      show = false;
-      t = 1;
-    } else {
-      moveY = 200;
-      show = true;
-      t = 0;
-    }
-    animationEvents(this, moveY, show);
-  },
-  //隐藏弹窗浮层
-  hiddenFloatView(e) {
-    moveY = 200;
-    show = true;
-    t = 0;
-    let that = this;
-    let id = e.currentTarget.dataset.id;
-    if (id == 'makeSure') {
-      let addressName = that.data.province + ' ' + that.data.city + ' ' + that.data.county;
-      that.setData({
-        'school.schoolAddress': addressName
-      })
-      wx.setStorageSync('school.schoolAddress', addressName)
-    }
-    animationEvents(this, moveY, show);
-  },
   //页面滑至底部事件
   onReachBottom: function () {
     // Do something when page reach bottom.
   },
 })
 
-//动画事件
-function animationEvents(that, moveY, show) {
-  that.animation = wx.createAnimation({
-    transformOrigin: "50% 50%",
-    duration: 400,
-    timingFunction: "ease",
-    delay: 0
-  }
-  )
-  that.animation.translateY(moveY + 'vh').step()
 
-  that.setData({
-    animation: that.animation.export(),
-    show: show
-  })
-
-}
 
  
   

@@ -24,6 +24,13 @@ App({
               })
             }
           }
+        },
+        fail:function(e){
+          wx.showToast({
+            title: '请求失败，请稍候重试',
+            duration:2000,
+            icon:'none'
+          })
         }
       })
     }else{
