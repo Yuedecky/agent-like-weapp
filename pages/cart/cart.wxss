@@ -98,9 +98,14 @@ button::after{
   color: #221b1b;
 }
 
+.delivery-address{
+  height:100rpx;
+  display: flex;
+}
+
 .right-arrow{
-    width: 9px;
-    height: 9px;
+    width: 6px;
+    height: 6px;
     border-top: 2px solid #999;
     border-right: 2px solid #999;
     position: absolute;
@@ -128,9 +133,13 @@ button::after{
 .accept-address{
   margin-left: 10rpx;
   overflow:hidden;
-  vertical-align: middle;
-  white-space:wrap;
+  font-size: 26rpx;
+  text-overflow: ellipsis;
+  -webkit-line-clamp:2;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
 }
+
 .select-address{
   line-height: 150rpx;
   color: red;

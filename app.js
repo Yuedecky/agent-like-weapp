@@ -22,6 +22,10 @@ App({
               wx.reLaunch({
                 url: '/pages/login/login'
               })
+            }else{
+              wx.reLaunch({
+                url: '/pages/home/home?currentTab=0',
+              })
             }
           }
         },
@@ -65,6 +69,9 @@ App({
 
   onShow: function () {
     //隐藏系统tabbar
+    //1.检查网络状态
+    this.checkNetStat();
+    //2.
   },
   
   getSystemInfo: function () {
@@ -74,6 +81,19 @@ App({
         t.globalData.systemInfo = res;
       }
     });
+  },
+
+/**
+ * 检查网络状态
+ */
+  checkNetStat:function(){
+    let t = this;
+    wx.getNetworkType({
+      success: function(res) {
+          let networkType = res.networkType
+          t.globalData.networkType = networkType
+      },
+    })
   },
 
   editTabbar: function () {
@@ -92,9 +112,10 @@ App({
   },
   globalData: {
     logoName: '微券加盟',
-    logoUrl: 'https://www.wqyp.shop/data/images/logo/logo.jpeg',
+    logoUrl: 'https://www.wqyp.shop/data/images/logo/logo.jpeg?timestamp='+new Date(),
     version: 0.1,
     serverUrl:"https://www.wqyp.shop/",
-    tabbars:[]
+    tabbars:[],
+    networkType: '4G'
   }
 })

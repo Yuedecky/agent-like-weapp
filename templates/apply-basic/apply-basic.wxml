@@ -1,9 +1,6 @@
 <template name='basic-info'>
 <view class='page middle-center'>
-  <view class='basic-title bottom-100'>
-  基本信息
-  </view>
-   <view class='input-section flow-column middle-center'>
+   <view class='input-section flow-column middle-center top-100'>
   <view class='realname-input bottom-40'>
            <input type="text" value="{{realName}}" name="realName" maxlength='20' placeholder="请输入真实姓名" bindinput='getRealNameValue'/>
         </view>

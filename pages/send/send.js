@@ -354,6 +354,7 @@ Component({
       let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
       this.setData({
         mainHeight: h,
+        networkType: app.globalData.networkType
       });
       var that = this;
       let sliderWidth = that.data.silderWidth;

@@ -100,7 +100,6 @@ Page({
           "Authorization":auth
         },
         success:function(res){
-          console.log(res)
           let data = res.data;
           if(data.status !=200){
             wx.showToast({
@@ -281,7 +280,6 @@ Page({
   },
   //隐藏弹窗浮层
   hiddenFloatView(e) {
-    console.log(e);
     moveY = 200;
     show = true;
     t = 0;
@@ -291,6 +289,17 @@ Page({
       let addressName = that.data.province + ' ' + that.data.city + ' ' + that.data.county;
       that.setData({
         location: addressName
+      })
+    }else{
+      let location  = that.data.location.split(" ");
+      let province =  location[0];
+      let city = location[1];
+      let county = location[2];
+      that.setData({
+        location:that.data.location,
+        province:province,
+        city:city,
+        county:county
       })
     }
     animationEvents(this, moveY, show);
@@ -305,9 +314,11 @@ Page({
     let name = that.data.acceptorName;
     let phone = that.data.acceptorPhone;
     let gender = that.data.gender;
-    let province = that.data.province;
-    let city = that.data.city;
-    let area = that.data.county;
+    let location = that.data.location.split(' ');
+
+    let province = location[0];
+    let city = location[1]
+    let area = location[2];
     let detailAddress = that.data.detailAddress;
     let defaultChoose = that.data.defaultChoose;
     let warn = '';
@@ -319,6 +330,10 @@ Page({
       warn = "手机号码不能为空";
     } else if (phone.trim().length != 11 || !phoneReg.test(phone)) {
       warn = "手机号格式不正确";
+    }else if(detailAddress == null || detailAddress == undefined || detailAddress ==''){
+      warn = '请填写详细地址';
+    }else if(detailAddress.length > 30){
+      warn = '详细地址不要超过30字';
     }
     if(warn != ''){
       wx.showToast({

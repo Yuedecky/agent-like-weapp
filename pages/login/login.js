@@ -31,47 +31,7 @@ Page({
       logoName: app.globalData.logoName,
       logoUrl: app.globalData.logoUrl,
     })
-    let auth = wx.getStorageSync('token')
-    if (auth != null && auth != '') {
-      wx.request({
-        url: app.globalData.serverUrl + 'user/token/expires',
-        header: {
-          'Authorization': auth
-        },
-        success: function(res) {
-          let data = res.data;
-          if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              duration: 2000,
-              icon: 'none'
-            })
-          } else {
-            if (data.data) {
-
-            } else {
-              //token未过期
-              var id = setInterval(function() {
-                wx.showLoading({
-                  title: '正在自动登录',
-                  mask: true
-                })
-              }, 1000)
-              wx.reLaunch({
-                url: '/pages/home/home?currentTab=0',
-                success: function() {
-                  console.log('success relaunch...')
-                },
-                complete: function() {
-                  clearInterval(id)
-                  wx.hideLoading()
-                }
-              })
-            }
-          }
-        }
-      })
-    }
+    
   },
 
   getPhoneValue: function(e) {

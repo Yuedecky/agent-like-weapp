@@ -49,6 +49,7 @@ Component({
     let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
     this.setData({
       mainHeight: h,
+      networkType: app.globalData.networkType
     });
     // wx.showLoading({
     //   title: '加载中',

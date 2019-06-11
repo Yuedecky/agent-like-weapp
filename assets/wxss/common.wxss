@@ -48,6 +48,11 @@ margin-top:10rpx;
 .top-600{
   margin-top: 600rpx;
 }
+
+.top-100{
+  margin-top: 100rpx;
+}
+
 .flex-row{
   display: flex;
   flex-direction: row;

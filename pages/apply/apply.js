@@ -71,6 +71,7 @@ Page({
       },
       success: function (res) {
         let data = res.data;
+        console.log(res)
         if (data.status != 200) {
           wx.showToast({
             title: data.msg,
@@ -125,9 +126,7 @@ Page({
       warn = '请填写真实姓名';
     } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
       warn = '请填写正确的手机号';
-    } else if(applyCode == '' || applyCode == undefined || applyCode.length != 6){
-      warn = '请输入6位数字验证码'
-    }
+    } 
     if (warn != '') {
       wx.showToast({
         title: warn,

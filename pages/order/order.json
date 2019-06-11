@@ -1,6 +1,5 @@
 {
     "component": true,
-  "enablePullDownRefresh": false,
-  
+    "enablePullDownRefresh": false,
     "usingComponents": {}
 }

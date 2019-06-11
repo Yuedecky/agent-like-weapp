@@ -8,7 +8,9 @@ Page({
     myAddresses:[],
   },
 
-  
+  /**
+   * 删除地址
+   */
   deleteAddress:function(e){
     let that = this;
     let aid = e.currentTarget.dataset.addressId;
@@ -18,7 +20,7 @@ Page({
       content: '确定删除该地址？',
       success:function(res){
         if(res.cancel){
-
+          //
         }else{
           wx.request({
             url: app.globalData.serverUrl + 'address/delete',
@@ -30,7 +32,6 @@ Page({
             },
             success:function(e){
               let data = e.data;
-              console.log(data)
               if(data.status != 200){
                 wx.showToast({
                   title: data.msg,

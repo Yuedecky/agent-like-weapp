@@ -1,5 +1,6 @@
 <import src='/templates/footer/footer.wxml'/>
 <view class="index-container page">
+
   <view class="index-nav-left">
     <scroll-view scroll-y class='scroll-y' style='height:{{mainHeight}}px;'>
       <block wx:for="{{brands}}" wx:key="{{id}}" wx:for-item='item'>
