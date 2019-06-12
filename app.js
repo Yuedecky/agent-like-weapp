@@ -1,50 +1,44 @@
 //app.js
 App({
-  onLaunch: function () {
+  onLaunch: function() {
     this.getSystemInfo();
     let auth = wx.getStorageSync('token')
-    if(auth){
+    if (auth) {
       wx.request({
         url: this.globalData.serverUrl + 'user/token/expires',
         header: {
           'Authorization': auth
         },
-        success: function (res) {
+        success: function(res) {
           let data = res.data;
           if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              duration: 2000,
-              icon: 'none'
+            wx.clearStorageSync()
+            wx.reLaunch({
+              url: '/pages/login/login'
             })
           } else {
-            if (data.data) {
-              wx.reLaunch({
-                url: '/pages/login/login'
-              })
-            }else{
-              wx.reLaunch({
-                url: '/pages/home/home?currentTab=0',
-              })
-            }
+            wx.reLaunch({
+              url: '/pages/home/home?currentTab=0',
+              complete: function() {}
+            })
           }
         },
-        fail:function(e){
+        fail: function(e) {
           wx.showToast({
             title: '请求失败，请稍候重试',
-            duration:2000,
-            icon:'none'
+            duration: 2000,
+            icon: 'none'
           })
         }
       })
-    }else{
+    } else {
       wx.reLaunch({
         url: '/pages/login/login',
       })
     }
-    
+
     // 展示本地存储能力
-    
+
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -67,36 +61,36 @@ App({
   },
 
 
-  onShow: function () {
+  onShow: function() {
     //隐藏系统tabbar
     //1.检查网络状态
     this.checkNetStat();
     //2.
   },
-  
-  getSystemInfo: function () {
+
+  getSystemInfo: function() {
     let t = this;
     wx.getSystemInfo({
-      success: function (res) {
+      success: function(res) {
         t.globalData.systemInfo = res;
       }
     });
   },
 
-/**
- * 检查网络状态
- */
-  checkNetStat:function(){
+  /**
+   * 检查网络状态
+   */
+  checkNetStat: function() {
     let t = this;
     wx.getNetworkType({
       success: function(res) {
-          let networkType = res.networkType
-          t.globalData.networkType = networkType
+        let networkType = res.networkType
+        t.globalData.networkType = networkType
       },
     })
   },
 
-  editTabbar: function () {
+  editTabbar: function() {
     let tabbar = this.globalData.tabbars;
     let currentPages = getCurrentPages();
     let _this = currentPages[currentPages.length - 1];
@@ -112,10 +106,10 @@ App({
   },
   globalData: {
     logoName: '微券加盟',
-    logoUrl: 'https://www.wqyp.shop/data/images/logo/logo.jpeg?timestamp='+new Date(),
+    logoUrl: 'https://www.wqyp.shop/data/images/logo/logo.jpeg?timestamp=' + new Date(),
     version: 0.1,
-    serverUrl:"https://www.wqyp.shop/",
-    tabbars:[],
+    serverUrl: "https://www.wqyp.shop/",
+    tabbars: [],
     networkType: '4G'
   }
 })
