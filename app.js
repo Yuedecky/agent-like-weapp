@@ -2,42 +2,6 @@
 App({
   onLaunch: function() {
     this.getSystemInfo();
-    let auth = wx.getStorageSync('token')
-    if (auth) {
-      wx.request({
-        url: this.globalData.serverUrl + 'user/token/expires',
-        header: {
-          'Authorization': auth
-        },
-        success: function(res) {
-          let data = res.data;
-          if (data.status != 200) {
-            wx.clearStorageSync()
-            wx.reLaunch({
-              url: '/pages/login/login'
-            })
-          } else {
-            wx.reLaunch({
-              url: '/pages/home/home?currentTab=0',
-              complete: function() {}
-            })
-          }
-        },
-        fail: function(e) {
-          wx.showToast({
-            title: '请求失败，请稍候重试',
-            duration: 2000,
-            icon: 'none'
-          })
-        }
-      })
-    } else {
-      wx.reLaunch({
-        url: '/pages/login/login',
-      })
-    }
-
-    // 展示本地存储能力
 
     // 获取用户信息
     wx.getSetting({
@@ -60,12 +24,58 @@ App({
     })
   },
 
+  checkTokenExpires: function() {
+    let auth = wx.getStorageSync('token')
+    if (auth != '' && auth != null) {
+      wx.request({
+        url: this.globalData.serverUrl + 'user/token/expires',
+        header: {
+          Authorization: auth
+        },
+        success: function(res) {
+          let data = res.data;
+          if (data.status != 200) {
+            wx.showToast({
+              title: data.msg,
+              duration: 2000,
+              icon: 'none'
+            })
+          } else {
+            if (!data.data) {
+              wx.reLaunch({
+                url: '/pages/home/home?currentTab=0',
+                complete: function() {}
+              })
+              return
+            }
+          }
+          wx.clearStorageSync()
+          wx.reLaunch({
+            url: '/pages/login/login'
+          })
+        },
+        fail: function(e) {
+          wx.showToast({
+            title: '请求失败，请稍候重试',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
+      })
+    }
+    wx.reLaunch({
+      url: '/pages/login/login',
+    })
+
+  },
+
 
   onShow: function() {
     //隐藏系统tabbar
     //1.检查网络状态
     this.checkNetStat();
     //2.
+    this.checkTokenExpires();
   },
 
   getSystemInfo: function() {
