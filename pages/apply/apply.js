@@ -1,7 +1,20 @@
 const promisify = require('../../assets/js/promise.util.js');
-import { $init, $digest } from '../../assets/js/common.util';
+import {
+  $init,
+  $digest
+} from '../../assets/js/common.util';
+import {
+  FileModel
+} from '../../models/fileModel.js';
+
+import {
+  CodeModel
+} from '../../models/codeModel.js';
+
 var app = getApp();
 
+const fileModel = new FileModel();
+const codeModel = new CodeModel();
 Page({
   /**
    * 页面的初始数据
@@ -18,7 +31,7 @@ Page({
       applyPhone: '',
       applyCode: '',
     },
-   
+
     qualification: {
       images: [],
       upImgUrl: '',
@@ -27,18 +40,11 @@ Page({
     pageIndex: 1,
     warn: '',
 
-    barTitle:''
+    barTitle: ''
   },
 
-  uploadImageFile: function (idx) {
-    let that = this;
-    var imgList = that.data.qualification.images;
-    let storeImages = wx.getStorageSync('qualification.images')
-    if (!storeImages) {
-      storeImages = []
-    }
-  },
-  submitApply: function (data) {
+
+  submitApply: function(data) {
     var that = this;
     var warn = '';
     if (that.data.qualification.images.length < 1) {
@@ -52,7 +58,7 @@ Page({
         duration: 2000,
         icon: 'none'
       })
-      return 
+      return
     }
     //1.先调用上传
     let studentIdCards = wx.getStorageSync('qualification.images');
@@ -69,9 +75,8 @@ Page({
         realName: realName,
         studentIdCards: studentIdCards
       },
-      success: function (res) {
+      success: function(res) {
         let data = res.data;
-        console.log(res)
         if (data.status != 200) {
           wx.showToast({
             title: data.msg,
@@ -85,22 +90,21 @@ Page({
           })
         }
       },
-      fail: function (res) {
+      fail: function(res) {
         wx.showToast({
           title: '申请失败，请联系客服',
           duration: 2000,
           icon: 'none'
         })
       },
-      complete:function(){
-      }
+      complete: function() {}
     })
 
   },
 
-  
 
-  getPhoneNumberValue: function (e) {
+
+  getPhoneNumberValue: function(e) {
     let that = this;
     that.setData({
       'applicant.applyPhone': e.detail.value
@@ -115,7 +119,7 @@ Page({
 
 
 
-  getApplyCode: function (e) {
+  getApplyCode: function(e) {
     var that = this;
     var realName = wx.getStorageSync('applicant.realName');
     var applyPhone = wx.getStorageSync('applicant.applyPhone');
@@ -126,7 +130,7 @@ Page({
       warn = '请填写真实姓名';
     } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
       warn = '请填写正确的手机号';
-    } 
+    }
     if (warn != '') {
       wx.showToast({
         title: warn,
@@ -142,7 +146,7 @@ Page({
         phone: that.data.applicant.applyPhone,
         type: 2
       },
-      success: function (e) {
+      success: function(e) {
         let data = e.data;
         if (data.status != 200) {
           wx.showToast({
@@ -159,7 +163,7 @@ Page({
         }
         //start
         //设置一分钟的倒计时
-        var interval = setInterval(function () {
+        var interval = setInterval(function() {
           currentTime--; //每执行一次让倒计时秒数减一
           that.setData({
             codeDisabled: true,
@@ -177,7 +181,7 @@ Page({
           }
         }, 1000);
       },
-      fail: function (e) {
+      fail: function(e) {
         console.log(e)
         wx.showToast({
           title: '发送失败',
@@ -188,7 +192,7 @@ Page({
   },
 
 
-  getRealNameValue: function (e) {
+  getRealNameValue: function(e) {
     let that = this;
     that.setData({
       'applicant.realName': e.detail.value
@@ -196,7 +200,7 @@ Page({
     wx.setStorageSync('applicant.realName', e.detail.value)
   },
 
-  getCodeValue: function (e) {
+  getCodeValue: function(e) {
     let that = this;
     that.setData({
       'applicant.applyCode': e.detail.value
@@ -204,7 +208,7 @@ Page({
     wx.setStorageSync('applicant.applyCode', e.detail.value)
   },
 
-  nextStepOne: function (e) {
+  nextStepOne: function(e) {
     var that = this;
     var realName = wx.getStorageSync('applicant.realName');
     var applyPhone = wx.getStorageSync('applicant.applyPhone');
@@ -215,7 +219,7 @@ Page({
       warn = '请填写真实姓名';
     } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
       warn = '请填写正确的手机号';
-    } else if (applyCode == '' || applyCode == undefined || applyCode.length !=6) {
+    } else if (applyCode == '' || applyCode == undefined || applyCode.length != 6) {
       warn = '请填写6位验证码';
     }
     if (warn != '') {
@@ -226,39 +230,24 @@ Page({
       })
       return
     } else {
-      wx.request({
-        url: app.globalData.serverUrl + 'verify/code/pre/check',
-        data: {
-          phone: wx.getStorageSync('applicant.applyPhone'),
-          verifyCode: wx.getStorageSync('applicant.applyCode'),
-          type: 2,
-        },
-        success: function (e) {
-          let data = e.data;
-          if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              duration: 2000,
-              icon: 'none'
-            })
-          } else {
-            wx.navigateTo({
-              url: '/pages/apply/apply?pageIndex=2'
-            })
-          }
-        },
-        fail: function (e) {
+      codeModel.preCheck(applyCode, applyPhone, 2).then(res => {
+        if (res.status == 200) {
+          wx.navigateTo({
+            url: '/pages/apply/apply?pageIndex=2'
+          })
+        } else {
           wx.showToast({
-            title: '无法发送请求',
+            title: res.msg,
             duration: 2000,
             icon: 'none'
           })
         }
       })
     }
-
   },
-  longPress: function (e) {
+
+
+  longPress: function(e) {
     console.log(e)
     let that = this;
     let images = that.data.qualification.images;
@@ -266,7 +255,7 @@ Page({
     wx.showModal({ //使用模态框提示用户进行操作
       title: '提示',
       content: '确定删除该图片?',
-      success: function (res) {
+      success: function(res) {
         if (res.confirm) { //判断用户是否点击了确定
           images.splice(index, 1)
           that.setData({
@@ -276,40 +265,23 @@ Page({
       }
     })
   },
-  chooseImage: function () {
+
+  chooseImage: function() {
     var that = this;
-    var imgArr = that.data.qualification.images;
-    wx.chooseImage({
-      count: 3, // 默认9
-      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-      success: function (res) {
-        var tempFilePaths = res.tempFilePaths
-        wx.uploadFile({
-          url: app.globalData.serverUrl + 'upload', //开发者服务器 url
-          filePath: tempFilePaths[0],
-          name: 'file',
-          success: function (res) {
-            let data = JSON.parse(res.data)
-            let url = data.data;
-            imgArr.push(url);
-            that.setData({
-              'qualification.images': imgArr
-            })
-          },
-          fail: function (res) {
-            console.log(res)
-            wx.showToast({
-              title: res.errMsg,
-              duration: 2000,
-              icon: 'none'
-            })
-          },
-        })
-      }
+    wx.setStorageSync('chooseImageFlag', true)
+    let imgArr = that.data.qualification.images || [];
+    fileModel.chooseImage().then((res) => {
+      let data = res[0];
+      return fileModel.uploadFile(data)
+    }).then(res => {
+      imgArr.push(JSON.parse(res).data)
+      that.setData({
+        'qualification.images': imgArr
+      })
     })
   },
-  previewImage: function (e) {
+
+  previewImage: function(e) {
     let that = this;
     wx.previewImage({
       current: e.currentTarget.id, // 当前显示图片的http链接
@@ -326,46 +298,46 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-
+  onUnload: function() {
+    console.log('进来了onUnload')
   },
 
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
- 
 
- 
- /**
-  * 
-  */
-  onLoad: function (options) {
+
+
+  /**
+   * 
+   */
+  onLoad: function(options) {
     var that = this;
     that.setData({
       pageIndex: options.pageIndex
@@ -375,22 +347,11 @@ Page({
         title: '基本信息',
       })
       wx.clearStorageSync()
-    }else if(options.pageIndex ==2){
+    } else if (options.pageIndex == 2) {
       wx.setNavigationBarTitle({
         title: '证件信息',
       })
     }
-    //获取省市区县数据
   },
 
-
-  //页面滑至底部事件
-  onReachBottom: function () {
-    // Do something when page reach bottom.
-  },
 })
-
-
-
- 
-  

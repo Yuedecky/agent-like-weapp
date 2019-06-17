@@ -61,7 +61,7 @@ App({
           })
         }
       })
-    }else{
+    } else {
       wx.reLaunch({
         url: '/pages/login/login',
       })
@@ -73,7 +73,12 @@ App({
     //隐藏系统tabbar
     //1.检查网络状态
     this.checkNetStat();
-    this.checkTokenExpires();
+    const chooseImgFlag = wx.getStorageSync('chooseImageFlag')
+    if (!chooseImgFlag) {
+      this.checkTokenExpires();
+    } else {
+      return
+    }
   },
 
   getSystemInfo: function() {

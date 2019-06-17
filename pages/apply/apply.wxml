@@ -1,11 +1,10 @@
 <import src="/templates/apply-basic/apply-basic.wxml"></import>
-<import src="/templates/apply-address/apply-address.wxml"></import>
 <import src="/templates/apply-qualification/apply-qualification.wxml"></import>
-<view class='page'>
-<view wx:if="{{pageIndex == 1}}">
-  <template is='basic-info' data="{{text:codeText,codeDisabled:codeDisabled}}"></template>
-</view>
-<view wx:if="{{pageIndex ==2}}">
-    <template is="qualification-info" data="{{...qualification}}"></template>
-</view>
+<view>
+  <view wx:if="{{pageIndex == 1}}">
+    <template is='basic-info' data="{{text:codeText,codeDisabled:codeDisabled}}" />
+  </view>
+  <view wx:else>
+    <template is="qualification-info" data="{{...qualification}}" />
+  </view>
 </view>

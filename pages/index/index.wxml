@@ -15,7 +15,7 @@
         <block wx:for="{{products}}" wx:key="id">
           <view class='product-container'>
             <v-product product="{{item}}" class='product' />
-            <image src='/assets/images/add-cart.png' class='add-cart' bindtap='onAddCart' data-pid='{{item.id}}'></image>
+            <image src='/assets/images/add-cart.png' class='add-cart' bind:tap='onAddCart' data-pid='{{item.id}}'></image>
           </view>
         </block>
         <view wx:if="{{!loadFlag}}">

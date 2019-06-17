@@ -1,5 +1,5 @@
 <template name='qualification-info'>
-<view class="page__bd">
+<view class="page">
        <view class="weui-cells">
            <view class="weui-cell">
                <view class="weui-cell__bd">
@@ -17,7 +17,7 @@
                                </block>
                            </view>
                            <view class="weui-uploader__input-box" wx:if='{{images.length<=2}}'>
-                               <view class="weui-uploader__input " bindtap="chooseImage"></view>
+                               <view class="weui-uploader__input " catchtap="chooseImage"></view>
                            </view>
                        </view>
                    </view>

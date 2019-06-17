@@ -1,10 +1,10 @@
 <!-- 组件显示 -->
 <view class='home-container'>
 <view hidden="{{currentTab == 0? false: true}}">
-  <index bind:homeReceiveFromIndex='homeCartCallBack'/>
+  <index bind:onAddCart='onAddCart'/>
 </view>
 <view hidden="{{currentTab == 1? false: true}}">
-  <cart id='#cart' shopcarData="{{shopcarData}}"/>
+  <cart id='cart' shopcarData="{{shopcarData}}"/>
 </view>
 <view hidden="{{currentTab == 2? false: true}}">
   <order id='order'/>

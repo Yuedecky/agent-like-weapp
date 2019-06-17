@@ -1,9 +1,14 @@
+import {
+  CartModel
+} from '../../models/cartModel.js';
 let app = getApp()
+const cartModel = new CartModel();
 
 Page({
   data: {
     currentTab: 0,
     items: [],
+    shopcarData: []
   },
 
   swichNav: function(e) {
@@ -18,20 +23,47 @@ Page({
     }
   },
 
-  onUpdateCart:function(){
-    console.log("in home onUpdateCart")
-    const cart =this.selectComponent("#cart");
-    console.log(cart)
+  onAddCart: function(event) {
+    let {
+      pid
+    } = event.detail;
+    cartModel.addCart(pid).then((res) => {
+      if (res.status != 200) {
+        wx.showToast({
+          title: res.msg,
+          duration: 2000,
+          icon: 'none'
+        })
+      } else {
+        wx.showToast({
+          title: '加购成功',
+          duration: 2000,
+          icon: 'success'
+        })
+      }
+    })
+    let cart = this.selectComponent("#cart");
+    cartModel.getCartList({}).then((res) => {
+      let data = res.data;
+      cart.setData({
+        shopcarData: data.list,
+        count: data.list != null ? data.list.length : 0,
+        canRequest:true,
+        loadFlag:true
+      })
+    })
   },
+
+ 
 
   onLoad: function(option) {
     let that = this;
     let role = wx.getStorageSync('role')
-    if(!option.currentTab){
+    if (!option.currentTab) {
       that.setData({
         currentTab: 0
       })
-    }else{
+    } else {
       that.setData({
         currentTab: option.currentTab
       })
@@ -88,6 +120,5 @@ Page({
       })
     }
   },
-  onShow: function() {
-  }
+  onShow: function() {}
 })

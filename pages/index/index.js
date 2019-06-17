@@ -91,10 +91,10 @@ Component({
             canRequest: true
           })
           let brandCode = that.data.current;
-          ++this.properties.pageNum;
+          let pageNum = that.data.pageNum + 1;
           productModel.getPageProducts({
             bcode: brandCode,
-            pageNum: this.properties.pageNum
+            pageNum: pageNum
           }).then((res) => {
             let products = res.data.list;
             const tempData = that.data.products.concat(products);
@@ -102,7 +102,8 @@ Component({
               products: tempData,
               count: tempData.length,
               canRequest: (tempData.length) < res.data.page.total,
-              loadFlag: (tempData.length) < res.data.page.total
+              loadFlag: (tempData.length) < res.data.page.total,
+              pageNum: pageNum
             })
           });
         } else {
@@ -117,29 +118,17 @@ Component({
     onAddCart: function(e) {
       let that = this;
       let pid = e.currentTarget.dataset.pid;
-      cartModel.addCart(pid).then((res) => {
-        if (res.status != 200) {
-          wx.showToast({
-            title: res.msg,
-            duration: 2000,
-            icon: 'none'
-          })
-        } else {
-          that.triggerEvent('onUpdateCart', {}, {})
-          wx.showToast({
-            title: '加购成功',
-            duration: 2000,
-            icon: 'success'
-          })
-        }
-      })
+      this.triggerEvent('onAddCart', {
+        pid: pid
+      }, {})
     },
 
     brandTap: function(e) {
       let that = this;
       let bcode = e.currentTarget.dataset.code;
       that.setData({
-        current: bcode
+        current: bcode,
+        pageNum: 1
       })
       wx.showLoading({
         title: '加载中...',
@@ -147,10 +136,15 @@ Component({
       productModel.getPageProducts({
         bcode: bcode
       }).then((res) => {
-        that.setData({
-          products: res.data.list,
-          count: 0,
-        })
+        const list = res.data.list;
+        const page = res.data.page;
+        if (list != null) {
+          that.setData({
+            products: list,
+            canRequest: list.length < page.total,
+            count: list.length,
+          })
+        }
         wx.hideLoading()
       })
     }

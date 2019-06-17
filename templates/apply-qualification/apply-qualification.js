@@ -5,7 +5,6 @@ Page({
    */
   data: {
     images: [],//临时图片地址
-    upImgUrl: 'https://........'//上传图片服务器地址
   },
 
 

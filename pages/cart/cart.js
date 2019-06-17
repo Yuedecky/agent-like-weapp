@@ -4,6 +4,11 @@ import {
 import {
   CartModel
 } from '../../models/cartModel.js';
+
+import {
+  Config
+} from '../../config.js';
+
 var app = getApp();
 const addressModel = new AddressModel();
 const cartModel = new CartModel();
@@ -31,10 +36,9 @@ Component({
     cartColor: '#006699',
     hasDefaultAddress: false,
 
-
-    canRequest: false,
-    maxCount: 250,
+    canRequest: true,
     loadFlag: true,
+    pageNum: 1,
     count: 0,
 
     touchDown: 0,
@@ -44,12 +48,9 @@ Component({
     scrollTop: 0,
   },
   properties: {
-    name: {
-      type: String,
-      value: 'cart'
+    cartList: {
+      type: Array,
     },
-
-
   },
 
   observers: {
@@ -82,12 +83,8 @@ Component({
       }
       this.getCartMainData();
     },
-    ready: function() {
-      console.log('cart ready')
-    },
-    detached: function() {
-      console.log('cart detached')
-    },
+    ready: function() {},
+    detached: function() {},
   },
   methods: {
     onAddressDetail(event) {
@@ -105,26 +102,26 @@ Component({
       Promise.all([address, cart]).then((res) => {
         const address = res[0].data;
         const cartList = res[1].data.list;
+        const page = res[1].data.page;
         that.setData({
           address: address.address,
           name: address.addressee,
           phone: address.phone,
           addressId: address.id
         });
-        that.setData({
+        if (cartList != null) {
+          that.setData({
+            shopcarData: cartList,
+            count: cartList.length,
+            canRequest: cartList.length < page.total
+          })
+        }
+        this.triggerEvent('updateHomeCart', {
           shopcarData: cartList
-        })
+        }, {})
       })
     },
 
-    onUpdateCart(){
-      console.log('onUpdateCart')
-      cartModel.getCartList({}).then((res)=>{
-        that.setData({
-          shopcarData:res.data.list
-        })
-      })
-    },
 
     cartScrollDown: function() {
       let that = this;
@@ -132,71 +129,64 @@ Component({
         wx.showLoading({
           title: '加载中',
         })
-        if (that.data.count < that.data.maxCount) {
-          let auth = wx.getStorageSync('token')
-          let pageNum = that.data.pageNum + 1;
-          that.setData({
-            pageNum: pageNum
-          })
+        if (that.data.count < Config.maxCount) {
           if (that.data.loadFlag) {
-
-            wx.request({
-              url: app.globalData.serverUrl + 'choose/list',
-              header: {
-                'Authorization': auth
-              },
-              data: {
-                pageNum: that.data.pageNum, // 继续请求
-                pageSize: that.data.pageSize, // 每次请求的数目
-              },
-              success: function(res) {
-                let data = res.data;
-                if (data.status == 200) {
-                  let list = res.data.data.list;
-                  if (list != null && list.length > 0) {
-                    if (that.data.allsel) {
-                      for (var i = 0; i < list.length; i++) {
-                        list[i].check = true
-                      }
+            let shopcarData = that.data.shopcarData;
+            let size = (shopcarData.length || 0) % Config.cart.pageSize == 0;
+            let pageNum = !size ? that.data.pageNum : that.data.pageNum + 1;
+            cartModel.getCartList({
+              pageSize: Config.cart.pageSize,
+              pageNum: pageNum
+            }).then((res) => {
+              let data = res.data;
+              if (res.status == 200) {
+                let list = data.list;
+                if (list != null && list.length > 0) {
+                  if (that.data.allsel) {
+                    for (var i = 0; i < list.length; i++) {
+                      list[i].check = true
                     }
-                    let tempData = that.data.shopcarData.concat(list);
-                    that.setData({
-                      count: that.data.count + that.data.pageNum * that.data.pageSize,
-                      loadFlag: tempData.length >= parseInt(res.data.data.page.total) ? false : true,
-                      canRequest: tempData.length >= parseInt(res.data.data.page.total) ? false : true,
-                      pageNum: ++pageNum,
-                    })
-                    that.computePriceAndRebate(tempData, that.data.allsel);
                   }
+                  let tempData = [];
+                  if (pageNum > that.data.pageNum) {
+                    tempData = that.data.shopcarData.concat(list);
+                  } else {
+                    tempData = list;
+                  }
+                  that.setData({
+                    count: that.data.count + that.properties.pageNum * Config.pageSize,
+                    loadFlag: tempData.length < parseInt(data.page.total),
+                    canRequest: tempData.length < parseInt(data.page.total),
+                    pageNum: pageNum,
+                    shopcarData: tempData
+                  })
+                  that.computePriceAndRebate(tempData, that.data.allsel);
                 } else {
-                  wx.showToast({
-                    title: data.msg,
-                    duration: 1500,
-                    icon: 'none'
+                  that.setData({
+                    loadFlag: false,
+                    canRequest: false
                   })
                 }
-              },
-              fail: function(err) {
+              } else {
                 wx.showToast({
-                  title: '下拉加载商品失败',
+                  title: data.msg,
                   duration: 1500,
                   icon: 'none'
                 })
-              },
-              complete: function() {
-                wx.hideLoading()
               }
             })
-          } else {
-            return
           }
         } else {
-          console.log('已经不能加载了')
           this.setData({
             canRequest: false,
             loadFlag: false,
           })
         }
+        wx.hideLoading()
+      } else {
+        that.setData({
+          loadFlag: false
+        })
       }
     },
 
@@ -275,41 +265,12 @@ Component({
         })
         return
       }
-      wx.request({
-        url: app.globalData.serverUrl + 'choose/del',
-        data: {
-          chooseIds: del.join(',')
-        },
-        header: {
-          'Authorization': auth
-        },
-        success: function(res) {
-          let data = res.data;
-          if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              duration: 2000,
-              icon: 'none'
-            })
-          } else {
-            wx.showToast({
-              title: '移出成功',
-              duration: 2000,
-              icon: 'success'
-            })
-            that.setData({
-              shopcarData: allsel ? [] : shopcar,
-              total: 0,
-              totalRebate: 0,
-              selarr: [],
-              checkedCount: 0,
-              totalNum: shopcar.length,
-              cartDisabled: that.data.selarr.length < 1,
-              cartColor: !that.data.selarr.length < 1 ? '#006699' : '',
-              loadFlag: !shopcar.length < 1
-            });
-          }
-        }
+      cartModel.removeCart(del).then((res) => {
+        return cartModel.getCartList({})
+      }).then((res) => {
+        that.setData({
+          shopcarData: res.data.list
+        })
       })
     },
 
