@@ -64,7 +64,7 @@ Component({
       var res = wx.getSystemInfoSync();
       var device = new RegExp("iOS");
       var result = device.test(res.system);
-      let tmp = 180;
+      let tmp = 172;
       let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
       this.setData({
         mainHeight: h,
@@ -148,10 +148,10 @@ Component({
                     }
                   }
                   let tempData = [];
-                  if (pageNum > that.data.pageNum) {
+                  if (that.data.pageNum < pageNum) {
                     tempData = that.data.shopcarData.concat(list);
                   } else {
-                    tempData = list;
+                    tempData = that.data.shopcarData;
                   }
                   that.setData({
                     count: that.data.count + that.properties.pageNum * Config.pageSize,
@@ -269,8 +269,17 @@ Component({
         return cartModel.getCartList({})
       }).then((res) => {
         that.setData({
-          shopcarData: res.data.list
+          shopcarData: res.data.list,
+          allsel: false,
+          selarr: [],
+          checkedCount: 0,
+          cartDisabled: true,
         })
+      })
+      let shopcars = that.data.shopcarData;
+      const pageNum = shopcars.length % Config.cart.pageSize == 0 ? that.data.pageNum - 1 : that.data.pageNum;
+      that.setData({
+        pageNum: pageNum
       })
     },
 

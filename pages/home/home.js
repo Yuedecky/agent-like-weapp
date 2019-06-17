@@ -1,6 +1,11 @@
 import {
   CartModel
 } from '../../models/cartModel.js';
+
+import {
+  Config
+} from '../../config.js';
+
 let app = getApp()
 const cartModel = new CartModel();
 
@@ -43,18 +48,24 @@ Page({
       }
     })
     let cart = this.selectComponent("#cart");
-    cartModel.getCartList({}).then((res) => {
+    const shopcarData = cart.data.shopcarData;
+    const pageNum = shopcarData.length % Config.cart.pageSize == 0 ? cart.data.pageNum + 1 : cart.data.pageNum;
+    cartModel.getCartList({
+      pageNum: pageNum
+    }).then((res) => {
       let data = res.data;
+      let tempData = shopcarData;
+      tempData.concat(data.list);
       cart.setData({
-        shopcarData: data.list,
-        count: data.list != null ? data.list.length : 0,
-        canRequest:true,
-        loadFlag:true
+        shopcarData: tempData,
+        count: tempData.length,
+        canRequest: tempData.length < data.page.total,
+        loadFlag: tempData.length < data.page.total
       })
     })
   },
 
- 
+
 
   onLoad: function(option) {
     let that = this;

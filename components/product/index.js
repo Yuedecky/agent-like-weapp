@@ -8,7 +8,7 @@ Component({
   methods:{
     onTapProduct:function(event){
       this.triggerEvent('productTap',{
-        pid:this.properties.book.id
+        pid:this.properties.product.id
       },
       {})      
     }

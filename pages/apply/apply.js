@@ -97,7 +97,9 @@ Page({
           icon: 'none'
         })
       },
-      complete: function() {}
+      complete: function() {
+        wx.clearStorageSync()
+      }
     })
 
   },
