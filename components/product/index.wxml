@@ -1,0 +1,21 @@
+<view bind:tap='onTapProduct' class='product-container'>
+  <view class='sub-container-left'>
+    <image src="{{product.coverImg}}" mode="aspectFit" class='product-image'/>
+  </view>
+  <view class='sub-container-right'>
+    <view class='product-name'>{{product.name}}</view>
+    <view class='product-desc'>{{product.color}}/{{product.memory}}</view>
+    <view class='product-price'>
+      <text>官网价：</text>
+      <text class='middle-line'>{{product.orgPrice}}</text>
+    </view>
+    <view class='product-price'>
+      <text>销售价：</text>
+      <text class='price-info'>{{product.platformPrice}}</text>
+    </view>
+    <view class='product-price'>提成：
+      <text class='price-info'>{{product.rebatePrice}}</text>
+    </view>
+  </view>
+
+</view>

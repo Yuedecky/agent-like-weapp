@@ -14,38 +14,32 @@
   line-height: 40rpx;
 }
 .scroll-y{
-    width: 25%;
+    width: 26%;
     position: fixed;
     left: 0;
     top: 0;
-    border-right: 1rpx solid #efefef;
-}
-.index-nav-left{
-  width : 25%;
-  height: 100%;
-}
-.index-nav-right {
-  width:75%;
-  height: 100%;
-}
-.nav-left-item {
-  justify-content: center;
-  align-items: center;
-  height: 100rpx;
-  line-height: 100rpx;
-  border-bottom: 1px solid #dedede;
-  font-size: 32rpx;
-  border-right: 1px solid #dedede;
-  color: #333;
 }
 
-.active {
-  border-left: 4rpx solid #006699;
-  color:#006699;
-  background: #f5f5f5;
-  border-right: none;
-  font-weight: bold;
+.index-nav-left{
+  width : 26%;
 }
+
+.index-nav-right {
+  width:74%;
+  height: 100%;
+}
+
+.product-container{
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+.product{
+  width: 94%;
+}
+
+
+
 
 .item-left-block{
   width: 32%;
@@ -58,54 +52,11 @@
   align-items: center;
 }
 
-.left-section{
-  width: 90%;
-  height:100%;
-}
-.right-section{
-  width: 10%;
-  height: 100%;
-}
-
-.offical-price {
-  color: #333;
-  text-decoration:line-through;
-}
-
-.right-image-item {
-  width: 100%;
-  height: 100%;
-}
-
-.item-name {
-  font-size: 34rpx;
-  font-weight: bold;
-  overflow: hidden;
-  line-height: 40rpx;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.item-desc{
-  font-size: 30rpx;
-  overflow: hidden;
-  line-height: 40rpx;
-  white-space: nowrap;
-  color: #666;
-}
-.price-info{
-  color: red;
-}
-
-.item-price,.item-commission{
-  font-size: 28rpx;
-  color: #666;
-  line-height: 32rpx;
-}
 
 .add-cart{
+  position: absolute;
+  bottom: 38rpx;
+  right: 30rpx;
   width: 40rpx;
   height: 40rpx;
-  margin-top: 130rpx;
-  margin-left: -40rpx;
 }

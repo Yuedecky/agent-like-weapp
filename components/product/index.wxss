@@ -1,0 +1,51 @@
+.product-container {
+  display: flex;
+}
+
+.sub-container-left {
+  width: 40%;
+  margin-left: 2rpx;
+}
+
+.product-image {
+  width: 198rpx;
+  height: 220rpx;
+}
+
+.sub-container-right {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  padding-top: 10rpx;
+}
+
+.product-name {
+  font-size: 34rpx;
+  font-weight: bold;
+  overflow: hidden;
+  line-height: 40rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.product-desc {
+  font-size: 30rpx;
+  overflow: hidden;
+  line-height: 40rpx;
+  white-space: nowrap;
+  color: #666;
+}
+
+.price-info {
+  color: red;
+}
+
+middle-line{
+  text-decoration: line-through;
+}
+
+.product-price {
+  font-size: 28rpx;
+  color: #222;
+  line-height: 34rpx;
+}

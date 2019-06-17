@@ -4,12 +4,8 @@ Page({
   data: {
     currentTab: 0,
     items: [],
-
-
-    //cart start
-    pids: []
-    //cart end
   },
+
   swichNav: function(e) {
     let that = this;
     if (this.data.currentTab === e.target.dataset.current) {
@@ -22,22 +18,20 @@ Page({
     }
   },
 
-
-  homeCartCallBack: function(event) {
-    let pid = event.detail.pid;
-    let that = this;
-    let pids = that.data.pids || [];
-    that.setData({
-      pids: pids.concat(pid)
-    })
-    let cart = that.selectComponent("#cart")
-    console.log('typeof cart:', typeof cart)
+  onUpdateCart:function(){
+    console.log("in home onUpdateCart")
+    const cart =this.selectComponent("#cart");
+    console.log(cart)
   },
 
   onLoad: function(option) {
     let that = this;
     let role = wx.getStorageSync('role')
-    if (option.currentTab != null && option.currentTab != undefined) {
+    if(!option.currentTab){
+      that.setData({
+        currentTab: 0
+      })
+    }else{
       that.setData({
         currentTab: option.currentTab
       })
@@ -95,8 +89,5 @@ Page({
     }
   },
   onShow: function() {
-    let that = this;
-    let tab = that.data.currentTab;
-    app.checkTokenExpires();
   }
 })

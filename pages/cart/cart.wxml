@@ -1,109 +1,61 @@
-<import src="/templates/footer/footer.wxml"/>
+<import src="/templates/footer/footer.wxml" />
 <view class='page cart-wraper flex-column'>
   <view class='header-wrapper'>
-  <view class='delivery-scope flex-row' catchtap='onSwithAddress'>
-    <view class='delivery-img'>
-          <image class='address-img' src='/assets/images/address.png'></image>
+    <v-address-select name="{{name}}" phone="{{phone}}" bind:addressTap="onAddressDetail" address="{{address}}" />
+    <view class='manage-header'>
+      <view class='check-box'>
+        <image class='check-img' src='/assets/images/unchecked.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
+        <image class='check-img' src='/assets/images/check.png' hidden='{{!allsel}}' catchtap='allcheckTap'></image>
+        <text class='check-text' catchtap='allcheckTap'>全选</text>
+      </view>
+      <view>
+        <view class='header-text' catchtap='adminTap'>{{adminShow?'完成':'管理'}}</view>
+      </view>
     </view>
-    <view class='flex-column delivery-body'>
-      <view class='delivery-info flex-row'>
-        <view class='delivery-name'>{{deliveryName}}</view>
-        <view class='delivery-name'>{{deliveryPhone}}</view>
-      </view>
-      <view class='delivery-address'>
-        <view class='accept-address' wx:if="{{hasDefaultAddress}}">收货地址：{{deliveryAddress}}</view>
-        <view class='select-address' wx:if="{{!hasDefaultAddress}}">请选择收货地址</view>
-      </view>
-      </view>
-      <view class='right-arrow' ></view>
-  </view>
-  <view class='flex-row manage-header'>
-  <view class='check-box'>
-     <image class='check-img' src='/assets/images/unchecked.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
-     <image class='check-img' src='/assets/images/check.png' hidden='{{!allsel}}' catchtap='allcheckTap'></image>        
-     <text class='check-text' catchtap='allcheckTap'>全选</text>
-  </view>
-  <view><text class='header-text' catchtap='adminTap'>{{adminShow?'完成':'管理'}}</text></view>
-  </view>
   </view>
   <view class='cart-main'>
-    <scroll-view class='main-scroll' scroll-y style='height:{{mainHeight}}px;' bindscrolltolower='scrollDown'  bindtouchstart="start_fn" bindtouchend='end_fn' scroll-top='{{scrollTop}}' id="cart-scroll-wrap">
+    <scroll-view scroll-y style='height:{{mainHeight}}px;' bindscrolltolower='cartScrollDown' scroll-top='{{scrollTop}}'>
       <view class='main-list' id="inner-wrap">
         <block wx:for='{{shopcarData}}' wx:key='id' wx:for-item='item' wx:for-index='index'>
-          <view class='flex-row shop'>
-          <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>
-              <image class='check-img' hidden='{{item.check}}' src='/assets/images/unchecked.png'></image>        
-              <image class='check-img' hidden='{{!item.check}}' src='/assets/images/check.png'></image>    
-          </view>
-          <view class='cart-item-image'>
-            <image 
-              class='cart-img' 
-              src='{{item.coverImg}}' 
-              mode='aspectFit' 
-              catchtap='phoneDetail'>
-            </image>
-          </view>
-          <view class='shop-detail'>
-              <view class='cart-item-names'>{{item.name}}</view>        
-              <view class='cart-item-type'><text>{{item.color}}/{{item.memory}}</text></view>
-                <view class='cart-price'>
-                    <view>官价：
-                      <text class='underline'>{{item.orgPrice}}</text>
-                    </view>     
-                    <view>售价：
-                      <text class='shop-price'>{{item.fullPlatformPrice}}</text>
-                    </view>
-                    <view>提成：
-                      <text class='shop-price'>{{item.fullRebatePrice}}</text>
-                    </view>
-              </view>
-          </view>
-          <view class='num-change flex-row'>                
-              <view data-id="{{item.id}}">
-                <image 
-                    class='minus-icon' 
-                    src='/assets/images/decrease.png' 
-                    data-index='{{index}}' 
-                    data-types='minus'  
-                    catchtap='numchangeTap'>
-                </image>
-              </view>
-              <view class='shop-num'>{{item.count}}</view>                
-              <view>
-                <image 
-                    class='add-icon' 
-                    data-index='{{index}}' 
-                    data-types='add'  
-                    catchtap='numchangeTap' 
-                    src='/assets/images/plus.png'>
-                </image>
-              </view>            
-          </view> 
+          <view class='shop' bind:onUpdateCart='onUpdateCart'>
+            <view class='shop-check-box' data-index='{{index}}' catchtap='checkTap'>
+              <image class='check-img' hidden='{{item.check}}' src='/assets/images/unchecked.png'></image>
+              <image class='check-img' hidden='{{!item.check}}' src='/assets/images/check.png'></image>
+            </view>
+            <v-product product="{{item}}" class='cart-product' />
+            <v-cart-num count="{{item.count}}" class='cart-num' bind:numchangeTap='numchangeTap' cart-id="{{item.id}}" />
           </view>
         </block>
       </view>
       <view wx:if='{{shopcarData.length ==0}}' class='empty-cart' class='flex-column'>
         <view class='cart-image-view'>
-            <image class='empty-cart-img' src='/assets/images/empty-cart.png'/>
+          <image class='empty-cart-img' src='/assets/images/empty-cart.png' />
         </view>
         <view class='go-cart-desc bottom-20'>购物车是空的，去首页或者下拉刷新试试</view>
         <view class='go-index-view'>
-          <button type='default' class="go-index-btn"    hover-class='none'
-         bindtap='goIndexPage'>去逛逛</button>
-         </view>
+          <button type='default' class="go-index-btn" hover-class='none' bindtap='goIndexPage'>去逛逛</button>
+        </view>
       </view>
       <view class="load-flag-text" wx:if="{{!loadFlag}}">
         <text class="cart-warn">没有更多啦~</text>
       </view>
     </scroll-view>
-    
+
   </view>
   <view class='cart-footer flex-row'>
-  <view class='flex-column total-part'>
-   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计支付<text class='footer-total-price' decode='true'>￥{{total}}</text></view>
-   <view class='footer-total-text' wx:if='{{!adminShow}}'>合计提成<text class='footer-total-price' decode='true'>￥{{totalRebate}}</text></view>
-   </view>
-   <view class='footer-total-submit' wx:if="{{!adminShow}}" catchtap='submitOrder'><button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>申请配送{{checkedCount}}</button></view>  
-   <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{adminShow}}'><button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>移出商品{{checkedCount}}</button></view>  
+    <view class='flex-column total-part'>
+      <view class='footer-total-text' wx:if='{{!adminShow}}'>合计支付
+        <text class='footer-total-price' decode='true'>￥{{total}}</text>
+      </view>
+      <view class='footer-total-text' wx:if='{{!adminShow}}'>合计提成
+        <text class='footer-total-price' decode='true'>￥{{totalRebate}}</text>
+      </view>
+    </view>
+    <view class='footer-total-submit' wx:if="{{!adminShow}}" catchtap='submitOrder'>
+      <button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>申请配送{{checkedCount}}</button>
+    </view>
+    <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{adminShow}}'>
+      <button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>移出商品{{checkedCount}}</button>
+    </view>
   </view>
 </view>

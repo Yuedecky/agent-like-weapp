@@ -1,43 +1,28 @@
-<import src='/templates/footer/footer.wxml'/>
+<import src='/templates/footer/footer.wxml' />
 <view class="index-container page">
 
   <view class="index-nav-left">
     <scroll-view scroll-y class='scroll-y' style='height:{{mainHeight}}px;'>
-      <block wx:for="{{brands}}" wx:key="{{id}}" wx:for-item='item'>
-          <view class="nav-left-item flex-row {{current == item.id ? 'active' : ''}}"  data-code='{{item.code}}'  data-bid='{{item.id}}' bindtap='onClick'>{{item.name}}
-          </view>
-        </block>
+      <block wx:for="{{brands}}" wx:key="id">
+        <v-brand  text="{{item.name}}" checked='{{item.code==current}}' code='{{item.code}}' bind:tap="brandTap" data-code='{{item.code}}' />
+      </block>
     </scroll-view>
   </view>
 
   <view class="index-nav-right">
-    <view class="nav-right-container" wx:if="{{dataList.length>0}}">
-    <scroll-view class="content" scroll-y style='height:{{mainHeight}}px;' bindscrolltolower='scrollDown'>
-      <block wx:for="{{dataList}}" wx:key="id">
-      <view class='flex-row bottom-20'>
-        <view class='item-left-block'>
-          <image src="{{item.coverImg}}"  mode="aspectFit" class='right-image-item'></image>
+    <view wx:if="{{products.length>0}}">
+      <scroll-view scroll-y style='height:{{mainHeight}}px;' bindscrolltolower='productScrollDown'>
+        <block wx:for="{{products}}" wx:key="id">
+          <view class='product-container'>
+            <v-product product="{{item}}" class='product' />
+            <image src='/assets/images/add-cart.png' class='add-cart' bindtap='onAddCart' data-pid='{{item.id}}'></image>
+          </view>
+        </block>
+        <view wx:if="{{!loadFlag}}">
+          <template is='footer' data="{{text: '没有更多了'}}" />
         </view>
-        <view class='item-right-block flex-row'>
-          <view class="left-section flex-column">
-              <view class='item-name'>{{item.name}}</view>
-              <view class='item-desc'>{{item.color}}/{{item.memory}}</view>
-              <view class='item-price'>官网价：<text class='offical-price'>{{item.orgPrice}}</text></view>
-              <view class='item-price'>销售价：<text class='price-info'>{{item.platformPrice}}</text></view>
-              
-              <view class='item-commission'>提成：<text class='price-info'>{{item.rebatePrice}}</text></view>
-          </view>
-          <view class='right-section'>
-            <image src='/assets/images/add-cart.png' class='add-cart' bindtap='onAddCart' id="the-cart-{{item.id}}" data-pid='{{item.id}}'></image>
-          </view>
-          </view>
-      </view>
-      </block>
-      <view wx:if="{{!loadFlag}}">
-        <template is='footer' data="{{text: '没有更多了'}}"/>
-      </view>
       </scroll-view>
     </view>
-    <view wx:else class='none-products'>暂无数据</view> 
+    <view wx:else class='none-products'>暂无数据</view>
   </view>
 </view>

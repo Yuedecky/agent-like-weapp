@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.brand-text {
+  color: #333;
+  line-height: 100rpx;
+  height: 100rpx;
+  text-align: center;
+  width: 100%;
+  border-bottom: 1px solid #dedede;
+  font-size: 32rpx;
+  border-right: 1px solid #dedede;
+}
+
+.checked-class {
+  border-left: 2rpx solid #069 !important;
+  color: #069 !important;
+  border-right: none !important;
+  font-weight: bold !important;
+}

@@ -1,0 +1,3 @@
+<view class="container">
+  <text class='brand-text  {{checked?"checked-class":""}}'>{{text}}</text>
+</view>

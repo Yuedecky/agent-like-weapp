@@ -1,0 +1,11 @@
+<view class='container'>
+              <view data-id="{{item.id}}">
+                <image class='minus-icon' src='/assets/images/decrease.png'  bind:tap='numDecrease'>
+                </image>
+              </view>
+              <view class='shop-num'>{{count}}</view>
+              <view>
+                <image class='add-icon'  bind:tap='numAdd' src='/assets/images/plus.png'>
+                </image>
+              </view>
+</view>

@@ -1,8 +1,29 @@
-var app = getApp()
+import {
+  BrandModel
+} from '../../models/brandModel.js';
+import {
+  ProductModel
+} from '../../models/productModel.js';
+import {
+  CartModel
+} from '../../models/cartModel.js';
+import {
+  Config
+} from '../../config.js';
+const app = getApp()
+const brandModel = new BrandModel()
+const productModel = new ProductModel()
+const cartModel = new CartModel();
 Component({
   /* 开启全局样式设置 */
   options: {
     addGlobalClass: true,
+  },
+  properties: {
+    pageNum: {
+      type: Number,
+      value: Config.product.pageNum || 1
+    },
   },
 
   /**
@@ -10,300 +31,133 @@ Component({
    */
   data: {
     brands: [],
-    current: 0, //当前选中的cate_id,
-    pageNum:1,
-    pageSize:10,
-    
     loadFlag: true,
     count: 0,
-    pullLoading: false,
-    dataList: [],
-    contentWaitingShow: false,
+    products: [],
     canRequest: true,
-    maxCount: 250,
-    //--
-  },
-  properties:{
-   name:{
-     type: String,
-     value:'index'
-   }
-  },
-
-  lifetimes:{
-    attached:function(){
-      // 显示设置
-      var res = wx.getSystemInfoSync();
-      var device = new RegExp("iOS");
-      var result = device.test(res.system);
-      let tmp = 0;
-      let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
-      this.setData({
-        mainHeight: h,
-        networkType: app.globalData.networkType
-      });
-      wx.showLoading({
-        title: '加载中',
-        mask:true
-      })
-      //初始化
-      this.getBrandsData(this);
-    },
-
+    current: 0,
   },
 
 
-  methods:{
-
-/**
- * 加载商品分类
- */
-    getBrandsData:function(that){
-      let auth = wx.getStorageSync('token')
-      wx.request({
-        url: app.globalData.serverUrl + 'brand/query',
-        method: 'get',
-        header: {
-          'Authorization': auth
-        },
-        success: function (res) {
-          let data = res.data;
-          if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              icon: 'none',
-              duration: 2000
-            })
-          } else {
-            let list = data.data;
-            if (list !=null &&list.length > 0) {
-              let brandCode = list[0].code;
-              let bid = list[0].id;
-              for (var i = 0; i < list.length; i++) {
-                if (that.data.current == list[i].id) {
-                  brandCode = list[i].code;
-                  bid = list[i].id;
-                  break;
-                }
-              }
-              that.setData({
-                brands: list,
-                brandCode: brandCode
-              });
-              that.getProductsData(true,brandCode,bid)
-            }else{
-              that.setData({
-                loadFlag:false
-              })
-            }
-          }
-        },
-        fail:function(res){
-          wx.showToast({
-            title: '商品分类加载失败',
-            duration:1500,
-            icon:'none'
-          })
-        }
-      })
-    },
-
-
-    //首页数据
-    getProductsData(firstLoading,brandCode,bid) {
-      let that = this;
-      if (firstLoading) {
-        that.setData({
-          contentWaitingShow: false,
-        })
-      }else{
-        that.setData({
-          dataList:[],
-          pageNum:1,
-          canRequest:true,
-          loadFlag:true
-        })
+  attached: function() {
+    // 显示设置
+    let that = this;
+    const res = wx.getSystemInfoSync();
+    const device = new RegExp("iOS");
+    const result = device.test(res.system);
+    let tmp = 0;
+    let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
+    this.setData({
+      mainHeight: h,
+      networkType: app.globalData.networkType
+    });
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+    brandModel.getAllBrands().then((res) => {
+      const brands = res.data;
+      let current = 0;
+      if (brands != null && brands.length > 0) {
+        current = brands[0].code;
       }
-      wx.showLoading({
-        title: '加载中',
-        mask:true
+      this.properties.current = current;
+      that.setData({
+        current: current,
+        brands: brands,
       })
-      let auth = wx.getStorageSync('token')
-        wx.request({
-          url: app.globalData.serverUrl + 'goods/query',
-          data: {
-            brandCode: brandCode,
-            pageNum: that.data.pageNum,
-            pageSize: that.data.pageSize
-          },
-          header: {
-            'Authorization': auth
-          },
-          success: function (res) {
-            let data = res.data;
-            if (data.status != 200) {
-              wx.showToast({
-                title: data.msg,
-                icon: 'none',
-                duration: 2000
-              })
-            } else {
-              let products = data.data;
-              let page = data.page;
-              let canRequest = false;
-              if(products.list != null && products.list.length >0){
-                let pageNum = that.data.pageNum;
-                let tempData = that.data.dataList.concat(products.list);
-                if(products.page.total <= that.data.pageSize){
-                }else{
-                  canRequest = true;
-                }
-                that.setData({
-                  dataList: tempData,
-                  current: bid,
-                  contentWaitingShow: true,
-                  loadingFlag: tempData.length >= parseInt(products.page.total) ? false : true,
-                  canRequest:canRequest,
-                  count:tempData.length,
-                })
-              }
-            }
-          },
-          fail: function (err) {
-            wx.showToast({
-              title: '加载商品失败',
-              duration: 1500,
-              icon: "none"
-            })
-            that.setData({
-              pageNum:1,
-              canRequest:true
-            })
-          },
-          complete: () => {
-            wx.hideLoading()
-          }
-        })
-    },
+      return productModel.getPageProducts({
+        bcode: current
+      });
+    }).then((res) => {
+      that.setData({
+        products: res.data.list,
+        count: res.data.list.length
+      });
+      wx.hideLoading()
+    });
+  },
 
-    scrollDown() {
+  methods: {
+    productScrollDown() {
       let that = this;
       if (that.data.canRequest) {
         wx.showLoading({
           title: '加载中',
-          mask:true
+          mask: true
         })
-        if (that.data.count < that.data.maxCount) {
+        if (that.data.count < Config.maxCount) {
           that.setData({
             canRequest: true
           })
-          let auth = wx.getStorageSync('token')
-          let brandCode = that.data.brandCode;
-          that.setData({
-            pageNum: ++that.data.pageNum
-          })
-          if (that.data.loadFlag) {
+          let brandCode = that.data.current;
+          ++this.properties.pageNum;
+          productModel.getPageProducts({
+            bcode: brandCode,
+            pageNum: this.properties.pageNum
+          }).then((res) => {
+            let products = res.data.list;
+            const tempData = that.data.products.concat(products);
             that.setData({
-              pullLoading: true
+              products: tempData,
+              count: tempData.length,
+              canRequest: (tempData.length) < res.data.page.total,
+              loadFlag: (tempData.length) < res.data.page.total
             })
-            wx.request({
-              url: app.globalData.serverUrl + 'goods/query',
-              header: { 'Authorization': auth },
-              data: {
-                brandCode: brandCode,
-                pageNum: that.data.pageNum,    // 继续请求
-                pageSize: that.data.pageSize,    // 每次请求的数目
-              },
-              success: function (res) {
-                let data = res.data;
-                if (data.status == 200) {
-                  let list = data.data.list;
-                  let page = data.data.page;
-                  if(list != null && list.length >0){
-                    let tempData = that.data.dataList.concat(list);
-                    that.setData({
-                      count: that.data.count + that.data.pageNum * that.data.pageSize,
-                      dataList: tempData,
-                      loadFlag: tempData.length >= parseInt(page.total) ? false : true,
-                      pullLoading: false,
-                      canRequest: tempData.length >= parseInt(page.total) ? false : true,
-                    })
-                  }
-                 
-                }else{
-                  wx.showToast({
-                    title: data.msg,
-                    duration:1500,
-                    icon:'none'
-                  })
-                }
-              },
-              fail: function (err) {
-                wx.showToast({
-                  title: '下拉加载商品失败',
-                  duration:1500,
-                  icon:'none'
-                })
-              }
-            })
-          } else {
-            return
-          }
+          });
         } else {
           this.setData({
-            canRequest:false,
-            loadFlag: false,
+            canRequest: false,
           })
         }
         wx.hideLoading()
       }
     },
 
-    onAddCart: function (e) {
+    onAddCart: function(e) {
       let that = this;
       let pid = e.currentTarget.dataset.pid;
-      let auth = wx.getStorageSync('token')
-      wx.request({
-        url: app.globalData.serverUrl + 'choose/add',
-        data: {
-          goodsId: pid,
-          count: 1
-        },
-        header: {
-          'Authorization': auth
-        },
-        success: function (res) {
-          let data = res.data;
-          if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              icon: 'none',
-              duration: 2000
-            })
-          } else {
-            wx.reLaunch({
-              url: '/pages/home/home?currentTab=1',
-            })
-          }
+      cartModel.addCart(pid).then((res) => {
+        if (res.status != 200) {
+          wx.showToast({
+            title: res.msg,
+            duration: 2000,
+            icon: 'none'
+          })
+        } else {
+          that.triggerEvent('onUpdateCart', {}, {})
+          wx.showToast({
+            title: '加购成功',
+            duration: 2000,
+            icon: 'success'
+          })
         }
       })
     },
 
-    onClick: function (e) {
+    brandTap: function(e) {
       let that = this;
-      let bid = e.currentTarget.dataset.bid;
-      let brandCode = e.currentTarget.dataset.code;
-      let auth = wx.getStorageSync('token')
+      let bcode = e.currentTarget.dataset.code;
       that.setData({
-        brandCode: brandCode,
-        bid:bid
+        current: bcode
       })
-      that.getProductsData(false,brandCode,bid)
+      wx.showLoading({
+        title: '加载中...',
+      })
+      productModel.getPageProducts({
+        bcode: bcode
+      }).then((res) => {
+        that.setData({
+          products: res.data.list,
+          count: 0,
+        })
+        wx.hideLoading()
+      })
     }
+  },
 
-}
+
 
 
 
 })
-  

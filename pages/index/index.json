@@ -1,4 +1,7 @@
 {
-  "component": true,
-  "usingComponents": {}
+  "component":true,
+  "usingComponents": {
+    "v-product":"/components/product/index",
+    "v-brand": "/components/brand/index"
+  }
 }

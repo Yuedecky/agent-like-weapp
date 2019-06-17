@@ -49,7 +49,6 @@ App({
               return
             }
           }
-          wx.clearStorageSync()
           wx.reLaunch({
             url: '/pages/login/login'
           })
@@ -62,11 +61,11 @@ App({
           })
         }
       })
+    }else{
+      wx.reLaunch({
+        url: '/pages/login/login',
+      })
     }
-    wx.reLaunch({
-      url: '/pages/login/login',
-    })
-
   },
 
 
@@ -74,7 +73,6 @@ App({
     //隐藏系统tabbar
     //1.检查网络状态
     this.checkNetStat();
-    //2.
     this.checkTokenExpires();
   },
 

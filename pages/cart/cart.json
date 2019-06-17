@@ -1,5 +1,8 @@
 {
   "component": true,
-  "enablePullDownRefresh": false,
-  "usingComponents": {}
+  "usingComponents": {
+    "v-address-select":"/components/address-select/index",
+    "v-product":"/components/product/index",
+    "v-cart-num":"/components/cart-num/index"
+  }
 }

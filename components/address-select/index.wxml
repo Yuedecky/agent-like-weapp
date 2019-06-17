@@ -1,0 +1,16 @@
+<view class='container' bind:tap='onSwithAddress'>
+    <view class='delivery-img'>
+          <image class='address-img' src='/assets/images/address.png'></image>
+    </view>
+    <view class='delivery-body'>
+      <view class='delivery-info'>
+        <view class='delivery-name'>{{name}}</view>
+        <view class='delivery-name'>{{phone}}</view>
+      </view>
+      <view class='delivery-address'>
+        <view class='accept-address' hidden="{{hasDefaultAddress}}">收货地址：{{address}}</view>
+        <view class='select-address' hidden="{{!hasDefaultAddress}}">请选择收货地址</view>
+      </view>
+      </view>
+      <view class='right-arrow' ></view>
+  </view>
