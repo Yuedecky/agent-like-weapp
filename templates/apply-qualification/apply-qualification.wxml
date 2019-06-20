@@ -24,7 +24,7 @@
                </view>
            </view>
        </view>
+<button bindtap="submitApply" class='login-btn'>提交申请</button>
    </view>
-<button bindtap="submitApply" type='primary' class='login-btn top-600'>提交申请</button>
 
 </template>

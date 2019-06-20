@@ -1,4 +1,8 @@
 //app.js
+import {
+  CodeModel
+} from './models/codeModel.js';
+const codeModel = new CodeModel();
 App({
   onLaunch: function() {
     this.getSystemInfo();
@@ -25,47 +29,26 @@ App({
   },
 
   checkTokenExpires: function() {
-    let auth = wx.getStorageSync('token')
-    if (auth != '' && auth != null) {
-      wx.request({
-        url: this.globalData.serverUrl + 'user/token/expires',
-        header: {
-          Authorization: auth
-        },
-        success: function(res) {
-          let data = res.data;
-          if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              duration: 2000,
-              icon: 'none'
-            })
-          } else {
-            if (!data.data) {
-              wx.reLaunch({
-                url: '/pages/home/home?currentTab=0',
-                complete: function() {}
-              })
-              return
-            }
-          }
+    codeModel.checkTokenExpire().then(res => {
+      if (res.status != 200) {
+        wx.showToast({
+          title: res.msg,
+          duration: 2000,
+          icon: 'none'
+        })
+      } else {
+        if (!res.data) {
           wx.reLaunch({
-            url: '/pages/login/login'
+            url: '/pages/home/home?currentTab=0',
+            complete: function() {}
           })
-        },
-        fail: function(e) {
-          wx.showToast({
-            title: '请求失败，请稍候重试',
-            duration: 2000,
-            icon: 'none'
-          })
+          return
         }
-      })
-    } else {
+      }
       wx.reLaunch({
-        url: '/pages/login/login',
+        url: '/pages/login/login'
       })
-    }
+    })
   },
 
 
@@ -74,10 +57,16 @@ App({
     //1.检查网络状态
     this.checkNetStat();
     const chooseImgFlag = wx.getStorageSync('chooseImageFlag')
-    if (!chooseImgFlag) {
+    const applyFlag = wx.getStorageSync('applyFlag')
+    let flag = true;
+    if(chooseImgFlag != '' && chooseImgFlag == true){
+        flag = false;
+    }
+    if(applyFlag != '' && applyFlag == true){
+      flag = false;
+    }
+    if (flag) {
       this.checkTokenExpires();
-    } else {
-      return
     }
   },
 

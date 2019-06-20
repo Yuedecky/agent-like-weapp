@@ -1,4 +1,5 @@
 {
+  "enablePullDownRefresh":false,
   "usingComponents": {
     "index": "/pages/index/index",
     "cart": "/pages/cart/cart",

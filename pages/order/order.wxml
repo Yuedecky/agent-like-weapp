@@ -35,7 +35,7 @@
             </view>
             <view class='contact-or-cancel flex-row'>
               <view classs='o-concat'>
-                <button type='primary' class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='onContactUsProcess'>联系客服</button>
+                <button  class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='onContactUsProcess'>联系客服</button>
               </view>
               <view>
                 <modal title="联系微信客服" hidden="{{modalHidden}}" bindconfirm="modalConfirmProcess" bindcancel="modalCancelProcess" data-value='process'>
@@ -80,7 +80,7 @@
               合计提成：<text class='order-p-count'>{{item.order.totalRebatePrice}}</text></view>
               <view class='contact-only flex-row'>
                 <view  classs='o-concat'>
-                  <button type='primary' class='order-btn' id='{{item.order.orderNo}}' bindtap='onContactUsFinished'>
+                  <button  class='order-btn' id='{{item.order.orderNo}}' bindtap='onContactUsFinished'>
                   联系客服
                   </button>
                 </view>

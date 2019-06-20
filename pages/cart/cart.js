@@ -61,15 +61,7 @@ Component({
     created: function() {},
     attached: function() {
       // 显示设置
-      var res = wx.getSystemInfoSync();
-      var device = new RegExp("iOS");
-      var result = device.test(res.system);
-      let tmp = 172;
-      let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
-      this.setData({
-        mainHeight: h,
-        networkType: app.globalData.networkType
-      });
+     
       let that = this;
       if (that.data.selarr.length > 0) {
         that.setData({
@@ -83,7 +75,17 @@ Component({
       }
       this.getCartMainData();
     },
-    ready: function() {},
+    ready: function() {
+      var res = wx.getSystemInfoSync();
+      let tmp = 180;
+      let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
+      if(res.platform =='android'){
+        h=res.windowHeight-res.windowWidth/750*116-170;
+      }
+      this.setData({
+        mainHeight: h,
+      });
+    },
     detached: function() {},
   },
   methods: {
@@ -113,12 +115,10 @@ Component({
           that.setData({
             shopcarData: cartList,
             count: cartList.length,
-            canRequest: cartList.length < page.total
+            canRequest: cartList.length < page.total,
+            pageNum: page.current,
           })
         }
-        this.triggerEvent('updateHomeCart', {
-          shopcarData: cartList
-        }, {})
       })
     },
 
@@ -132,8 +132,14 @@ Component({
         if (that.data.count < Config.maxCount) {
           if (that.data.loadFlag) {
             let shopcarData = that.data.shopcarData;
-            let size = (shopcarData.length || 0) % Config.cart.pageSize == 0;
-            let pageNum = !size ? that.data.pageNum : that.data.pageNum + 1;
+            let pageNum = 1;
+            if (shopcarData.length != 0) {
+              if (that.data.count % Config.cart.pageSize == 0) {
+                pageNum = that.data.pageNum + 1;
+              } else {
+                pageNum = that.data.pageNum;
+              }
+            }
             cartModel.getCartList({
               pageSize: Config.cart.pageSize,
               pageNum: pageNum
@@ -147,20 +153,25 @@ Component({
                       list[i].check = true
                     }
                   }
-                  let tempData = [];
-                  if (that.data.pageNum < pageNum) {
-                    tempData = that.data.shopcarData.concat(list);
-                  } else {
-                    tempData = that.data.shopcarData;
+                  if (data.page.current > parseInt(shopcarData.length / Config.cart.pageSize)) {
+                    //需要判断是否为第一页
+                    let carLength = shopcarData.length;
+                    if (data.page.current <= 1) {
+                      shopcarData = Array.from(data.list)
+                    } else {
+                      shopcarData.splice((data.page.current - 1) * Config.cart.pageSize);
+                      shopcarData = shopcarData.concat(data.list)
+                    }
                   }
                   that.setData({
-                    count: that.data.count + that.properties.pageNum * Config.pageSize,
-                    loadFlag: tempData.length < parseInt(data.page.total),
-                    canRequest: tempData.length < parseInt(data.page.total),
-                    pageNum: pageNum,
-                    shopcarData: tempData
+                    count: shopcarData.length,
+                    loadFlag: shopcarData.length < parseInt(data.page.total),
+                    canRequest: shopcarData.length < parseInt(data.page.total),
+                    pageNum: data.page.current,
+                    canRequest: shopcarData.length < data.page.total,
+                    shopcarData: shopcarData
                   })
-                  that.computePriceAndRebate(tempData, that.data.allsel);
+                  that.computePriceAndRebate(shopcarData, that.data.allsel);
                 } else {
                   that.setData({
                     loadFlag: false,
@@ -268,19 +279,24 @@ Component({
       cartModel.removeCart(del).then((res) => {
         return cartModel.getCartList({})
       }).then((res) => {
+        let page = res.data.page;
         that.setData({
-          shopcarData: res.data.list,
+          shopcarData: res.data.list == null ? [] : res.data.list,
           allsel: false,
           selarr: [],
           checkedCount: 0,
           cartDisabled: true,
+          total: 0,
+          totalRebate: 0,
+          pageNum: page.current
+        })
+        wx.showToast({
+          title: '移出成功',
+          duration: 2000,
+          icon: 'success'
         })
       })
-      let shopcars = that.data.shopcarData;
-      const pageNum = shopcars.length % Config.cart.pageSize == 0 ? that.data.pageNum - 1 : that.data.pageNum;
-      that.setData({
-        pageNum: pageNum
-      })
+
     },
 
 
@@ -399,9 +415,19 @@ Component({
                       })
                     }
                   }).then((res) => {
-                    that.setData({
-                      shopcarData: res.data.list
-                    })
+                    if (res.data.list == null) {
+                      that.setData({
+                        shopcarData: [],
+                        allsel: false,
+                        selarr: [],
+                        total: 0,
+                        totalRebate: 0,
+                      })
+                    } else {
+                      that.setData({
+                        shopcarData: res.data.list,
+                      })
+                    }
                   });
                 }
               }

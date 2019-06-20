@@ -36,7 +36,7 @@
           <button type='default' class="go-index-btn" hover-class='none' bindtap='goIndexPage'>去逛逛</button>
         </view>
       </view>
-      <view class="load-flag-text" wx:if="{{!loadFlag}}">
+      <view class="load-flag-text" wx:if="{{!loadFlag && shopcarData.length !=0}}">
         <text class="cart-warn">没有更多啦~</text>
       </view>
     </scroll-view>

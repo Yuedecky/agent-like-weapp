@@ -14,7 +14,7 @@
             </button>
         </view>
         </view>
-        <button type='primary' class="login-btn"  disabled='{{disabled}}'   hover-class='none'
+        <button  class="login-btn"  disabled='{{disabled}}'   hover-class='none'
          bindtap='submitInfo'>登录</button>
          <view class='protocol bottom-100'>
          点击登录，即表示已阅读并同意<text bindtap='onShowProtocol'>《登录服务条款》</text>

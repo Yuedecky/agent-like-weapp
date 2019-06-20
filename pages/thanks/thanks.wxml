@@ -1,9 +1,8 @@
-<view class='thanks-container'>
+<view class='thanks-container page'>
 <view class="thanks-info">
 感谢您的申请,我们会在1~3个工作日内跟您取得联系,请保持手机畅通
 </view>
 <view class='thanks-okay middle-center'>
-<!-- <navigator open-type='exit' target='miniProgram' class='login-btn'>好的</navigator> -->
 <navigator target="miniProgram" class='exit-btn' open-type="exit" >好的</navigator>
 </view>
 </view>

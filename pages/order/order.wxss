@@ -39,7 +39,10 @@
 .order-btn{
   height: 60rpx;
   line-height: 60rpx;
+  color:#fff;
+  background-color: #006699;
 }
+
 .modal-image{
   width:540rpx;
   height: 400rpx;

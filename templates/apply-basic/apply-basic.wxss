@@ -1,48 +1,50 @@
 @import '/assets/wxss/common.wxss';
-.baisc-info-container{
+
+.baisc-info-container {
   width: 100%;
 }
 
-.basic-title{
+.basic-title {
   text-align: center;
   margin-top: 100rpx;
 }
 
-.input-section{
+.input-section {
   padding-left: 40rpx;
   padding-right: 40rpx;
 }
-.input-section input{
+
+.input-section input {
   border-bottom: 1px solid #ccc;
   height: 80rpx;
   line-height: 80rpx;
 }
 
-.code-input input{
+.code-input input {
   width: 360rpx;
   margin-right: 20rpx;
 }
 
-.code-input button{
+.code-input button {
   width: 320rpx;
-  height:80rpx;
+  height: 80rpx;
   font-size: 40rpx;
   line-height: 80rpx;
   border: none;
 }
 
-.code-input button::after{
+.code-input button::after {
   border: none;
 }
 
-.login-btn{
+.login-btn {
   margin-left: 40rpx;
   margin-right: 40rpx;
-    margin-top: 40rpx;
-    padding: 12rpx 12rpx 12rpx 12rpx;
-    font-size: 40rpx;
-    line-height: 80rpx;
-    background-color: #57A948;
-    color: white;
-    font-weight: 600;
+  margin-top: 40rpx;
+  padding: 12rpx 12rpx 12rpx 12rpx;
+  font-size: 40rpx;
+  line-height: 80rpx;
+  background-color: #006699;
+  color: white;
+  font-weight: 600;
 }

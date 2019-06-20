@@ -13,6 +13,19 @@ class CodeModel extends Http {
       method: 'POST'
     })
   }
+
+  checkTokenExpire() {
+    const token = wx.getStorageSync('token')
+    return this.request({
+      url: 'user/token/expires',
+      method: 'GET',
+      header: {
+        Authorization: token
+      }
+    })
+  }
 }
 
-export {CodeModel}
+export {
+  CodeModel
+}

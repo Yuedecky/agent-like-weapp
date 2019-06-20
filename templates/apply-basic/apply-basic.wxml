@@ -14,7 +14,7 @@
             </button>
         </view>
         </view>
-        <button type='primary' class="login-btn"  disabled='{{disabled}}'   hover-class='none'
+        <button  class="login-btn"  disabled='{{disabled}}'   hover-class='none'
          bindtap='nextStepOne'>下一步</button>
 </view>
 </template>

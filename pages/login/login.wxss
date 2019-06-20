@@ -53,7 +53,7 @@
     padding: 12rpx 12rpx 12rpx 12rpx;
     font-size: 40rpx;
     line-height: 80rpx;
-    background-color: #57A948;
+    background-color: #006699;
     color: white;
     font-weight: 600;
 }

@@ -14,8 +14,8 @@ Component({
     tabs:['未完成','已完成'],
     activeIndex:0,
     sliderOffset: 0,
-    sliderLeft:20, 
-    silderWidth:120,
+    sliderLeft:30, 
+    silderWidth:100,
     modalHidden:true,
     modalFinished:true,
 
@@ -51,9 +51,6 @@ Component({
       mainHeight: h,
       networkType: app.globalData.networkType
     });
-    // wx.showLoading({
-    //   title: '加载中',
-    // })
     var that = this;
     let activeIndex = 0;
     if(options != undefined && options.activeIndex != undefined){

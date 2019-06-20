@@ -24,7 +24,7 @@
             <switch class="swith-btn" checked="{{defaultAddr}}" bindchange="changeSwitch"/>
             <text class='set-default'>设为默认地址</text>
       </view>
-        <button type='primary' class="save-address-btn"  disabled='{{disabled}}'   hover-class='none'
+        <button  class="save-address-btn"  disabled='{{disabled}}'   hover-class='none'
          bindtap='saveAddress'>保存并使用</button>
 </view>
 

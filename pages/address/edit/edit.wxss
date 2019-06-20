@@ -170,6 +170,8 @@ picker-view-column view{
 }
 .save-address-btn{
   width: 100%;
+  background-color: #006699;
+  color: #fff;
 }
 
 

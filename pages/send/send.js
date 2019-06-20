@@ -13,9 +13,9 @@ Component({
   data: {
     tabs: ['待配送', '配送中','已完成'],
     activeIndex: 0,
-    sliderOffset: 20,
+    sliderOffset: 30,
     sliderLeft: 0,
-    silderWidth: 120,
+    silderWidth: 100,
 
     orderToSend:[],
     orderSending:[],

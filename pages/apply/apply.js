@@ -341,9 +341,6 @@ Page({
    */
   onLoad: function(options) {
     var that = this;
-    that.setData({
-      pageIndex: options.pageIndex
-    })
     if (options.pageIndex == 1) {
       wx.setNavigationBarTitle({
         title: '基本信息',
@@ -354,6 +351,7 @@ Page({
         title: '证件信息',
       })
     }
+    wx.setStorageSync('applyFlag', true)
   },
 
 })

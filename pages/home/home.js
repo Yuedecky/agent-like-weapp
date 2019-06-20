@@ -25,7 +25,53 @@ Page({
       that.setData({
         currentTab: e.target.dataset.current
       })
+      if (current == 1) {
+        that.loadCartList()
+      }
     }
+  },
+
+  loadCartList() {
+    let cart = this.selectComponent("#cart");
+    let shopcarData = cart.data.shopcarData || [];
+    let pageNum = 1;
+    if (shopcarData.length != 0) {
+      if (shopcarData.length % Config.cart.pageSize == 0) {
+        pageNum = cart.data.pageNum + 1;
+      } else {
+        pageNum = cart.data.pageNum;
+      }
+    }
+    cartModel.getCartList({
+      pageNum: pageNum
+    }).then((res) => {
+      let data = res.data;
+      const page = data.page;
+      if (page.total > 0) {
+        if (page.current > parseInt(shopcarData.length / Config.cart.pageSize)) {
+          //需要判断是否为第一页
+          let carLength = shopcarData.length;
+          if (page.current <= 1) {
+            shopcarData = Array.from(data.list == null ? [] : data.list)
+          } else {
+            shopcarData.splice((data.page.current - 1) * Config.cart.pageSize);
+            if (data.list != null) {
+              shopcarData = shopcarData.concat(data.list)
+            }
+          }
+        }
+      } else {
+        shopcarData = []
+      }
+      cart.setData({
+        shopcarData: shopcarData,
+        count: shopcarData.length,
+        canRequest: shopcarData.length < data.page.total,
+        loadFlag: shopcarData.length < data.page.total,
+        pageNum: data.page.current,
+        allsel:false,
+      })
+    })
   },
 
   onAddCart: function(event) {
@@ -47,22 +93,7 @@ Page({
         })
       }
     })
-    let cart = this.selectComponent("#cart");
-    const shopcarData = cart.data.shopcarData;
-    const pageNum = shopcarData.length % Config.cart.pageSize == 0 ? cart.data.pageNum + 1 : cart.data.pageNum;
-    cartModel.getCartList({
-      pageNum: pageNum
-    }).then((res) => {
-      let data = res.data;
-      let tempData = shopcarData;
-      tempData.concat(data.list);
-      cart.setData({
-        shopcarData: tempData,
-        count: tempData.length,
-        canRequest: tempData.length < data.page.total,
-        loadFlag: tempData.length < data.page.total
-      })
-    })
+
   },
 
 
