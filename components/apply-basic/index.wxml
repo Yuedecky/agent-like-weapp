@@ -1,0 +1,19 @@
+<view class='page middle-center'>
+    <view class='input-section flow-column middle-center top-100'>
+        <view class='realname-input bottom-40'>
+            <input type="text" value="{{realName}}" name="realName" maxlength='20' placeholder="请输入真实姓名" bindinput='getRealNameValue' />
+        </view>
+        <view class='phone-input bottom-40'>
+            <input type="tel" value="{{phone}}" name="applyPhone" maxlength='11' placeholder="请输入手机号" bindinput='getPhoneNumberValue' />
+        </view>
+        <view class='code-input flex-row'>
+            <input type='number' maxlength='6' value="{{code}}" placeholder='请输入验证码' name="applyCode" bindinput='getCodeValue' />
+            <button type='default' bindtap='getApplyCode' disabled='{{codeDisabled}}'>
+                {{text}}
+            </button>
+        </view>
+    </view>
+    <button class="login-btn" disabled='{{disabled}}' hover-class='none' bind:tap='next'>
+        下一步
+    </button>
+</view>

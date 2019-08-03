@@ -6,7 +6,7 @@
                    <view class="weui-uploader">
                        <view class="weui-uploader__hd">
                            <view class="weui-uploader__title font-grey">拍照上传身份证正反面(长按删除)</view>
-                           <view class="weui-uploader__info">{{images.length}}/3</view>
+                           <view class="weui-uploader__info">{{images.length}}/2</view>
                        </view>
                        <view class="weui-uploader__bd">
                            <view class="weui-uploader__files padding-bottom-40 " id="uploaderFiles">
@@ -16,7 +16,7 @@
                                    </view>
                                </block>
                            </view>
-                           <view class="weui-uploader__input-box" wx:if='{{images.length<=2}}'>
+                           <view class="weui-uploader__input-box" wx:if='{{images.length<=1}}'>
                                <view class="weui-uploader__input " catchtap="chooseImage"></view>
                            </view>
                        </view>

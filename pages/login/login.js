@@ -1,3 +1,7 @@
+import {
+  CodeModel
+} from '../../models/codeModel.js';
+const codeModel = new CodeModel();
 const app = getApp()
 Page({
 
@@ -31,7 +35,7 @@ Page({
       logoName: app.globalData.logoName,
       logoUrl: app.globalData.logoUrl,
     })
-    
+
   },
 
   getPhoneValue: function(e) {
@@ -43,7 +47,6 @@ Page({
     this.setData({
       code: e.detail.value
     })
-
   },
   getCode: function(e) {
     let that = this;
@@ -56,69 +59,64 @@ Page({
     } else if (phone.trim().length != 11 || !phoneReg.test(phone)) {
       warn = "手机号格式不正确";
     } else {
-      //当手机号正确的时候提示用户短信验证码已经发送
-      wx.request({
-        url: app.globalData.serverUrl + 'verify/code/send',
-        data: {
-          phone: phone,
-          type: 1
-        },
-        success: function(res) {
-          let data = res.data;
-          if (data.status != 200) {
-            wx.showToast({
-              title: data.msg,
-              duration: 2000,
-              icon: 'none'
-            })
-          } else {
-            wx.showToast({
-              title: '发送验证码成功',
-              duration: 2000
-            })
-          }
-        },
-        fail: function(e) {
-          wx.showToast({
-            title: '获取验证码失败',
-            icon: 'none',
-            duration: 2000
-          })
-        }
-      })
-    }
-
-    //判断 当提示错误信息文字不为空 即手机号输入有问题时提示用户错误信息 并且提示完之后一定要让按钮为可用状态 因为点击按钮时设置了只要点击了按钮就让按钮禁用的情况
-    if (warn != null) {
-      wx.showToast({
-        title: warn,
-        icon: 'none'
-      })
-      that.setData({
-        codeDisabled: false,
-        color: '#59b550'
-      })
-      return;
-    }
-
-    //设置一分钟的倒计时
-    var interval = setInterval(function() {
-      currentTime--; //每执行一次让倒计时秒数减一
-      that.setData({
-        codeDisabled: true,
-        text: currentTime + 's', //按钮文字变成倒计时对应秒数
-      })
-      //如果当秒数小于等于0时 停止计时器 且按钮文字变成重新发送 且按钮变成可用状态 倒计时的秒数也要恢复成默认秒数 即让获取验证码的按钮恢复到初始化状态只改变按钮文字
-      if (currentTime <= 0) {
-        clearInterval(interval)
+      if (warn != null) {
+        wx.showToast({
+          title: warn,
+          icon: 'none'
+        })
         that.setData({
-          text: '重新发送',
-          currentTime: 61,
           codeDisabled: false,
           color: '#59b550'
         })
+        return;
       }
-    }, 1000);
+      //当手机号正确的时候提示用户短信验证码已经发送
+      const sendRes = codeModel.sendCode(phone, 1);
+      sendRes.then(res => {
+        if (res.status != 200) {
+          wx.showToast({
+            title: res.msg,
+            duration: 2000,
+            icon: 'none'
+          })
+          return;
+        } else {
+          wx.showToast({
+            title: '发送验证码成功',
+            duration: 2000
+          })
+
+          //设置一分钟的倒计时
+          var interval = setInterval(function() {
+            currentTime--; //每执行一次让倒计时秒数减一
+            that.setData({
+              codeDisabled: true,
+              text: currentTime + 's', //按钮文字变成倒计时对应秒数
+            })
+            //如果当秒数小于等于0时 停止计时器 且按钮文字变成重新发送 且按钮变成可用状态 倒计时的秒数也要恢复成默认秒数 即让获取验证码的按钮恢复到初始化状态只改变按钮文字
+            if (currentTime <= 0) {
+              clearInterval(interval)
+              that.setData({
+                text: '重新发送',
+                currentTime: 61,
+                codeDisabled: false,
+                color: '#59b550'
+              })
+            }
+          }, 1000);
+        }
+      })
+
+
+
+
+
+    }
+
+    //判断 当提示错误信息文字不为空 即手机号输入有问题时提示用户错误信息 并且提示完之后一定要让按钮为可用状态 因为点击按钮时设置了只要点击了按钮就让按钮禁用的情况
+
+
+
   },
 
   //提交表单信息

@@ -6,7 +6,6 @@ const codeModel = new CodeModel();
 App({
   onLaunch: function() {
     this.getSystemInfo();
-
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -52,20 +51,13 @@ App({
   },
 
 
-  onShow: function() {
+  onShow: function(options) {
     //隐藏系统tabbar
     //1.检查网络状态
     this.checkNetStat();
-    const chooseImgFlag = wx.getStorageSync('chooseImageFlag')
-    const applyFlag = wx.getStorageSync('applyFlag')
-    let flag = true;
-    if(chooseImgFlag != '' && chooseImgFlag == true){
-        flag = false;
-    }
-    if(applyFlag != '' && applyFlag == true){
-      flag = false;
-    }
-    if (flag) {
+    const path = options.path;
+    const entries = ['pages/apply/apply']
+    if(!entries.includes(path)){
       this.checkTokenExpires();
     }
   },
@@ -92,26 +84,12 @@ App({
     })
   },
 
-  editTabbar: function() {
-    let tabbar = this.globalData.tabbars;
-    let currentPages = getCurrentPages();
-    let _this = currentPages[currentPages.length - 1];
-    let pagePath = _this.route;
-    (pagePath.indexOf('/') != 0) && (pagePath = '/' + pagePath);
-    for (let i in tabbar.list) {
-      tabbar.list[i].selected = false;
-      (tabbar.list[i].pagePath == pagePath) && (tabbar.list[i].selected = true);
-    }
-    _this.setData({
-      tabbar: tabbar
-    });
-  },
+
   globalData: {
     logoName: '微券加盟',
     logoUrl: 'https://www.wqyp.shop/data/images/logo/logo.jpeg?timestamp=' + new Date(),
     version: 0.1,
     serverUrl: "https://www.wqyp.shop/",
-    tabbars: [],
-    networkType: '4G'
+    networkType: '4G',
   }
 })

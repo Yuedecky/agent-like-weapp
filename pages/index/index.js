@@ -128,7 +128,8 @@ Component({
       let bcode = e.currentTarget.dataset.code;
       that.setData({
         current: bcode,
-        pageNum: 1
+        pageNum: 1,
+        products:[]
       })
       wx.showLoading({
         title: '加载中...',

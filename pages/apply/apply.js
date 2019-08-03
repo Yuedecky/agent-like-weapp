@@ -268,20 +268,7 @@ Page({
     })
   },
 
-  chooseImage: function() {
-    var that = this;
-    wx.setStorageSync('chooseImageFlag', true)
-    let imgArr = that.data.qualification.images || [];
-    fileModel.chooseImage().then((res) => {
-      let data = res[0];
-      return fileModel.uploadFile(data)
-    }).then(res => {
-      imgArr.push(JSON.parse(res).data)
-      that.setData({
-        'qualification.images': imgArr
-      })
-    })
-  },
+  
 
   previewImage: function(e) {
     let that = this;
@@ -322,7 +309,6 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-    console.log('进来了onUnload')
   },
 
 
@@ -345,13 +331,18 @@ Page({
       wx.setNavigationBarTitle({
         title: '基本信息',
       })
+      that.setData({
+        pageIndex :1
+      })
       wx.clearStorageSync()
     } else if (options.pageIndex == 2) {
       wx.setNavigationBarTitle({
         title: '证件信息',
       })
+      that.setData({
+        pageIndex:2
+      })
     }
-    wx.setStorageSync('applyFlag', true)
   },
 
 })

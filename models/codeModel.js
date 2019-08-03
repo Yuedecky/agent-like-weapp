@@ -24,6 +24,17 @@ class CodeModel extends Http {
       }
     })
   }
+
+  sendCode(phone,type){
+    return this.request({
+      url:'verify/code/send',
+      method:'POST',
+      data:{
+        phone:phone,
+        type:type
+      }
+    })
+  }
 }
 
 export {
