@@ -97,37 +97,29 @@ Component({
             });
         },
 
-    },
 
-
-
-    submit() {
-        var warn = '';
-        if (warn != '') {
-            wx.showToast({
-                title: warn,
-                duration: 2000,
-                icon: 'none'
-            })
-            return
-        }
-        //1.先调用上传
-        let realName = this.data.realName;
-        let applyPhone = this.data.applyPhone;
-        let applyCode = this.data.applyCode;
-        //2.提交申请
-        wx.request({
-            url: app.globalData.serverUrl + 'user/apply',
-            data: {
-                loginName: applyPhone,
-                verifyCode: applyCode,
-                realName: realName,
-            },
-            success: function (res) {
-                let data = res.data;
-                if (data.status != 200) {
+        submit() {
+            const res = this.checkInput();
+            if (!res) {
+                return
+            }
+            //1.先调用上传
+            let realName = this.data.realName;
+            let applyPhone = this.data.applyPhone;
+            let applyCode = this.data.applyCode;
+            if (applyCode == null || applyCode == '' || applyCode.length != 6) {
+                wx.showToast({
+                    title: '请填写正确的验证码',
+                    icon: 'none',
+                    duration: 2000
+                })
+                return
+            }
+            //2.提交申请
+            codeModel.userApply(applyPhone, realName, applyCode).then(res => {
+                if (res.status != 200) {
                     wx.showToast({
-                        title: data.msg,
+                        title: res.msg,
                         icon: 'none',
                         duration: 2000
                     })
@@ -136,16 +128,13 @@ Component({
                         url: '/pages/thanks/thanks',
                     })
                 }
-            },
-            fail: function (res) {
-                wx.showToast({
-                    title: '申请失败，请联系客服',
-                    duration: 2000,
-                    icon: 'none'
-                })
-            },
-        })
+            })
+
+        },
 
     },
+
+
+
 
 })

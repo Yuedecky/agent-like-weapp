@@ -46,6 +46,19 @@ class CodeModel extends Http {
       }
     })
   }
+
+
+  userApply(phone, realName, code) {
+    return this.request({
+      url: 'user/apply',
+      method: 'POST',
+      data: {
+        loginName: phone,
+        verifyCode: code,
+        realName: realName
+      }
+    })
+  }
 }
 
 export {

@@ -28,9 +28,12 @@
 }
 
 .to-paid-order{
+  padding-right: 20rpx;
+  display: flex;
+  flex-direction: column;
   font-size: 34rpx;
+  align-items: flex-end;
   line-height: 40rpx;
-  margin-left: 360rpx;
 }
 
 
