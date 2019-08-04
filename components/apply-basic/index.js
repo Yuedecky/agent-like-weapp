@@ -14,9 +14,6 @@ Component({
         codeDisabled: false
     },
     methods: {
-        submit() {
-            this.triggerEvent('submit', {}, {})
-        },
 
         getRealNameValue: function (e) {
             let that = this;
@@ -103,14 +100,9 @@ Component({
     },
 
 
-    submitApply: function (data) {
-        var that = this;
+
+    submit() {
         var warn = '';
-        if (that.data.qualification.images.length < 1) {
-            warn = '请选择图片'
-        } else if (that.data.qualification.images.length > 3) {
-            warn = '至多只能上传三张图片'
-        }
         if (warn != '') {
             wx.showToast({
                 title: warn,
@@ -120,11 +112,9 @@ Component({
             return
         }
         //1.先调用上传
-        let studentIdCards = wx.getStorageSync('qualification.images');
-        let realName = wx.getStorageSync('applicant.realName')
-        let applyPhone = wx.getStorageSync('applicant.applyPhone')
-        let applyCode = wx.getStorageSync('applicant.applyCode')
-        studentIdCards = that.data.qualification.images.join(',')
+        let realName = this.data.realName;
+        let applyPhone = this.data.applyPhone;
+        let applyCode = this.data.applyCode;
         //2.提交申请
         wx.request({
             url: app.globalData.serverUrl + 'user/apply',
@@ -132,7 +122,6 @@ Component({
                 loginName: applyPhone,
                 verifyCode: applyCode,
                 realName: realName,
-                studentIdCards: studentIdCards
             },
             success: function (res) {
                 let data = res.data;
@@ -143,7 +132,6 @@ Component({
                         duration: 2000
                     })
                 } else {
-                    wx.clearStorageSync()
                     wx.reLaunch({
                         url: '/pages/thanks/thanks',
                     })
@@ -156,10 +144,8 @@ Component({
                     icon: 'none'
                 })
             },
-            complete: function () {
-                wx.clearStorageSync()
-            }
         })
 
     },
+
 })

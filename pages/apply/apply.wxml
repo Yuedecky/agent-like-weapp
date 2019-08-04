@@ -1,5 +1,5 @@
 <view class='app-container'>
   <view wx:if="{{pageIndex == 1}}" class='apply-basic'>
-    <apply-basic></apply-basic>
+    <apply-basic bind:submit="submit"></apply-basic>
   </view>
 </view>

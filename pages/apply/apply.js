@@ -49,49 +49,15 @@ Page({
 
 
 
+
+  
   
 
   
 
  
 
-  nextStepOne: function(e) {
-    var that = this;
-    var realName = wx.getStorageSync('applicant.realName');
-    var applyPhone = wx.getStorageSync('applicant.applyPhone');
-    var applyCode = wx.getStorageSync('applicant.applyCode');
-    let phoneReg = /^(14[0-9]|13[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$$/;
-    let warn = '';
-    if (realName == '' || realName == undefined) {
-      warn = '请填写真实姓名';
-    } else if (applyPhone == '' || applyPhone == undefined || !phoneReg.test(applyPhone) || applyPhone.trim().length != 11) {
-      warn = '请填写正确的手机号';
-    } else if (applyCode == '' || applyCode == undefined || applyCode.length != 6) {
-      warn = '请填写6位验证码';
-    }
-    if (warn != '') {
-      wx.showToast({
-        title: warn,
-        icon: 'none',
-        duration: 2000
-      })
-      return
-    } else {
-      codeModel.preCheck(applyCode, applyPhone, 2).then(res => {
-        if (res.status == 200) {
-          wx.navigateTo({
-            url: '/pages/apply/apply?pageIndex=2'
-          })
-        } else {
-          wx.showToast({
-            title: res.msg,
-            duration: 2000,
-            icon: 'none'
-          })
-        }
-      })
-    }
-  },
+  
 
 
   longPress: function(e) {
@@ -125,51 +91,8 @@ Page({
 
 
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-  },
-
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-
-
-
-  /**
-   * 
-   */
+ 
+  
   onLoad: function(options) {
     var that = this;
     if (options.pageIndex == 1) {
