@@ -58,10 +58,9 @@ Component({
   },
 
   lifetimes: {
-    created: function() {},
-    attached: function() {
+    created: function () { },
+    attached: function () {
       // 显示设置
-     
       let that = this;
       if (that.data.selarr.length > 0) {
         that.setData({
@@ -75,18 +74,18 @@ Component({
       }
       this.getCartMainData();
     },
-    ready: function() {
+    ready: function () {
       var res = wx.getSystemInfoSync();
       let tmp = 180;
       let h = res.windowHeight - res.windowWidth / 750 * 116 - tmp;
-      if(res.platform =='android'){
-        h=res.windowHeight-res.windowWidth/750*116-170;
+      if (res.platform == 'android') {
+        h = res.windowHeight - res.windowWidth / 750 * 116 - 170;
       }
       this.setData({
         mainHeight: h,
       });
     },
-    detached: function() {},
+    detached: function () { },
   },
   methods: {
     onAddressDetail(event) {
@@ -95,7 +94,7 @@ Component({
       })
     },
 
-    getCartMainData: function() {
+    getCartMainData: function () {
       let that = this;
       let address = addressModel.getDefaultAddress();
       let cart = cartModel.getCartList({
@@ -106,10 +105,7 @@ Component({
         const cartList = res[1].data.list;
         const page = res[1].data.page;
         that.setData({
-          address: address.address,
-          name: address.addressee,
-          phone: address.phone,
-          addressId: address.id
+          address: address,
         });
         if (cartList != null) {
           that.setData({
@@ -123,7 +119,7 @@ Component({
     },
 
 
-    cartScrollDown: function() {
+    cartScrollDown: function () {
       let that = this;
       if (that.data.canRequest) {
         wx.showLoading({
@@ -203,7 +199,7 @@ Component({
 
 
     //点击全选  
-    allcheckTap: function() {
+    allcheckTap: function () {
       let shopcar = this.data.shopcarData;
       let that = this;
       let allsel = !that.data.allsel; //点击全选后allsel变化
@@ -244,7 +240,7 @@ Component({
       }
     },
     //点击移除商品  
-    deleteshopTap: function() {
+    deleteshopTap: function () {
       let that = this;
       var allsel = that.data.allsel;
       var shopcar = that.data.shopcarData;
@@ -300,14 +296,14 @@ Component({
     },
 
 
-    goIndexPage: function(e) {
+    goIndexPage: function (e) {
       wx.reLaunch({
         url: '/pages/home/home?currentTab=0',
       })
     },
 
     //点击管理按钮，是否显示管理的选项  
-    adminTap: function() {
+    adminTap: function () {
       let that = this;
       that.setData({
         adminShow: !that.data.adminShow
@@ -315,7 +311,7 @@ Component({
     },
 
     //点击单个选择按钮  
-    checkTap: function(e) {
+    checkTap: function (e) {
       let that = this;
       let index = e.currentTarget.dataset.index;
       let shopcar = that.data.shopcarData;
@@ -357,7 +353,7 @@ Component({
     },
 
     //点击加减按钮  
-    numchangeTap: function(e) {
+    numchangeTap: function (e) {
       let that = this;
       const pid = e.detail.id; //点击的商品下标值        
       const shopcar = that.data.shopcarData;
@@ -397,9 +393,9 @@ Component({
             wx.showModal({
               title: '提示',
               content: '确定删除该商品',
-              success: function(res) {
+              success: function (res) {
                 let chooseIds = []
-                if (res.cancel) {} else {
+                if (res.cancel) { } else {
                   chooseIds.push(pid)
                   cartModel.removeCart(chooseIds).then((res) => {
                     if (res.status != 200) {
@@ -468,7 +464,7 @@ Component({
         totalRebate: totalRebate
       });
     },
-    submitOrder: function(e) {
+    submitOrder: function (e) {
       let that = this;
       let orderIds = [];
       let shopcar = that.data.selarr;
@@ -501,9 +497,8 @@ Component({
     },
 
 
-
     //判断是否为全选  
-    judgmentAll: function() {
+    judgmentAll: function () {
       let that = this;
       let shopcar = that.data.shopcarData;
       let shoplen = shopcar.length;
@@ -515,39 +510,7 @@ Component({
         allsel: lenIndex == shoplen //如果购物车选中的个数和购物车里货物的总数相同，则为全选，反之为未全选    
       });
     },
-
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-  // onLoad: function (options) {
-  // 
-  // },
-
-
-  // onReady: function () {
-
-  // },
-
-
-
-
-
-  /**  
-   * 生命周期函数--监听页面显示 
-   */
-  // onShow: function () {
-
-  // },
+  },
 
 
 })

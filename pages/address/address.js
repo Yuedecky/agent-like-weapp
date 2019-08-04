@@ -5,56 +5,56 @@ Page({
    * 页面的初始数据
    */
   data: {
-    myAddresses:[],
+    myAddresses: [],
   },
 
   /**
    * 删除地址
    */
-  deleteAddress:function(e){
+  deleteAddress: function (e) {
     let that = this;
     let aid = e.currentTarget.dataset.addressId;
     let auth = wx.getStorageSync('token')
     wx.showModal({
       title: '提示',
       content: '确定删除该地址？',
-      success:function(res){
-        if(res.cancel){
+      success: function (res) {
+        if (res.cancel) {
           //
-        }else{
+        } else {
           wx.request({
             url: app.globalData.serverUrl + 'address/delete',
-            header:{
-              'Authorization':auth
+            header: {
+              'Authorization': auth
             },
-            data:{
+            data: {
               addressId: aid
             },
-            success:function(e){
+            success: function (e) {
               let data = e.data;
-              if(data.status != 200){
+              if (data.status != 200) {
                 wx.showToast({
                   title: data.msg,
-                  icon:'none',
-                  duration:1500
+                  icon: 'none',
+                  duration: 1500
                 })
-              }else{
+              } else {
                 wx.showToast({
                   title: '删除地址成功',
-                  duration:1500,
-                  icon:'success'
+                  duration: 1500,
+                  icon: 'success'
                 })
                 wx.switchTab({
                   url: '/pages/address/address',
                 })
-                that.loadAddressList(auth,that)
+                that.loadAddressList(auth, that)
               }
             },
-            fail:function(e){
+            fail: function (e) {
               wx.showToast({
                 title: '请求失败',
-                duration:2000,
-                icon:'none'
+                duration: 2000,
+                icon: 'none'
               })
             }
           })
@@ -63,27 +63,27 @@ Page({
     })
   },
 
-  setDefaultAddress:function(e){
+  setDefaultAddress: function (e) {
     let that = this;
     let auth = wx.getStorageSync('token')
     let aid = e.currentTarget.dataset.addressId;
     wx.request({
-      url: app.globalData.serverUrl+'address/set/default',
-      header:{
-        'Authorization':auth
+      url: app.globalData.serverUrl + 'address/set/default',
+      header: {
+        'Authorization': auth
       },
-      data:{
+      data: {
         addressId: aid
       },
-      success:function(res){
+      success: function (res) {
         let data = res.data;
-        if(data.status != 200){
+        if (data.status != 200) {
           wx.showToast({
             title: data.msg,
-            duration:1500,
-            icon:'success'
+            duration: 1500,
+            icon: 'success'
           })
-        }else{
+        } else {
           wx.reLaunch({
             url: '/pages/home/home?currentTab=1',
           })
@@ -95,27 +95,27 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+
   },
 
 
-onEditAddress:function(e){
- let aid = e.currentTarget.dataset.addressId;
- wx.navigateTo({
-   url: '/pages/address/edit/edit?id='+aid
- })
-},
+  onEditAddress: function (e) {
+    let aid = e.currentTarget.dataset.addressId;
+    wx.navigateTo({
+      url: '/pages/address/edit/edit?id=' + aid
+    })
+  },
 
-addressAddOrUpdate:function(){
-  wx.navigateTo({
-    url: '/pages/address/edit/edit?title=新增收货地址',
-  })
-},
+  addressAddOrUpdate: function () {
+    wx.navigateTo({
+      url: '/pages/address/edit/edit?title=新增收货地址',
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    
+
   },
 
   /**
@@ -123,10 +123,10 @@ addressAddOrUpdate:function(){
    */
   onShow: function () {
     let auth = wx.getStorageSync('token')
-    this.loadAddressList(auth,this)
+    this.loadAddressList(auth, this)
   },
 
-  loadAddressList:function(auth,that){
+  loadAddressList: function (auth, that) {
     wx.request({
       url: app.globalData.serverUrl + 'address/list',
       header: {
@@ -143,13 +143,14 @@ addressAddOrUpdate:function(){
           })
         } else {
           let addrList = data.data;
-          console.log(addrList)
-          for (var i = 0; i < addrList.length; i++) {
-            if (addrList[i].defaultChoose == 1) {
-              addrList[i].defaultAddr = true
-              addrList[i].addressImg = '/assets/images/address.png'
-            } else {
-              addrList[i].defaultAddr = false
+          if (addrList != null) {
+            for (var i = 0; i < addrList.length; i++) {
+              if (addrList[i].defaultChoose == 1) {
+                addrList[i].defaultAddr = true
+                addrList[i].addressImg = '/assets/images/address.png'
+              } else {
+                addrList[i].defaultAddr = false
+              }
             }
           }
           that.setData({
@@ -164,34 +165,34 @@ addressAddOrUpdate:function(){
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    
+
   },
 
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-    
+
   }
 })

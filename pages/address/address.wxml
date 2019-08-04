@@ -5,7 +5,7 @@
                 <view class="name">{{item.addressee}}</view>
                 <view class="default-address" wx:if="{{item.defaultAddr}}">默认</view>
                 <view wx:else class='switch-view' data-address-id='{{item.id}}' catchtap='setDefaultAddress'>
-                    <image class='address-check' src='/assets/images/check-black.png'/>
+                    <image class='address-check' src='/assets/images/check-black.png' />
                 </view>
             </view>
             <view class="c">
@@ -18,8 +18,8 @@
         </view>
     </view>
     <view class="empty-view" wx:else>
-      <image class="icon" src="/assets/images/empty-address.png"></image>
-      <text class="text">收货地址在哪里</text>
+        <image class="icon" src="/assets/images/empty-address.png"></image>
+        <text class="text">收货地址在哪里?</text>
     </view>
     <view class="add-address" bindtap="addressAddOrUpdate" data-address-id="0">新建收货地址</view>
 </view>

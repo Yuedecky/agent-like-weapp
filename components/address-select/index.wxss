@@ -1,5 +1,4 @@
 .container {
-  width: 100%;
   padding-left: 20rpx;
   padding-right: 20rpx;
   line-height: 50rpx;
@@ -9,7 +8,6 @@
   flex-direction: row;
   background: #efefef;
   position: relative;
-  color: #221b1b;
 }
 
 .delivery-img {
@@ -24,7 +22,7 @@
   border-top: 2px solid #999;
   border-right: 2px solid #999;
   position: absolute;
-  right: 90rpx;
+  right: 40rpx;
   top: 68rpx;
   transform: rotate(45deg);
 }
@@ -67,7 +65,7 @@
 }
 
 .select-address {
-  line-height: 150rpx;
   color: red;
+  line-height: 150rpx;
   margin-left: 10rpx;
 }

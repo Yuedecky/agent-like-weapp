@@ -1,4 +1,4 @@
-<view class='container'>
+<view class='cart-num-container'>
   <view data-id="{{item.id}}">
     <image class='minus-icon' src='/assets/images/decrease.png' bind:tap='numDecrease'></image>
   </view>

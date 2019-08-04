@@ -6,9 +6,11 @@ import {
   Config
 } from '../../config.js';
 
-let app = getApp()
+import {
+  AddressModel
+} from '../../models/addressModel'
 const cartModel = new CartModel();
-
+const addressModel = new AddressModel();
 Page({
   data: {
     currentTab: 0,
@@ -16,7 +18,7 @@ Page({
     shopcarData: []
   },
 
-  swichNav: function(e) {
+  swichNav: function (e) {
     let that = this;
     if (this.data.currentTab === e.target.dataset.current) {
       return false;
@@ -42,19 +44,23 @@ Page({
         pageNum = cart.data.pageNum;
       }
     }
-    cartModel.getCartList({
+    let address = addressModel.getDefaultAddress();
+    const cartList = cartModel.getCartList({
       pageNum: pageNum
-    }).then((res) => {
-      let data = res.data;
-      const page = data.page;
+    })
+    Promise.all([address, cartList]).then((res) => {
+      const dAddress = res[0].data;
+      const carts = res[1].data;
+
+      let list = carts.list;
+      const page = carts.page;
       if (page.total > 0) {
         if (page.current > parseInt(shopcarData.length / Config.cart.pageSize)) {
           //需要判断是否为第一页
-          let carLength = shopcarData.length;
           if (page.current <= 1) {
-            shopcarData = Array.from(data.list == null ? [] : data.list)
+            shopcarData = Array.from(list == null ? [] : list)
           } else {
-            shopcarData.splice((data.page.current - 1) * Config.cart.pageSize);
+            shopcarData.splice((page.current - 1) * Config.cart.pageSize);
             if (data.list != null) {
               shopcarData = shopcarData.concat(data.list)
             }
@@ -66,15 +72,16 @@ Page({
       cart.setData({
         shopcarData: shopcarData,
         count: shopcarData.length,
-        canRequest: shopcarData.length < data.page.total,
-        loadFlag: shopcarData.length < data.page.total,
-        pageNum: data.page.current,
-        allsel:false,
+        canRequest: shopcarData.length < page.total,
+        loadFlag: shopcarData.length < page.total,
+        pageNum: page.current,
+        allsel: false,
+        address: dAddress
       })
     })
   },
 
-  onAddCart: function(event) {
+  onAddCart: function (event) {
     let {
       pid
     } = event.detail;
@@ -98,7 +105,7 @@ Page({
 
 
 
-  onLoad: function(option) {
+  onLoad: function (option) {
     let that = this;
     let role = wx.getStorageSync('role')
     if (!option.currentTab) {
@@ -113,54 +120,59 @@ Page({
     if (role == 16) {
       that.setData({
         items: [{
-            "pagePath": "/pages/index/index",
-            "text": "首页",
-            "iconPath": "/assets/images/index-black.png",
-            "selectedIconPath": "/assets/images/index.png"
-          },
-          {
-            "pagePath": "/pages/cart/cart",
-            "text": "购物车",
-            "iconPath": "/assets/images/cart-black.png",
-            "selectedIconPath": "/assets/images/cart.png"
-          },
-          {
-            "pagePath": "/pages/order/order",
-            "text": "订单",
-            "iconPath": "/assets/images/order-black.png",
-            "selectedIconPath": "/assets/images/order.png"
-          },
-          {
-            "pagePath": "/pages/send/send",
-            "text": "派送",
-            "iconPath": "/assets/images/send-black.png",
-            "selectedIconPath": "/assets/images/send.png"
-          }
+          "pagePath": "/pages/index/index",
+          "text": "首页",
+          "iconPath": "/assets/images/index-black.png",
+          "selectedIconPath": "/assets/images/index.png"
+        },
+        {
+          "pagePath": "/pages/cart/cart",
+          "text": "购物车",
+          "iconPath": "/assets/images/cart-black.png",
+          "selectedIconPath": "/assets/images/cart.png"
+        },
+        {
+          "pagePath": "/pages/order/order",
+          "text": "订单",
+          "iconPath": "/assets/images/order-black.png",
+          "selectedIconPath": "/assets/images/order.png"
+        },
+        {
+          "pagePath": "/pages/send/send",
+          "text": "派送",
+          "iconPath": "/assets/images/send-black.png",
+          "selectedIconPath": "/assets/images/send.png"
+        }
         ]
       })
     } else {
       that.setData({
         items: [{
-            "pagePath": "/pages/index/index",
-            "text": "首页",
-            "iconPath": "/assets/images/index-black.png",
-            "selectedIconPath": "/assets/images/index.png"
-          },
-          {
-            "pagePath": "/pages/cart/cart",
-            "text": "购物车",
-            "iconPath": "/assets/images/cart-black.png",
-            "selectedIconPath": "/assets/images/cart.png"
-          },
-          {
-            "pagePath": "/pages/order/order",
-            "text": "订单",
-            "iconPath": "/assets/images/order-black.png",
-            "selectedIconPath": "/assets/images/order.png"
-          }
+          "pagePath": "/pages/index/index",
+          "text": "首页",
+          "iconPath": "/assets/images/index-black.png",
+          "selectedIconPath": "/assets/images/index.png"
+        },
+        {
+          "pagePath": "/pages/cart/cart",
+          "text": "购物车",
+          "iconPath": "/assets/images/cart-black.png",
+          "selectedIconPath": "/assets/images/cart.png"
+        },
+        {
+          "pagePath": "/pages/order/order",
+          "text": "订单",
+          "iconPath": "/assets/images/order-black.png",
+          "selectedIconPath": "/assets/images/order.png"
+        }
         ]
       })
     }
   },
-  onShow: function() {}
+  onShow: function () {
+    console.log(this.data.currentTab)
+    if (this.data.currentTab === 1) {
+      this.loadCartList()
+    }
+  }
 })

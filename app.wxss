@@ -1,5 +1,6 @@
 /**app.wxss**/
 @import '/assets/wxss/common.wxss';
+@import '/assets/lib/weui.wxss';
 page{
   background-color: #F8F8F8;
   font-family: "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif !important;

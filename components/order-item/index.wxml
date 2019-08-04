@@ -1,30 +1,28 @@
-<view class='page order-list-container flex-row'>
+<view class='order-list-container'>
   <view class='item-left-block'>
-    <image src="{{ordersD.coverImg}}" class='order-image-item'></image>
+    <image src="{{order.coverImg}}" class='order-image-item'></image>
   </view>
-  <view class='item-right-block flex-row'>
+  <view class='item-right-block'>
     <view class="left-section">
-      <view class='item-name'>{{name}}</view>
-      <view class='item-desc'>{{color}}/{{memory}}</view>
+      <view class='item-name'>{{order.name}}</view>
+      <view class='item-desc'>{{order.color}}/{{order.memory}}</view>
       <view class='item-price'>
         <view>
           官网价：
-          <text class='price-info'>{{orgPrice}}</text>
+          <text class='price-info'>{{order.orgPrice}}</text>
         </view>
         <view>
           销售价：
-          <text class='price-info'>{{platformPrice}}</text>
+          <text class='price-info'>{{order.platformPrice}}</text>
         </view>
         <view>
           提成：
-          <text class='price-info'>{{rebatePrice}}</text>
+          <text class='price-info'>{{order.rebatePrice}}</text>
         </view>
       </view>
     </view>
     <view class='right-section'>
-      <view>
-        <text class='goods-num'>×{{count}}</text>
-      </view>
+      <text class='goods-num'>×{{order.count}}</text>
     </view>
   </view>
 </view>

@@ -1,17 +1,13 @@
 Component({
   properties: {
-    name: String,
-    address: String,
-    phone: String
+    address: Object,
   },
   data: {
 
   },
   methods: {
     onSwithAddress(event) {
-      console.log(event)
       this.triggerEvent('addressTap', {
-
       }, {})
     }
   }

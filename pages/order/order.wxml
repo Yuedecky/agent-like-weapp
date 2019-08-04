@@ -31,9 +31,9 @@
                       合计提成：
                       <text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
                     </view>
-                    <view class='contact-or-cancel flex-row'>
+                    <view class='contact-or-cancel'>
                       <view classs='o-concat'>
-                        <button class='order-btn right-20' id="{{item.order.orderNo}}" bindtap='onContactUsProcess'>
+                        <button class='order-btn right-20' id="{{item.order.orderNo}}" bind:tap='onContactUsProcess'>
                           联系客服
                         </button>
                       </view>
@@ -61,7 +61,7 @@
         <view class="weui-tab__content" hidden="{{activeIndex != 1}}">
           <view wx:if="{{orderListFinished.length>0}}">
             <scroll-view scroll-y style='height:{{mainHeight}}px;'>
-              <block wx:for="{{orderListFinished}}" wx:key="order.id" wx:for-index="index">
+              <block wx:for="{{orderListFinished}}" wx:key="id" wx:for-index="index">
                 <view class='order-part bottom-20'>
                   <view class='m-order-header flex-row top-20'>
                     <view class='order-p-no'>订单编号：{{item.order.orderNo}}</view>
@@ -79,7 +79,7 @@
                       合计提成：
                       <text class='order-p-count'>{{item.order.totalRebatePrice}}</text>
                     </view>
-                    <view class='contact-only flex-row'>
+                    <view class='contact-only'>
                       <view classs='o-concat'>
                         <button class='order-btn' id='{{item.order.orderNo}}' bindtap='onContactUsFinished'>
                           联系客服

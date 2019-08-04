@@ -1,6 +1,6 @@
-<view class='page cart-wraper flex-column'>
+<view class='cart-wraper'>
   <view class='header-wrapper'>
-    <v-address-select name="{{name}}" phone="{{phone}}" bind:addressTap="onAddressDetail" address="{{address}}" />
+    <v-address-select bind:addressTap="onAddressDetail" address="{{address}}" />
     <view class='manage-header'>
       <view class='check-box'>
         <image class='check-img' src='/assets/images/unchecked.png' hidden='{{allsel}}' catchtap='allcheckTap'></image>
@@ -30,9 +30,9 @@
         <view class='cart-image-view'>
           <image class='empty-cart-img' src='/assets/images/empty-cart.png' />
         </view>
-        <view class='go-cart-desc bottom-20'>购物车是空的，去首页或者下拉刷新试试</view>
+        <view class='go-cart-desc bottom-20'>购物车是空的，去首页逛逛吧</view>
         <view class='go-index-view'>
-          <button type='default' class="go-index-btn" hover-class='none' bindtap='goIndexPage'>
+          <button type='default' class="go-index-btn" hover-class='none' bind:tap='goIndexPage'>
             去逛逛
           </button>
         </view>

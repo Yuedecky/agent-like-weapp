@@ -1,5 +1,6 @@
 .order-list-container{
-  width: 100%;
+  display: flex;
+  flex-direction: row;
   padding-top: 20rpx;
 }
 
@@ -11,6 +12,8 @@
 .item-right-block{
   width: 72%;
   height: 200rpx;
+  display: flex;
+  flex-direction: row;
 }
 
 .left-section{

@@ -19,8 +19,8 @@
   padding-top: 10rpx;
 }
 
-.product-name {
-  font-size: 34rpx;
+.product-name, .product-desc {
+  font-size: 32rpx;
   font-weight: bold;
   overflow: hidden;
   line-height: 40rpx;
@@ -30,10 +30,7 @@
 
 .product-desc {
   font-size: 30rpx;
-  overflow: hidden;
-  line-height: 40rpx;
-  white-space: nowrap;
-  color: #666;
+  color: #999;
 }
 
 .price-info {
