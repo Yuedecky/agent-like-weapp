@@ -1,4 +1,3 @@
-<import src="/templates/footer/footer.wxml" />
 <view class='page cart-wraper flex-column'>
   <view class='header-wrapper'>
     <v-address-select name="{{name}}" phone="{{phone}}" bind:addressTap="onAddressDetail" address="{{address}}" />
@@ -33,29 +32,36 @@
         </view>
         <view class='go-cart-desc bottom-20'>购物车是空的，去首页或者下拉刷新试试</view>
         <view class='go-index-view'>
-          <button type='default' class="go-index-btn" hover-class='none' bindtap='goIndexPage'>去逛逛</button>
+          <button type='default' class="go-index-btn" hover-class='none' bindtap='goIndexPage'>
+            去逛逛
+          </button>
         </view>
       </view>
       <view class="load-flag-text" wx:if="{{!loadFlag && shopcarData.length !=0}}">
         <text class="cart-warn">没有更多啦~</text>
       </view>
     </scroll-view>
-
   </view>
   <view class='cart-footer flex-row'>
     <view class='flex-column total-part'>
-      <view class='footer-total-text' wx:if='{{!adminShow}}'>合计支付
+      <view class='footer-total-text' wx:if='{{!adminShow}}'>
+        合计支付
         <text class='footer-total-price' decode='true'>￥{{total}}</text>
       </view>
-      <view class='footer-total-text' wx:if='{{!adminShow}}'>合计提成
+      <view class='footer-total-text' wx:if='{{!adminShow}}'>
+        合计提成
         <text class='footer-total-price' decode='true'>￥{{totalRebate}}</text>
       </view>
     </view>
     <view class='footer-total-submit' wx:if="{{!adminShow}}" catchtap='submitOrder'>
-      <button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>申请配送{{checkedCount}}</button>
+      <button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>
+        申请配送{{checkedCount}}
+      </button>
     </view>
     <view class='footer-total-submit' catchtap='deleteshopTap' wx:if='{{adminShow}}'>
-      <button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>移出商品{{checkedCount}}</button>
+      <button type='primary' class='send-submit-btn' style='background-color: {{cartColor}}' disabled='{{cartDisabled}}'>
+        移出商品{{checkedCount}}
+      </button>
     </view>
   </view>
 </view>

@@ -1,14 +1,11 @@
-<import src='/templates/footer/footer.wxml' />
 <view class="index-container page">
-
   <view class="index-nav-left">
     <scroll-view scroll-y class='scroll-y' style='height:{{mainHeight}}px;'>
       <block wx:for="{{brands}}" wx:key="id">
-        <v-brand  text="{{item.name}}" checked='{{item.code==current}}' code='{{item.code}}' bind:tap="brandTap" data-code='{{item.code}}' />
+        <v-brand text="{{item.name}}" checked='{{item.code==current}}' code='{{item.code}}' bind:tap="brandTap" data-code='{{item.code}}' />
       </block>
     </scroll-view>
   </view>
-
   <view class="index-nav-right">
     <view wx:if="{{products.length>0}}">
       <scroll-view scroll-y style='height:{{mainHeight}}px;' bindscrolltolower='productScrollDown'>
@@ -19,7 +16,7 @@
           </view>
         </block>
         <view wx:if="{{!loadFlag}}">
-          <template is='footer' data="{{text: '没有更多了'}}" />
+          <v-footer text='没有更多了' />
         </view>
       </scroll-view>
     </view>

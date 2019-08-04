@@ -1,5 +1,8 @@
 {
   "component": true,
   "enablePullDownRefresh": false,
-  "usingComponents": {}
+  "usingComponents": {
+    "v-footer": "/components/footer/index",
+    "v-order-item": "/components/order-item/index"
+  }
 }

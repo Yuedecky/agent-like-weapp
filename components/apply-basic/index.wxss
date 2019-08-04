@@ -1,22 +1,31 @@
+.app-b-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
+}
+
 .baisc-info-container {
   display: flex;
   flex-direction: column;
 }
 
-.basic-title {
-  text-align: center;
-  margin-top: 100rpx;
+.bottom-40{
+  margin-bottom: 40rpx;
 }
 
-.input-section {
-  padding-left: 40rpx;
-  padding-right: 40rpx;
-}
+
 
 .input-section input {
   border-bottom: 1px solid #ccc;
   height: 80rpx;
   line-height: 80rpx;
+}
+
+.code-input{
+  display: flex;
+  flex-direction: row;
 }
 
 .code-input input {
@@ -37,11 +46,10 @@
 }
 
 .login-btn {
-  margin-left: 40rpx;
-  margin-right: 40rpx;
+  width: 100%;
   margin-top: 40rpx;
-  padding: 12rpx 12rpx 12rpx 12rpx;
   font-size: 40rpx;
+  padding: 8rpx;
   line-height: 80rpx;
   background-color: #006699;
   color: white;

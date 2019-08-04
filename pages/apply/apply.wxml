@@ -1,10 +1,5 @@
-<import src="/templates/apply-basic/apply-basic.wxml"></import>
-<import src="/templates/apply-qualification/apply-qualification.wxml"></import>
-<view>
-  <view wx:if="{{pageIndex == 1}}">
-    <template is='basic-info' data="{{text:codeText,codeDisabled:codeDisabled}}" />
-  </view>
-  <view wx:if="{{pageIndex==2}}">
-    <template is="qualification-info" data="{{...qualification}}" />
+<view class='app-container'>
+  <view wx:if="{{pageIndex == 1}}" class='apply-basic'>
+    <apply-basic></apply-basic>
   </view>
 </view>

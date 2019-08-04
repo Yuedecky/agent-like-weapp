@@ -1,5 +1,3 @@
-@import "/assets/wxss/common.wxss";
-@import "/templates/footer/footer.wxss";
 .order-list-container{
   width: 100%;
   padding-top: 20rpx;

@@ -1,5 +1,3 @@
-@import "/assets/wxss/common.wxss";
-@import "/templates/footer/footer.wxss";
 .index-container{
   width:100%;
   height:100%;

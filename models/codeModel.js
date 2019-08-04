@@ -14,6 +14,17 @@ class CodeModel extends Http {
     })
   }
 
+  verifyCodeSend(phone, type) {
+    return this.request({
+      url: "verify/code/send",
+      method: 'POST',
+      data: {
+        phone: phone,
+        type: type
+      }
+    })
+  }
+
   checkTokenExpire() {
     const token = wx.getStorageSync('token')
     return this.request({
@@ -25,13 +36,13 @@ class CodeModel extends Http {
     })
   }
 
-  sendCode(phone,type){
+  sendCode(phone, type) {
     return this.request({
-      url:'verify/code/send',
-      method:'POST',
-      data:{
-        phone:phone,
-        type:type
+      url: 'verify/code/send',
+      method: 'POST',
+      data: {
+        phone: phone,
+        type: type
       }
     })
   }
