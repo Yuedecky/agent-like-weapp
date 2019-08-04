@@ -62,7 +62,7 @@
 }
 
 .s-delivery-scope{
-  width: 90%;
+  width: 90%; 
   margin: 0 auto;
   background: #fdfdfd;
   font-size: 34rpx;

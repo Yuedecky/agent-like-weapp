@@ -9,7 +9,7 @@
         <view class='code-input'>
             <input type='number' maxlength='6' value="{{code}}" placeholder='请输入验证码' name="applyCode" bind:blur='getCodeValue' />
             <button type='default' bind:tap='getApplyCode' class='code-btn' disabled='{{codeDisabled}}'>
-                {{text}}
+                {{codeText}}
             </button>
         </view>
     </view>

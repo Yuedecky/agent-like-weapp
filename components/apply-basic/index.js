@@ -10,11 +10,11 @@ Component({
         realName: '',
         applyPhone: '',
         applyCode: '',
-        text: '获取验证码',
-        codeDisabled: false
+        codeText: '获取验证码',
+        codeDisabled: false,
+        currentTime: 60
     },
     methods: {
-
         getRealNameValue: function (e) {
             let that = this;
             that.setData({
