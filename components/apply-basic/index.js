@@ -16,6 +16,7 @@ Component({
     },
     methods: {
         getRealNameValue: function (e) {
+            console.log(e)
             let that = this;
             that.setData({
                 realName: e.detail.value
@@ -23,6 +24,7 @@ Component({
         },
 
         getCodeValue: function (e) {
+            console.log(e)
             let that = this;
             that.setData({
                 applyCode: e.detail.value
@@ -31,6 +33,7 @@ Component({
 
 
         getPhoneNumberValue: function (e) {
+            console.log(e)
             let that = this;
             that.setData({
                 applyPhone: e.detail.value
