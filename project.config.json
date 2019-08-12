@@ -15,7 +15,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.7.0",
 	"appid": "wxd077718d491658fd",
-	"projectname": "wqyp-agent-mini-app",
+	"projectname": "agent-mini-app",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},

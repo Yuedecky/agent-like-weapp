@@ -87,9 +87,9 @@ App({
 
   globalData: {
     logoName: '微券加盟',
-    logoUrl: 'https://www.wqyp.shop/data/images/logo/logo.jpeg?timestamp=' + new Date(),
+    logoUrl: 'https://xxx.your-domain.com/data/images/logo/logo.jpeg?timestamp=' + new Date(),
     version: 0.1,
-    serverUrl: "https://www.wqyp.shop/",
+    serverUrl: "https://www.your-domain.com/",
     networkType: '4G',
   }
 })
